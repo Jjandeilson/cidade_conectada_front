@@ -4,12 +4,15 @@ const menu = [
     {label: "Home", url: "/"},
     {
      label: "Administração", items: [
-            {label: "Setor", url: "/setores"},
-            {label: "Fila", url: "/filas"},
-            {label: "Usuários", url: "/usuarios"}
+            {label: "Setores", url: "/setores"},
+            {label: "Filas", url: "/filas"},
+            {label: "Usuários", url: "/usuarios"},
+            {label: "Canais de atendimento", url: "/canais-atendimento"},
+            {label: "Tipo de ocorrências", url: "/tipos-ocorrencia"}
         ]
     },
-    {label: "Atendimentos"}
+    {label: "Atendimentos"},
+    {label: "Clientes", url: "/clientes"}
 ]
 
 const MenuNavegacao = () => {

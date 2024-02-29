@@ -8,6 +8,12 @@ import TabelaFila from './pages/fila/tabela-fila';
 import CadastroFila from './pages/fila/cadastro-fila';
 import TabelaUsuario from './pages/usuario/tabela-usuario';
 import CadastroUsuario from './pages/usuario/cadastro-usuario';
+import TabelaCanalAtendimento from './pages/canal-atendimento/tabela-canal-atendimento';
+import CadastroCanalAtendimento from './pages/canal-atendimento/cadastro-canal-atendimento';
+import TabelaCliente from './pages/cliente/tabela-cliente';
+import CadastroCliente from './pages/cliente/cadastro-cliente';
+import TabelaTipoOcorrencia from './pages/tipo-ocorrencia/tabela-tipo-ocorrencia';
+import CadastroTipoOcorencia from './pages/tipo-ocorrencia/cadastro-tipo-ocorrencia';
 
 function App() {
   return (
@@ -25,6 +31,18 @@ function App() {
           <Route path="usuarios">
             <Route path="" element={<TabelaUsuario />} />
             <Route path="novo" element={<CadastroUsuario />} />
+          </Route>
+          <Route path="canais-atendimento">
+            <Route path="" element={<TabelaCanalAtendimento />} />
+            <Route path="novo" element={<CadastroCanalAtendimento />} />
+          </Route>
+          <Route path="clientes">
+            <Route path="" element={<TabelaCliente />} />
+            <Route path="novo" element={<CadastroCliente />} />
+          </Route>
+          <Route path="tipos-ocorrencia">
+            <Route path="" element={<TabelaTipoOcorrencia />} />
+            <Route path="novo" element={<CadastroTipoOcorencia />} />
           </Route>
         </Route>
       </Routes>
