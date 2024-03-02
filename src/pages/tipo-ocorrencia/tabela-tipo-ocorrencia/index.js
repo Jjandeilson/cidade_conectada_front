@@ -1,13 +1,17 @@
+import { useNavigate } from 'react-router-dom';
+
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 // import { Paginator } from 'primereact/paginator';
 import { Button } from 'primereact/button';
 
 const TabelaTipoOcorrencia = () => {
+    const navegacao = useNavigate();
+
     return (
         <>
             <div>
-                <a href="/tipos-ocorrencia/novo" className="p-button font-bold">Novo tipo de ocorrência</a>
+                <a onClick={() => navegacao("/tipos-ocorrencia/novo")} className="p-button font-bold">Novo tipo de ocorrência</a>
             </div>
 
             <DataTable  tableStyle={{ minWidth: '50rem' }}>

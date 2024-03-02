@@ -1,14 +1,18 @@
+import { useNavigate } from 'react-router-dom';
+
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { InputMask } from 'primereact/inputmask';
 import { InputTextarea } from 'primereact/inputtextarea';
 
 const CadastroCliente = () => {
+    const navegacao = useNavigate();
+
     return (
         <>
             <div>
                 <Button label="Salvar" severity="success" />
-                <a href="/clientes" className="p-button p-button-warning font-bold">Cancelar</a>
+                <a onClick={() => navegacao("/clientes")} className="p-button p-button-warning font-bold">Cancelar</a>
             </div>
 
             <div>

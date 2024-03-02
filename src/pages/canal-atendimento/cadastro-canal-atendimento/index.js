@@ -1,14 +1,18 @@
+import { useNavigate } from 'react-router-dom';
+
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Dropdown } from 'primereact/dropdown';
 
 const CadastroCanalAtendimento = () => {
+    const navegacao = useNavigate();
+
     return (
         <>
             <div>
                 <Button label="Salvar" severity="success" />
-                <a href="/canais-atendimento" className="p-button p-button-warning font-bold">Cancelar</a>
+                <a onClick={() => navegacao("/canais-atendimento")} className="p-button p-button-warning font-bold">Cancelar</a>
             </div>
 
             <div>

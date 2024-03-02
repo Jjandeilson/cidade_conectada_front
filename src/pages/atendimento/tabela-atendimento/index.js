@@ -1,13 +1,17 @@
+import { useNavigate } from 'react-router-dom';
+
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 // import { Paginator } from 'primereact/paginator';
 import { Button } from 'primereact/button';
 
 const TabelaAtendimento = () => {
+    const navegacao = useNavigate();
+
     return (
         <>
             <div>
-                <a href="/atendimentos/novo" className="p-button font-bold">Novo Atendimento</a>
+                <a onClick={() => navegacao('/atendimentos/novo')} className="p-button font-bold">Novo Atendimento</a>
             </div>
 
             <DataTable  tableStyle={{ minWidth: '50rem' }}>

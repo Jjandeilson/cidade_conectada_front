@@ -25,6 +25,7 @@ function App() {
           <Route path="setores">
             <Route path="" element={<TabelaSetor />} />
             <Route path="novo" element={<CadastroSetor />} />
+            <Route path=":codigo/editar" element={<CadastroSetor />} />
           </Route>
           <Route path="filas">
             <Route path="" element={<TabelaFila />} />

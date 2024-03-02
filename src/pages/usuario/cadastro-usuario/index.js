@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { InputMask } from 'primereact/inputmask';
@@ -10,11 +11,13 @@ import CadastroUsuarioFila from '../cadastro-usuario-fila';
 const optionsSelectButton = ['Ativo', 'Desativado']
 
 const CadastroUsuario = () => {
+    const navegacao = useNavigate();
+
     return (
         <>
             <div>
                 <Button label="Salvar" severity="success" />
-                <a href="/usuarios" className="p-button p-button-warning font-bold">Cancelar</a>
+                <a onClick={() => navegacao("/usuarios")} className="p-button p-button-warning font-bold">Cancelar</a>
             </div>
 
             <div>

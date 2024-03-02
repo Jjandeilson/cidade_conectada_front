@@ -1,13 +1,17 @@
+import { useNavigate } from 'react-router-dom';
+
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
 
 const CadastroFila = () => {
+    const navegacao = useNavigate();
+
     return (
         <>
             <div>
                 <Button label="Salvar" severity="success" />
-                <a href="/filas" className="p-button p-button-warning font-bold">Cancelar</a>
+                <a onClick={() => navegacao("/filas")} className="p-button p-button-warning font-bold">Cancelar</a>
             </div>
 
             <div>
