@@ -73,7 +73,7 @@ const CadastroUsuario = () => {
 
             <div>
                 <div>
-                    <label htmlFor="senha">Setor</label>
+                    <label htmlFor="setor">Setor</label>
                 </div>
                 <div>
                     <Dropdown placeholder="Selecione" options={[]} className="w-full md:w-14rem" />

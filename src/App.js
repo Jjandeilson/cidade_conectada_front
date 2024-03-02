@@ -14,6 +14,8 @@ import TabelaCliente from './pages/cliente/tabela-cliente';
 import CadastroCliente from './pages/cliente/cadastro-cliente';
 import TabelaTipoOcorrencia from './pages/tipo-ocorrencia/tabela-tipo-ocorrencia';
 import CadastroTipoOcorencia from './pages/tipo-ocorrencia/cadastro-tipo-ocorrencia';
+import TabelaAtendimento from './pages/atendimento/tabela-atendimento';
+import CadastroAtendimento from './pages/atendimento/cadastro-atendimento';
 
 function App() {
   return (
@@ -43,6 +45,10 @@ function App() {
           <Route path="tipos-ocorrencia">
             <Route path="" element={<TabelaTipoOcorrencia />} />
             <Route path="novo" element={<CadastroTipoOcorencia />} />
+          </Route>
+          <Route path="atendimentos">
+            <Route path="" element={<TabelaAtendimento />} />
+            <Route path="novo" element={<CadastroAtendimento />} />
           </Route>
         </Route>
       </Routes>

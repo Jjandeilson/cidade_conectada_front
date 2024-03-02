@@ -11,7 +11,7 @@ const menu = [
             {label: "Tipo de ocorrências", url: "/tipos-ocorrencia"}
         ]
     },
-    {label: "Atendimentos"},
+    {label: "Atendimentos", url: "/atendimentos"},
     {label: "Clientes", url: "/clientes"}
 ]
 
