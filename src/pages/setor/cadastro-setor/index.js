@@ -6,7 +6,7 @@ import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Toast } from 'primereact/toast';
 
-import SetorService from '../../../service/setor/sertorService';
+import SetorService from '../../../service/sertorService';
 
 const Setor = {
     codigo: '',
@@ -85,6 +85,7 @@ const CadastroSetor = () => {
                     <InputTextarea name="descricao" value={setor?.descricao} rows={5} cols={30} onChange={atualizarValores} />
                 </div>
             </div>
+            
             <Toast ref={toast} />
         </>
     )

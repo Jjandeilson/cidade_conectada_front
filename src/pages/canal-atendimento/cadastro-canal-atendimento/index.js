@@ -1,17 +1,73 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
 
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Dropdown } from 'primereact/dropdown';
+import { Toast } from 'primereact/toast';
+
+import CanalAntendimentoService from '../../../service/canalAtendimentoService';
+
+const Canal = {
+    codigo: '',
+    nome: '',
+    icone: '',
+    descricao: ''
+}
+
+const icones = ["Whatsapp", "Chat", "Presencial"]
 
 const CadastroCanalAtendimento = () => {
     const navegacao = useNavigate();
+    const toast = useRef(null);
+    const {codigo} = useParams();
+    const [canal, setCanal] = useState(Canal);
+    const canalAtendimentoService = CanalAntendimentoService
+
+    const show = (mensagem, severity, summary) => {
+        toast.current.show({ severity: severity, summary: summary, detail: mensagem });
+    };
+
+    function atualizarValores(envet) {
+        const {name, value} = envet.target
+        setCanal({...canal,[name]: value});
+    }
+
+    function salvar() {
+        if (canal.codigo == '') {
+            canalAtendimentoService.salvar(canal)
+                .then(() => {
+                    show('Operação realizada com sucesso', 'success', 'Success')
+                    navegacao("/canais-atendimento")
+                })
+                .catch(response => (show(response.response.data.detail, 'error', 'Error')))
+            } else {
+                canalAtendimentoService.atualizar(canal.codigo, canal)
+                .then(() => {
+                    show('Operação realizada com sucesso', 'success', 'Success')
+                    navegacao("/canais-atendimento")
+                })
+                .catch(response => (show(response.response.data.detail, 'error', 'Error')))
+        }
+        
+    }
+
+    useEffect(() => {
+        if (codigo != undefined) {
+            document.title = "Editar canal de atendimento";
+            canalAtendimentoService.buscar(codigo)
+                .then(response => setCanal(response.data))
+        } else {
+            document.title = 'Novo canal de atendimento';
+        }
+
+    }, [])
 
     return (
         <>
             <div>
-                <Button label="Salvar" severity="success" />
+                <Button label="Salvar" severity="success" onClick={salvar}/>
                 <a onClick={() => navegacao("/canais-atendimento")} className="p-button p-button-warning font-bold">Cancelar</a>
             </div>
 
@@ -20,7 +76,7 @@ const CadastroCanalAtendimento = () => {
                     <label htmlFor="nome">Nome</label>
                 </div>
                 <div>
-                    <InputText />
+                    <InputText name="nome" value={canal.nome} onChange={atualizarValores} />
                 </div>
             </div>
             
@@ -29,7 +85,8 @@ const CadastroCanalAtendimento = () => {
                     <label htmlFor="nome">Ícone</label>
                 </div>
                 <div>
-                    <Dropdown options={[]} placeholder="Selecione" className="w-full md:w-14rem" />
+                    <Dropdown options={icones} name="icone" value={canal?.icone} onChange={atualizarValores} placeholder="Selecione" className="w-full md:w-14rem"
+                         />
                 </div>
             </div>
 
@@ -38,9 +95,11 @@ const CadastroCanalAtendimento = () => {
                     <label htmlFor="nome">Descrição</label>
                 </div>
                 <div>
-                <InputTextarea rows={5} cols={30} />
+                    <InputTextarea name="descricao" value={canal?.descricao} onChange={atualizarValores} rows={5} cols={30} />
                 </div>
             </div>
+
+            <Toast ref={toast} />
         </>
     )
 }

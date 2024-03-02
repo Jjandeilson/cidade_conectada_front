@@ -30,6 +30,7 @@ function App() {
           <Route path="filas">
             <Route path="" element={<TabelaFila />} />
             <Route path="novo" element={<CadastroFila />} />
+            <Route path=":codigo/editar" element={<CadastroFila />} />
           </Route>
           <Route path="usuarios">
             <Route path="" element={<TabelaUsuario />} />
@@ -38,6 +39,7 @@ function App() {
           <Route path="canais-atendimento">
             <Route path="" element={<TabelaCanalAtendimento />} />
             <Route path="novo" element={<CadastroCanalAtendimento />} />
+            <Route path=":codigo/editar" element={<CadastroCanalAtendimento />} />
           </Route>
           <Route path="clientes">
             <Route path="" element={<TabelaCliente />} />

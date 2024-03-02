@@ -7,7 +7,7 @@ import { Paginator } from 'primereact/paginator';
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
 
-import SetorService from '../../../service/setor/sertorService';
+import SetorService from '../../../service/sertorService';
 
 const TabelaSetor = () => {
     document.title = 'Listagem de setor';
@@ -50,7 +50,6 @@ const TabelaSetor = () => {
                 setTotalRegistros(response.data.totalElements);
             })
     }
-    
 
     const botoesEditarExcluir = (setor) => {
         return  (
@@ -82,9 +81,9 @@ const TabelaSetor = () => {
                 <Column field="descricao" header="Descrição"></Column>
                 <Column filed="acao" header="Ações" body={botoesEditarExcluir}></Column>
             </DataTable>
-            <Toast ref={toast} />
             <Paginator first={numeroPagina} rows={quantidadePorPagina} totalRecords={totalRegistros} onPageChange={atualizarPagina}/>
 
+            <Toast ref={toast} />
         </>
     )
 }
