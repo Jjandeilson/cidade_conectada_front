@@ -19,7 +19,6 @@ const CadastroSetor = () => {
     const toast = useRef(null);
     const {codigo} = useParams();
     const [setor, setSetor] = useState(Setor);
-    const setorService = SetorService;
 
     const show = (mensagem, severity, summary) => {
         toast.current.show({ severity: severity, summary: summary, detail: mensagem });
@@ -31,15 +30,15 @@ const CadastroSetor = () => {
     }
 
     function salvar() {
-        if (setor.codigo == '') {
-            setorService.salvar(setor)
+        if (setor.codigo === '') {
+            SetorService.salvar(setor)
                 .then(() => {
                     show('Operação realizada com sucesso', 'success', 'Success')
                     navegacao("/setores")
                 })
                 .catch(response => (show(response.response.data.detail, 'error', 'Error')))
             } else {
-                setorService.atualizar(setor.codigo, setor)
+                SetorService.atualizar(setor.codigo, setor)
                 .then(() => {
                     show('Operação realizada com sucesso', 'success', 'Success')
                     navegacao("/setores")
@@ -50,15 +49,15 @@ const CadastroSetor = () => {
     }
 
     useEffect(() => {
-        if (codigo != undefined) {
+        if (codigo !== undefined) {
             document.title = "Editar setor";
-            setorService.buscar(codigo)
+            SetorService.buscar(codigo)
                 .then(response => setSetor(response.data))
         } else {
             document.title = 'Novo setor';
         }
 
-    }, [])
+    }, [codigo])
 
     return (
         <>
@@ -67,7 +66,6 @@ const CadastroSetor = () => {
                 <a onClick={() => navegacao("/setores")} className="p-button p-button-warning font-bold">Cancelar</a>
             </div>
 
-            {/* <InputText name="codigo" value={setor.codigo} onChange={atualizarValores} hidden /> */}
             <div>
                 <div>
                     <label htmlFor="nome">Nome</label>

@@ -18,17 +18,16 @@ const TabelaSetor = () => {
     const [quantidadePorPagina, setQuantidadePorPagina] = useState(0);
     const [totalRegistros, setTotalRegistros] = useState(0);
     const navegacao = useNavigate();
-    const setorService = SetorService;
 
     const show = (mensagem, severity, summary) => {
         toast.current.show({ severity: severity, summary: summary, detail: mensagem });
     };
     
     const excluir = (codigo) => {
-        setorService.excluir(codigo)
+        SetorService.excluir(codigo)
             .then(() => {
                 show('Operação realizada com sucesso', 'success', 'Success')
-                setorService.listar()
+                SetorService.listar()
                     .then(response => {
                         setSetores(response.data.content);
                         setNumeroPagina(response.data.number);
@@ -42,7 +41,7 @@ const TabelaSetor = () => {
     }
 
     const atualizarPagina = (e) => {
-        setorService.listar(e.page)
+        SetorService.listar(e.page)
             .then(response => {
                 setSetores(response.data.content);
                 setNumeroPagina(e.first);
@@ -61,7 +60,7 @@ const TabelaSetor = () => {
     }
 
     useEffect(() => {
-        setorService.listar()
+        SetorService.listar()
             .then(response =>  {
                 setSetores(response.data.content);
                 setNumeroPagina(response.data.number);

@@ -10,7 +10,7 @@ import { Toast } from 'primereact/toast';
 import CanalAntendimentoService from '../../../service/canalAtendimentoService';
 
 const TabelaCanalAtendimento = () => {
-    document.title = 'Listagem de setor';
+    document.title = 'Listagem de canais de atendimento';
     
     const toast = useRef(null);
     const [canais, setCanais] = useState([]);
@@ -18,17 +18,16 @@ const TabelaCanalAtendimento = () => {
     const [quantidadePorPagina, setQuantidadePorPagina] = useState(0);
     const [totalRegistros, setTotalRegistros] = useState(0);
     const navegacao = useNavigate();
-    const canalAtendimentoService = CanalAntendimentoService;
 
     const show = (mensagem, severity, summary) => {
         toast.current.show({ severity: severity, summary: summary, detail: mensagem });
     };
 
     const excluir = (codigo) => {
-        canalAtendimentoService.excluir(codigo)
+        CanalAntendimentoService.excluir(codigo)
             .then(() => {
                 show('Operação realizada com sucesso', 'success', 'Success')
-                canalAtendimentoService.listar()
+                CanalAntendimentoService.listar()
                     .then(response => {
                         setCanais(response.data.content);
                         setNumeroPagina(response.data.number);
@@ -42,7 +41,7 @@ const TabelaCanalAtendimento = () => {
     }
 
     const atualizarPagina = (e) => {
-        canalAtendimentoService.listar(e.page)
+        CanalAntendimentoService.listar(e.page)
             .then(response => {
                 setCanais(response.data.content);
                 setNumeroPagina(e.first);
@@ -61,7 +60,7 @@ const TabelaCanalAtendimento = () => {
     }
 
     useEffect(() => {
-        canalAtendimentoService.listar()
+        CanalAntendimentoService.listar()
             .then(response =>  {
                 setCanais(response.data.content);
                 setNumeroPagina(response.data.number);

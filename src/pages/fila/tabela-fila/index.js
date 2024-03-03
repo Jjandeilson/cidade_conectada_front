@@ -18,17 +18,16 @@ const TabelaFila = () => {
     const [quantidadePorPagina, setQuantidadePorPagina] = useState(0);
     const [totalRegistros, setTotalRegistros] = useState(0);
     const navegacao = useNavigate();
-    const filaService = FilaService;
 
     const show = (mensagem, severity, summary) => {
         toast.current.show({ severity: severity, summary: summary, detail: mensagem });
     };
 
     const excluir = (codigo) => {
-        filaService.excluir(codigo)
+        FilaService.excluir(codigo)
             .then(() => {
                 show('Operação realizada com sucesso', 'success', 'Success')
-                filaService.listar()
+                FilaService.listar()
                     .then(response => {
                         setFilas(response.data.content);
                         setNumeroPagina(response.data.number);
@@ -42,7 +41,7 @@ const TabelaFila = () => {
     }
 
     const atualizarPagina = (e) => {
-        filaService.listar(e.page)
+        FilaService.listar(e.page)
             .then(response => {
                 setFilas(response.data.content);
                 setNumeroPagina(e.first);
@@ -61,7 +60,7 @@ const TabelaFila = () => {
     }
 
     useEffect(() => {
-        filaService.listar()
+        FilaService.listar()
             .then(response =>  {
                 setFilas(response.data.content);
                 setNumeroPagina(response.data.number);

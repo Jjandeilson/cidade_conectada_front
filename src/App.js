@@ -35,6 +35,7 @@ function App() {
           <Route path="usuarios">
             <Route path="" element={<TabelaUsuario />} />
             <Route path="novo" element={<CadastroUsuario />} />
+            <Route path=":codigo/editar" element={<CadastroUsuario />} />
           </Route>
           <Route path="canais-atendimento">
             <Route path="" element={<TabelaCanalAtendimento />} />
@@ -44,6 +45,7 @@ function App() {
           <Route path="clientes">
             <Route path="" element={<TabelaCliente />} />
             <Route path="novo" element={<CadastroCliente />} />
+            <Route path=":codigo/editar" element={<CadastroCliente />} />
           </Route>
           <Route path="tipos-ocorrencia">
             <Route path="" element={<TabelaTipoOcorrencia />} />

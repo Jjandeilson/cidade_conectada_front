@@ -19,7 +19,6 @@ const CadastroFila = () => {
     const toast = useRef(null);
     const {codigo} = useParams();
     const [fila, setFila] = useState(Fila);
-    const filaService = FilaService;
 
     const show = (mensagem, severity, summary) => {
         toast.current.show({ severity: severity, summary: summary, detail: mensagem });
@@ -31,15 +30,15 @@ const CadastroFila = () => {
     }
 
     function salvar() {
-        if (fila.codigo == '') {
-            filaService.salvar(fila)
+        if (fila.codigo === '') {
+            FilaService.salvar(fila)
                 .then(() => {
                     show('Operação realizada com sucesso', 'success', 'Success')
                     navegacao("/filas")
                 })
                 .catch(response => (show(response.response.data.detail, 'error', 'Error')))
             } else {
-                filaService.atualizar(fila.codigo, fila)
+                FilaService.atualizar(fila.codigo, fila)
                 .then(() => {
                     show('Operação realizada com sucesso', 'success', 'Success')
                     navegacao("/filas")
@@ -50,15 +49,15 @@ const CadastroFila = () => {
     }
 
     useEffect(() => {
-        if (codigo != undefined) {
+        if (codigo !== undefined) {
             document.title = "Editar fila";
-            filaService.buscar(codigo)
+            FilaService.buscar(codigo)
                 .then(response => setFila(response.data))
         } else {
-            document.title = 'Novo setor';
+            document.title = 'Novo fila';
         }
 
-    }, [])
+    }, [codigo])
 
     return (
         <>

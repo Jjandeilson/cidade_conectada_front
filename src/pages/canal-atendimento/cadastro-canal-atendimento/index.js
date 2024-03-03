@@ -35,7 +35,7 @@ const CadastroCanalAtendimento = () => {
     }
 
     function salvar() {
-        if (canal.codigo == '') {
+        if (canal.codigo === '') {
             canalAtendimentoService.salvar(canal)
                 .then(() => {
                     show('Operação realizada com sucesso', 'success', 'Success')
@@ -54,7 +54,7 @@ const CadastroCanalAtendimento = () => {
     }
 
     useEffect(() => {
-        if (codigo != undefined) {
+        if (codigo !== undefined) {
             document.title = "Editar canal de atendimento";
             canalAtendimentoService.buscar(codigo)
                 .then(response => setCanal(response.data))
@@ -85,8 +85,7 @@ const CadastroCanalAtendimento = () => {
                     <label htmlFor="nome">Ícone</label>
                 </div>
                 <div>
-                    <Dropdown options={icones} name="icone" value={canal?.icone} onChange={atualizarValores} placeholder="Selecione" className="w-full md:w-14rem"
-                         />
+                    <Dropdown options={icones} name="icone" value={canal?.icone} onChange={atualizarValores} placeholder="Selecione" className="w-full md:w-14rem" />
                 </div>
             </div>
 
