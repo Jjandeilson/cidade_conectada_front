@@ -5,7 +5,10 @@ import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { InputMask } from 'primereact/inputmask';
 import { InputTextarea } from 'primereact/inputtextarea';
+import { Calendar } from 'primereact/calendar';
 import { Toast } from 'primereact/toast';
+
+import * as moment from 'moment-timezone';
 
 import ClienteService from '../../../service/clienteService';
 
@@ -18,12 +21,13 @@ const Endereco = {
 
 const Cliente = {
     nome: '',
+    codigo: '',
     cpf: '',
     email: '',
     telefone: '',
     celular: '',
     observacao: '',
-    dataNascimento: new Date(),
+    dataNascimento: Date,
     endereco: Endereco
 }
 
@@ -31,45 +35,57 @@ const CadastroCliente = () => {
     const navegacao = useNavigate();
     const toast = useRef(null);
     const {codigo} = useParams();
+    const [endereco, setEndereco] = useState(Endereco);
     const [cliente, setCliente] = useState(Cliente);
 
     const show = (mensagem, severity, summary) => {
         toast.current.show({ severity: severity, summary: summary, detail: mensagem });
     };
 
-    function atualizarValores(envet) {
-        const {name, value} = envet.target
+    function atualizarValores(event) {
+        const {name, value} = event.target;
         setCliente({...cliente,[name]: value});
+    }
+    
+    function atualizarValoresEndereco(event) {
+        const {name, value} = event.target;
+        setEndereco({...endereco,[name]: value});
     }
 
     function salvar() {
         if (cliente.codigo === '') {
+            cliente.endereco = endereco;
             ClienteService.salvar(cliente)
-                .then(() => {
-                    show('Operação realizada com sucesso', 'success', 'Success')
-                    navegacao("/clientes")
-                })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')))
-            } else {
+            .then(() => {
+                show('Operação realizada com sucesso', 'success', 'Success')
+                navegacao("/clientes")
+            })
+            .catch(response => (show(response.response.data.detail, 'error', 'Error')))
+        } else {
+                cliente.endereco = endereco;
                 ClienteService.atualizar(cliente.codigo, cliente)
                 .then(() => {
                     show('Operação realizada com sucesso', 'success', 'Success')
                     navegacao("/clientes")
                 })
                 .catch(response => (show(response.response.data.detail, 'error', 'Error')))
+            }
+            
         }
         
-    }
-
-    useEffect(() => {
-        if (codigo !== undefined) {
-            document.title = "Editar cliente";
-            ClienteService.buscar(codigo)
-                .then(response => setCliente(response.data))
+        useEffect(() => {
+            if (codigo !== undefined) {
+                document.title = "Editar cliente";
+                ClienteService.buscar(codigo)
+                    .then(response => {
+                        response.data.dataNascimento = moment( response.data.dataNascimento).add(1, "days").toDate();
+                        setCliente(response.data);
+                        setEndereco(response.data.endereco);
+                    })
+                    .catch(response => console.log(response))
         } else {
             document.title = 'Novo cliente';
         }
-        console.log(cliente)
     }, [codigo])
 
     return (
@@ -94,7 +110,7 @@ const CadastroCliente = () => {
                         <label htmlFor="cpf">CPF</label>
                     </div>
                     <div>
-                        <InputMask name="cpf" value={cliente.cpf} onChange={atualizarValores} mask="999.999.999-99" />
+                        <InputMask name="cpf" value={cliente.cpf} onChange={atualizarValores} mask="999.999.999-99" unmask={true} />
                     </div>
                 </div>
 
@@ -112,7 +128,7 @@ const CadastroCliente = () => {
                         <label htmlFor="telefone">Telefone</label>
                     </div>
                     <div>
-                        <InputMask name="telefone" value={cliente.telefone} onChange={atualizarValores} mask="(99) 99999-9999" />
+                        <InputMask name="telefone" value={cliente.telefone} onChange={atualizarValores} mask="(99) 99999-9999" unmask={true} />
                     </div>
                 </div>
             
@@ -121,7 +137,7 @@ const CadastroCliente = () => {
                         <label htmlFor="celular">Celular</label>
                     </div>
                     <div>
-                        <InputMask name="celular" value={cliente.celular} onChange={atualizarValores} mask="(99) 99999-9999" />
+                        <InputMask name="celular" value={cliente.celular} onChange={atualizarValores} mask="(99) 99999-9999" unmask={true} />
                     </div>
                 </div>
 
@@ -130,51 +146,51 @@ const CadastroCliente = () => {
                         <label htmlFor="datanascimento">Data de nascimento</label>
                     </div>
                     <div>
-                        <InputMask name="dataNascimento" value={cliente.dataNascimento} onChange={atualizarValores} mask="99/99/9999" />
-                    </div>
-                </div>
-            </div>
-            <div>
-                <div>
-                    <div>
-                        <label htmlFor="logradouro">Logradouro</label>
-                    </div>
-                    <div>
-                        <InputText name="logradouro" value={cliente.endereco.logradouro} onChange={atualizarValores}/>
+                        <Calendar name="dataNascimento" value={cliente.dataNascimento} onChange={atualizarValores} dateFormat="dd/mm/yy" showIcon />
                     </div>
                 </div>
                 <div>
                     <div>
-                        <label htmlFor="numero">Número</label>
+                        <div>
+                            <label htmlFor="logradouro">Logradouro</label>
+                        </div>
+                        <div>
+                            <InputText name="logradouro" value={endereco.logradouro} onChange={atualizarValoresEndereco}/>
+                        </div>
                     </div>
                     <div>
-                        <InputText name="numero" value={cliente.endereco.numero} onChange={atualizarValores}/>
+                        <div>
+                            <label htmlFor="numero">Número</label>
+                        </div>
+                        <div>
+                            <InputText name="numero" value={endereco.numero} onChange={atualizarValoresEndereco}/>
+                        </div>
+                    </div>
+                    <div>
+                        <div>
+                            <label htmlFor="bairro">Bairro</label>
+                        </div>
+                        <div>
+                            <InputText name="bairro" value={endereco.bairro} onChange={atualizarValoresEndereco}/>
+                        </div>
+                    </div>
+                    <div>
+                        <div>
+                            <label htmlFor="cep">CEP</label>
+                        </div>
+                        <div>
+                            <InputMask name="cep" value={endereco.cep} onChange={atualizarValoresEndereco} mask="99.999-999" unmask={true} />
+                        </div>
                     </div>
                 </div>
-                <div>
-                    <div>
-                        <label htmlFor="bairro">Bairro</label>
-                    </div>
-                    <div>
-                        <InputText name="bairro" value={cliente.endereco.bairro} onChange={atualizarValores}/>
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        <label htmlFor="cep">CEP</label>
-                    </div>
-                    <div>
-                        <InputMask name="cep" value={cliente.endereco.cep} onChange={atualizarValores} mask="99.999-999" />
-                    </div>
-                </div>
-            </div>
 
-            <div>
                 <div>
-                    <label htmlFor="descricao">Descrição</label>
-                </div>
-                <div>
-                    <InputTextarea name="descricao" rows={5} cols={30} />
+                    <div>
+                        <label htmlFor="descricao">Descrição</label>
+                    </div>
+                    <div>
+                        <InputTextarea name="descricao" rows={5} cols={30} />
+                    </div>
                 </div>
             </div>
 

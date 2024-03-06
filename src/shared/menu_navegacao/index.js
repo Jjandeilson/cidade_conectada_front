@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { PanelMenu } from 'primereact/panelmenu';
 
 const MenuNavegacao = () => {
+    document.title = "Home";
     const navegacao = useNavigate();
 
     const menu = [

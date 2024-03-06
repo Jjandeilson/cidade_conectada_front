@@ -39,7 +39,7 @@ const CadastroUsuario = () => {
     const toast = useRef(null);
     const {codigo} = useParams();
     const [usuario, setUsuario] = useState(Usuario);
-    const [setores, setSetores] = useState([])
+    const [setores, setSetores] = useState([]);
     const [filas, setFilas] = useState([]);
     const navegacao = useNavigate();
 
@@ -80,7 +80,6 @@ const CadastroUsuario = () => {
 
     function salvar() {
         if (usuario.codigo === '') {
-            console.log(usuario)
             UsuarioService.salvar(usuario)
                 .then(() => {
                     show('Operação realizada com sucesso', 'success', 'Success');

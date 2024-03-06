@@ -50,6 +50,7 @@ function App() {
           <Route path="tipos-ocorrencia">
             <Route path="" element={<TabelaTipoOcorrencia />} />
             <Route path="novo" element={<CadastroTipoOcorencia />} />
+            <Route path=":codigo/editar" element={<CadastroTipoOcorencia />} />
           </Route>
           <Route path="atendimentos">
             <Route path="" element={<TabelaAtendimento />} />
