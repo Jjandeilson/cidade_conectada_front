@@ -8,6 +8,11 @@ const CanalAntendimentoService = {
         const response = await http.get(`${urlCanal}?page=${numeroPagina}`);
         return response;
     },
+   
+    listaTodosCanais : async function() {
+        const response = await http.get(`${urlCanal}/todos`);
+        return response;
+    },
 
     buscar: async function(codigoCanal) {
         const response = await http.get(`${urlCanal}/${codigoCanal}`)
@@ -28,6 +33,7 @@ const CanalAntendimentoService = {
         const response = await http.delete(`${urlCanal}/${codigoCanal}`)
         return response; 
     }
+    
 }
 
 export default CanalAntendimentoService

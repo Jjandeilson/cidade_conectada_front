@@ -11,25 +11,8 @@ import { Toast } from 'primereact/toast';
 import * as moment from 'moment-timezone';
 
 import ClienteService from '../../../service/clienteService';
-
-const Endereco = {
-    logradouro: '',
-    numero: '',
-    bairro: '',
-    cep: ''
-}
-
-const Cliente = {
-    nome: '',
-    codigo: '',
-    cpf: '',
-    email: '',
-    telefone: '',
-    celular: '',
-    observacao: '',
-    dataNascimento: Date,
-    endereco: Endereco
-}
+import Cliente from '../../../dto/cliente';
+import Endereco from '../../../dto/endereco';
 
 const CadastroCliente = () => {
     const navegacao = useNavigate();
@@ -57,28 +40,27 @@ const CadastroCliente = () => {
             cliente.endereco = endereco;
             ClienteService.salvar(cliente)
             .then(() => {
-                show('Operação realizada com sucesso', 'success', 'Success')
-                navegacao("/clientes")
+                show('Operação realizada com sucesso', 'success', 'Success');
+                navegacao("/clientes");
             })
-            .catch(response => (show(response.response.data.detail, 'error', 'Error')))
+            .catch(response => (show(response.response.data.detail, 'error', 'Error')));
         } else {
-                cliente.endereco = endereco;
-                ClienteService.atualizar(cliente.codigo, cliente)
+            cliente.endereco = endereco;
+            ClienteService.atualizar(cliente.codigo, cliente)
                 .then(() => {
-                    show('Operação realizada com sucesso', 'success', 'Success')
-                    navegacao("/clientes")
+                    show('Operação realizada com sucesso', 'success', 'Success');
+                    navegacao("/clientes");
                 })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')))
-            }
-            
+                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
         }
+    }
         
         useEffect(() => {
             if (codigo !== undefined) {
                 document.title = "Editar cliente";
                 ClienteService.buscar(codigo)
                     .then(response => {
-                        response.data.dataNascimento = moment( response.data.dataNascimento).add(1, "days").toDate();
+                        response.data.dataNascimento = moment(response.data.dataNascimento).add(1, "days").toDate();
                         setCliente(response.data);
                         setEndereco(response.data.endereco);
                     })
@@ -186,10 +168,10 @@ const CadastroCliente = () => {
 
                 <div>
                     <div>
-                        <label htmlFor="descricao">Descrição</label>
+                        <label htmlFor="observacao">Observação</label>
                     </div>
                     <div>
-                        <InputTextarea name="descricao" rows={5} cols={30} />
+                        <InputTextarea name="observacao" rows={5} cols={30} value={cliente.observacao} onChange={atualizarValores} />
                     </div>
                 </div>
             </div>

@@ -6,13 +6,8 @@ import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Toast } from 'primereact/toast';
 
-import FilaService from '../../../service/filaService'
-
-const Fila = {
-    codigo: '',
-    nome: '',
-    descricao: ''
-}
+import FilaService from '../../../service/filaService';
+import Fila from '../../../dto/fila';
 
 const CadastroFila = () => {
     const navegacao = useNavigate();
@@ -33,17 +28,17 @@ const CadastroFila = () => {
         if (fila.codigo === '') {
             FilaService.salvar(fila)
                 .then(() => {
-                    show('Operação realizada com sucesso', 'success', 'Success')
-                    navegacao("/filas")
+                    show('Operação realizada com sucesso', 'success', 'Success');
+                    navegacao("/filas");
                 })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')))
+                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
             } else {
                 FilaService.atualizar(fila.codigo, fila)
                 .then(() => {
-                    show('Operação realizada com sucesso', 'success', 'Success')
-                    navegacao("/filas")
+                    show('Operação realizada com sucesso', 'success', 'Success');
+                    navegacao("/filas");
                 })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')))
+                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
         }
         
     }
@@ -53,6 +48,7 @@ const CadastroFila = () => {
             document.title = "Editar fila";
             FilaService.buscar(codigo)
                 .then(response => setFila(response.data))
+                .catch(response => console.log(response));
         } else {
             document.title = 'Novo fila';
         }

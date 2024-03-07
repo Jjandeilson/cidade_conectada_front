@@ -27,7 +27,13 @@ const ClienteService = {
     excluir: async function(codigoCliente) {
         const response = await http.delete(`${urlCliente}/${codigoCliente}`)
         return response; 
+    },
+
+    buscarPorCpf: async function(cpf) {
+        const response = await http.get(`${urlCliente}/buscar-por-cpf/${cpf}`)
+        return response; 
     }
+
 }
 
 export default ClienteService

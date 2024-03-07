@@ -14,21 +14,7 @@ import UsuarioService from '../../../service/usuarioService';
 import SetorService from '../../../service/sertorService';
 import FilaService from '../../../service/filaService';
 
-const Setor = {
-    codigo: ''
-}
-
-const Usuario = {
-    codigo: '',
-    nome: '',
-    login: '',
-    senha: '',
-    telefone: '',
-    celular: '',
-    email: '',
-    atendente: false,
-    setor: Setor
-}
+import Usuario from '../../../dto/usuario';
 
 const optionsSelectButton = [
     {nome:'Ativo', valor: true},

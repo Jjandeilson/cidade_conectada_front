@@ -8,11 +8,7 @@ import { Toast } from 'primereact/toast';
 
 import SetorService from '../../../service/sertorService';
 
-const Setor = {
-    codigo: '',
-    nome: '',
-    descricao: ''
-}
+import Setor from '../../../dto/setor';
 
 const CadastroSetor = () => {
     const navegacao = useNavigate();
@@ -33,17 +29,17 @@ const CadastroSetor = () => {
         if (setor.codigo === '') {
             SetorService.salvar(setor)
                 .then(() => {
-                    show('Operação realizada com sucesso', 'success', 'Success')
-                    navegacao("/setores")
+                    show('Operação realizada com sucesso', 'success', 'Success');
+                    navegacao("/setores");
                 })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')))
+                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
             } else {
                 SetorService.atualizar(setor.codigo, setor)
                 .then(() => {
-                    show('Operação realizada com sucesso', 'success', 'Success')
-                    navegacao("/setores")
+                    show('Operação realizada com sucesso', 'success', 'Success');
+                    navegacao("/setores");
                 })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')))
+                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
         }
         
     }
@@ -53,6 +49,7 @@ const CadastroSetor = () => {
             document.title = "Editar setor";
             SetorService.buscar(codigo)
                 .then(response => setSetor(response.data))
+                .catch(response => console.log(response));
         } else {
             document.title = 'Novo setor';
         }

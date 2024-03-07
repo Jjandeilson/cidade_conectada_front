@@ -16,6 +16,7 @@ import TabelaTipoOcorrencia from './pages/tipo-ocorrencia/tabela-tipo-ocorrencia
 import CadastroTipoOcorencia from './pages/tipo-ocorrencia/cadastro-tipo-ocorrencia';
 import TabelaAtendimento from './pages/atendimento/tabela-atendimento';
 import CadastroAtendimento from './pages/atendimento/cadastro-atendimento';
+import AcompanhamentoAtendimento from './pages/atendimento/acompanhamento-atendimento';
 
 function App() {
   return (
@@ -55,6 +56,7 @@ function App() {
           <Route path="atendimentos">
             <Route path="" element={<TabelaAtendimento />} />
             <Route path="novo" element={<CadastroAtendimento />} />
+            <Route path=":codigo/editar" element={<AcompanhamentoAtendimento />} />
           </Route>
         </Route>
       </Routes>

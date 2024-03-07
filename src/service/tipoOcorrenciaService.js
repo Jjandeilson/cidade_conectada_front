@@ -8,6 +8,11 @@ const TipoOcorrenciaService = {
         const response = await http.get(`${urlTipoOcorrencias}?page=${numeroPagina}`);
         return response;
     },
+   
+    listaTodosTiposOcorrencias : async function() {
+        const response = await http.get(`${urlTipoOcorrencias}/todas`);
+        return response;
+    },
 
     buscar: async function(codigoTipoOcorrencia) {
         const response = await http.get(`${urlTipoOcorrencias}/${codigoTipoOcorrencia}`)

@@ -53,6 +53,7 @@ const UsuarioService = {
         const response = await http.delete(`${urlUsuario}/${codigoUsuario}/filas/${codigoFila}`);
         return response;
     }
+    
 }
 
 export default UsuarioService

@@ -11,16 +11,7 @@ import CadastroOcorrencia from '../../ocorrencia/cadastro-ocorrencia';
 import TipoOcorrenciaService from '../../../service/tipoOcorrenciaService';
 import SetorService from '../../../service/sertorService';
 
-const Setor = {
-    codigo: ''
-}
-
-const TipoOcorrencia = {
-    codigo: '',
-    nome: '',
-    descricao: '',
-    setor: Setor
-}
+import TipoOcorrencia from '../../../dto/tipo-ocorrencia';
 
 const CadastroTipoOcorencia = () => {
     const toast = useRef(null);
@@ -43,16 +34,16 @@ const CadastroTipoOcorencia = () => {
             TipoOcorrenciaService.salvar(tipoOcorrencia)
                 .then(() => {
                     show('Operação realizada com sucesso', 'success', 'Success');
-                    navegacao("/tipos-ocorrencia")
+                    navegacao("/tipos-ocorrencia");
                 })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')))
+                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
         } else {
             TipoOcorrenciaService.atualizar(tipoOcorrencia.codigo, tipoOcorrencia)
                     .then(() => {
-                        show('Operação realizada com sucesso', 'success', 'Success')
-                        navegacao("/tipos-ocorrencia")
+                        show('Operação realizada com sucesso', 'success', 'Success');
+                        navegacao("/tipos-ocorrencia");
                     })
-                    .catch(response => (show(response.response.data.detail, 'error', 'Error')))
+                    .catch(response => (show(response.response.data.detail, 'error', 'Error')));
             }
     }
 

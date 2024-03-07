@@ -8,13 +8,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { Toast } from 'primereact/toast';
 
 import CanalAntendimentoService from '../../../service/canalAtendimentoService';
-
-const Canal = {
-    codigo: '',
-    nome: '',
-    icone: '',
-    descricao: ''
-}
+import CanalAtendimento from '../../../dto/canal-atendimento';
 
 const icones = ["Whatsapp", "Chat", "Presencial"]
 
@@ -22,15 +16,15 @@ const CadastroCanalAtendimento = () => {
     const navegacao = useNavigate();
     const toast = useRef(null);
     const {codigo} = useParams();
-    const [canal, setCanal] = useState(Canal);
-    const canalAtendimentoService = CanalAntendimentoService
+    const [canal, setCanal] = useState(CanalAtendimento);
+    const canalAtendimentoService = CanalAntendimentoService;
 
     const show = (mensagem, severity, summary) => {
         toast.current.show({ severity: severity, summary: summary, detail: mensagem });
-    };
+    }
 
     function atualizarValores(envet) {
-        const {name, value} = envet.target
+        const {name, value} = envet.target;
         setCanal({...canal,[name]: value});
     }
 
@@ -38,17 +32,17 @@ const CadastroCanalAtendimento = () => {
         if (canal.codigo === '') {
             canalAtendimentoService.salvar(canal)
                 .then(() => {
-                    show('Operação realizada com sucesso', 'success', 'Success')
-                    navegacao("/canais-atendimento")
+                    show('Operação realizada com sucesso', 'success', 'Success');
+                    navegacao("/canais-atendimento");
                 })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')))
+                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
             } else {
                 canalAtendimentoService.atualizar(canal.codigo, canal)
                 .then(() => {
-                    show('Operação realizada com sucesso', 'success', 'Success')
-                    navegacao("/canais-atendimento")
+                    show('Operação realizada com sucesso', 'success', 'Success');
+                    navegacao("/canais-atendimento");
                 })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')))
+                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
         }
         
     }
@@ -58,6 +52,7 @@ const CadastroCanalAtendimento = () => {
             document.title = "Editar canal de atendimento";
             canalAtendimentoService.buscar(codigo)
                 .then(response => setCanal(response.data))
+                .catch(response => console.log(response));
         } else {
             document.title = 'Novo canal de atendimento';
         }

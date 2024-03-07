@@ -12,17 +12,8 @@ import { Toast } from 'primereact/toast';
 
 import CadastroEtapa from '../../etapa/cadastro-etapa';
 import OcorrenciaService from '../../../service/ocorrenciaService';
-
-const tipoOcorrencia = {
-    codigo: ''
-}
-
-const Ocorrencia = {
-    codigo: '',
-    nome: '',
-    descricao: '',
-    tipoOcorrencia: tipoOcorrencia
-}
+import Ocorrencia from '../../../dto/ocorrencia';
+import TipoOcorrencia from '../../../dto/tipo-ocorrencia';
 
 const CadastroOcorrencia = () => {
     const toast = useRef(null);
@@ -49,31 +40,28 @@ const CadastroOcorrencia = () => {
                     setOcorrencia(Ocorrencia);
                     OcorrenciaService.listar(codigo)
                         .then(response => setOcorrencias(response.data))
-                        .catch(response => console.log(response))
+                        .catch(response => console.log(response));
                 })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')))
+                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
             } else {
                 OcorrenciaService.atualizar(codigo, ocorrencia)
                 .then(() => {
-                    show('Operação realizada com sucesso', 'success', 'Success')
+                    show('Operação realizada com sucesso', 'success', 'Success');
                     setOcorrencia(Ocorrencia);
                 })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')))
+                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
             }
     }
 
     const excluirOcorrencia = (codigoOcorrencia) => {
         OcorrenciaService.excluir(codigo, codigoOcorrencia)
             .then(() => {
-                show('Operação realizada com sucesso', 'success', 'Success')
+                show('Operação realizada com sucesso', 'success', 'Success');
                 OcorrenciaService.listar(codigo)
                     .then(response => setOcorrencias(response.data))
-                    .catch(response => console.log(response))
+                    .catch(response => console.log(response));
             })
-            .catch(response => (
-                console.log(response)
-                // show(response.response.data.detail, 'error', 'Error')
-            ))
+            .catch(response => console.log(response));
     }
 
     const exibirModalEtapa = (codigoOcorrencia) => {
@@ -91,8 +79,8 @@ const CadastroOcorrencia = () => {
     }
 
     useEffect(() => {
-       tipoOcorrencia.codigo = codigo;
-       ocorrencia.tipoOcorrencia = tipoOcorrencia;
+       TipoOcorrencia.codigo = codigo;
+       ocorrencia.tipoOcorrencia = TipoOcorrencia;
        OcorrenciaService.listar(codigo)
         .then(response => setOcorrencias(response.data))
         .catch(response => console.log(response))

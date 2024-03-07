@@ -8,16 +8,8 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import { Toast } from 'primereact/toast';
 
 import EtapaService from '../../../service/etapaService';
-
-const Ocorrencia = {
-    codigo: ''
-}
-
-const Etapa = {
-    nome: '',
-    descricao: '',
-    ocorrencia: Ocorrencia
-}
+import Etapa from '../../../dto/etapa';
+import Ocorrencia from '../../../dto/ocorrencia';
 
 const CadastroEtapa = ({codigoOcorrencia}) => {
     const toast = useRef(null);
@@ -30,7 +22,7 @@ const CadastroEtapa = ({codigoOcorrencia}) => {
     };
 
     function atualizarValores(envet) {
-        const {name, value} = envet.target
+        const {name, value} = envet.target;
         setEtapa({...etapa,[name]: value});
     }
 
@@ -41,9 +33,9 @@ const CadastroEtapa = ({codigoOcorrencia}) => {
                 
                 EtapaService.listar(codigo)
                     .then(response => setEtapas(response.data))
-                    .catch(response => console.log(response))
+                    .catch(response => console.log(response));
             })
-            .catch(response => console.log(response))
+            .catch(response => console.log(response));
     }
 
     function excluirEtapa(codigoEtapa) {
@@ -51,9 +43,9 @@ const CadastroEtapa = ({codigoOcorrencia}) => {
             .then(() => {
                 EtapaService.listar(codigo)
                 .then(response => setEtapas(response.data))
-                .catch(response => console.log(response))
+                .catch(response => console.log(response));
             })
-            .catch(response => console.log(response))
+            .catch(response => console.log(response));
     }
 
     const botoesTabelaEtapa = (etapa) => {
