@@ -42,13 +42,13 @@ const AcompanhamentoAtendimento = () => {
     function podeIniciarEtapa(etapa) {
         let executarEtapa = true;
         
-        if ((etapa.inicio != null && etapa.posicao == 1 || etapa.status !== 'PENDENTE') || (etapa.inicio == null && etapa.posicao > 1 && etapa.status !== 'PENDENTE' && etapaAtual)) {
+        if (((etapa.inicio !== null && etapa.posicao === 1) || etapa.status !== 'PENDENTE') || (etapa.inicio === null && etapa.posicao > 1 && etapa.status !== 'PENDENTE' && etapaAtual)) {
             executarEtapa = false;
         }
         
-        if (etapa.status == 'FINALIZADO') {
+        if (etapa.status === 'FINALIZADO') {
            etapaAtual = true;
-        } else if (etapa.status == 'PENDENTE' && etapaAtual || (etapa.posicao == numeroEtapaAtual)) {
+        } else if ((etapa.status === 'PENDENTE' && etapaAtual) || (etapa.posicao === numeroEtapaAtual)) {
             etapaAtual = false;
             numeroEtapaAtual = etapa.posicao;
         }
@@ -63,7 +63,21 @@ const AcompanhamentoAtendimento = () => {
         AtendimentoService.iniciarEtapa(codigo, codigoEtapa)
             .then(() => {
                 AtendimentoService.buscarEtapasAtendimento(codigo)
-                    .then(response => setEtapas(response.data))
+                    .then(response => {
+                        let etapasBanco = response.data;
+
+                        etapasBanco.forEach(etapa => {
+                            if (etapa.inicio) {
+                                etapa.inicio = moment(etapa.inicio).format("DD/MM/YYYY HH:mm:ss");
+                            }
+
+                            if (etapa.fim) {
+                                etapa.fim = moment(etapa.fim).format("DD/MM/YYYY HH:mm:ss");
+                            }
+                        });
+
+                        setEtapas(etapasBanco);
+                    })
                     .catch(response => console.log(response));
             })
             .catch(response => console.log(response));
@@ -73,7 +87,21 @@ const AcompanhamentoAtendimento = () => {
         AtendimentoService.finalizarEtapa(codigo, codigoEtapa)
             .then(() => {
                 AtendimentoService.buscarEtapasAtendimento(codigo)
-                .then(response => setEtapas(response.data))
+                .then(response => {
+                    let etapasBanco = response.data;
+
+                    etapasBanco.forEach(etapa => {
+                        if (etapa.inicio) {
+                            etapa.inicio = moment(etapa.inicio).format("DD/MM/YYYY HH:mm:ss");
+                        }
+
+                        if (etapa.fim) {
+                            etapa.fim = moment(etapa.fim).format("DD/MM/YYYY HH:mm:ss");
+                        }
+                    });
+
+                    setEtapas(etapasBanco);
+                })
                 .catch(response => console.log(response));
             })
             .catch(response => console.log(response));
@@ -116,7 +144,15 @@ const AcompanhamentoAtendimento = () => {
 
         AtendimentoService.buscar(codigo)
             .then(response => {
-                setAtendimento(response.data);
+                let atendimentoBanco = response.data;
+
+                atendimentoBanco.abertura = moment(atendimentoBanco.abertura).format("DD/MM/YYYY HH:mm:ss");
+
+                if (atendimentoBanco.fechamento) {
+                    atendimentoBanco.fechamento = moment(atendimentoBanco.fechamento).format("DD/MM/YYYY HH:mm:ss");
+                }
+
+                setAtendimento(atendimentoBanco);
                 OcorrenciaService.listar(response.data.tipoOcorrencia.codigo)
                     .then(response => setOcorrencias(response.data))
                     .catch(response => console.log(response));
@@ -124,7 +160,21 @@ const AcompanhamentoAtendimento = () => {
             .catch(response => console.log(response));
 
         AtendimentoService.buscarEtapasAtendimento(codigo)
-            .then(response => setEtapas(response.data))
+            .then(response => {
+                let etapasBanco = response.data;
+
+                etapasBanco.forEach(etapa => {
+                    if (etapa.inicio) {
+                        etapa.inicio = moment(etapa.inicio).format("DD/MM/YYYY HH:mm:ss");
+                    }
+
+                    if (etapa.fim) {
+                        etapa.fim = moment(etapa.fim).format("DD/MM/YYYY HH:mm:ss");
+                    }
+                });
+
+                setEtapas(etapasBanco);
+            })
             .catch(response => console.log(response));    
         
 }, [codigo]);
@@ -237,7 +287,10 @@ const AcompanhamentoAtendimento = () => {
                     </div>
                 </TabPanel>
                 <TabPanel header="Dados do atendimento">
-                <div>
+                    <div>
+                        <div>
+                            <span><label>Data de abertura: {atendimento.abertura}</label></span> | <span><label>Data de finalização: {atendimento.fechamento}</label></span> | <span><label>Status: {atendimento.status}</label></span>
+                        </div>
                         <div>
                             <div>
                                 <label htmlFor="canalAtendimento">Canal de atendimento</label>

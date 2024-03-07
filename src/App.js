@@ -17,6 +17,7 @@ import CadastroTipoOcorencia from './pages/tipo-ocorrencia/cadastro-tipo-ocorren
 import TabelaAtendimento from './pages/atendimento/tabela-atendimento';
 import CadastroAtendimento from './pages/atendimento/cadastro-atendimento';
 import AcompanhamentoAtendimento from './pages/atendimento/acompanhamento-atendimento';
+import AcompanharAtendimentoCliente from './pages/atendimento/acompanhar-atendimento-cliente';
 
 function App() {
   return (
@@ -58,6 +59,9 @@ function App() {
             <Route path="novo" element={<CadastroAtendimento />} />
             <Route path=":codigo/editar" element={<AcompanhamentoAtendimento />} />
           </Route>
+        </Route>
+        <Route path="consultar-protocolo">
+           <Route path="" element={<AcompanharAtendimentoCliente />} />
         </Route>
       </Routes>
     </>

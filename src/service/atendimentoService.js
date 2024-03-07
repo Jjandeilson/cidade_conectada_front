@@ -47,6 +47,11 @@ const AtendimentoService = {
     finalizarEtapa: async function(codigoAtendimento, codigoEtapa) {
         const response = await http.put(`${urlAtendimentos}/${codigoAtendimento}/etapas/${codigoEtapa}/finalizar`);
         return response;
+    },
+
+    consultarProtocolo: async function(protocolo) {
+        const response = await http.get(`${urlAtendimentos}/consultar-protocolo/${protocolo}`);
+        return response;
     }
 }
 
