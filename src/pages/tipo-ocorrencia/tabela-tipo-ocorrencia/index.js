@@ -22,7 +22,7 @@ const TabelaTipoOcorrencia = () => {
     const show = (mensagem, severity, summary) => {
         toast.current.show({ severity: severity, summary: summary, detail: mensagem });
     };
-    
+
     const excluir = (codigo) => {
         TipoOcorrenciaService.excluir(codigo)
             .then(() => {
@@ -52,17 +52,17 @@ const TabelaTipoOcorrencia = () => {
     }
 
     const botoesEditarExcluir = (tipo) => {
-        return  (
+        return (
             <>
-               <Button label="Editar" onClick={() => navegacao(`/tipos-ocorrencia/${tipo.codigo}/editar`)}/>
-               <Button label="Excluir" onClick={() => excluir(tipo.codigo)} severity="warning"/>
+                <Button label="Editar" onClick={() => navegacao(`/tipos-ocorrencia/${tipo.codigo}/editar`)} />
+                <Button label="Excluir" onClick={() => excluir(tipo.codigo)} severity="warning" />
             </>
         )
     }
 
     useEffect(() => {
         TipoOcorrenciaService.listar()
-            .then(response =>  {
+            .then(response => {
                 setTiposOcorrencias(response.data.content);
                 setNumeroPagina(response.data.number);
                 setQuantidadePorPagina(response.data.size);
@@ -74,17 +74,19 @@ const TabelaTipoOcorrencia = () => {
     return (
         <>
             <div>
-                <a onClick={() => navegacao("/tipos-ocorrencia/novo")} className="p-button font-bold">Novo tipo de ocorrência</a>
+                <div>
+                    <a onClick={() => navegacao("/tipos-ocorrencia/novo")} className="p-button font-bold">Novo tipo de ocorrência</a>
+                </div>
+
+                <DataTable value={tiposOCorrencia} tableStyle={{ minWidth: '50rem' }}>
+                    <Column field="nome" header="Nome"></Column>
+                    <Column field="setorNome" header="Setor"></Column>
+                    <Column field="acoes" header="Ações" body={botoesEditarExcluir}></Column>
+                </DataTable>
+                <Paginator first={numeroPagina} rows={quantidadePorPagina} totalRecords={totalRegistros} onPageChange={atualizarPagina} />
+
+                <Toast ref={toast} />
             </div>
-
-            <DataTable value={tiposOCorrencia} tableStyle={{ minWidth: '50rem' }}>
-                <Column field="nome" header="Nome"></Column>
-                <Column field="setorNome" header="Setor"></Column>
-                <Column field="acoes" header="Ações" body={botoesEditarExcluir}></Column>
-            </DataTable>
-            <Paginator first={numeroPagina} rows={quantidadePorPagina} totalRecords={totalRegistros} onPageChange={atualizarPagina}/>
-
-            <Toast ref={toast} />
         </>
     )
 }

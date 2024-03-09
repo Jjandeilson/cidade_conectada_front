@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom"
 
-import MenuNavegacao from "../../shared/menu_navegacao"
+import MenuNavegacao from "../../shared/menu_navegacao/menu"
 
 const Main = () => {
     return (

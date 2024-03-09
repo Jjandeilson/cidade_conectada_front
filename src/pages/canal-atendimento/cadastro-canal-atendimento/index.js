@@ -15,7 +15,7 @@ const icones = ["Whatsapp", "Chat", "Presencial"]
 const CadastroCanalAtendimento = () => {
     const navegacao = useNavigate();
     const toast = useRef(null);
-    const {codigo} = useParams();
+    const { codigo } = useParams();
     const [canal, setCanal] = useState(CanalAtendimento);
     const canalAtendimentoService = CanalAntendimentoService;
 
@@ -24,8 +24,8 @@ const CadastroCanalAtendimento = () => {
     }
 
     function atualizarValores(envet) {
-        const {name, value} = envet.target;
-        setCanal({...canal,[name]: value});
+        const { name, value } = envet.target;
+        setCanal({ ...canal, [name]: value });
     }
 
     function salvar() {
@@ -36,15 +36,15 @@ const CadastroCanalAtendimento = () => {
                     navegacao("/canais-atendimento");
                 })
                 .catch(response => (show(response.response.data.detail, 'error', 'Error')));
-            } else {
-                canalAtendimentoService.atualizar(canal.codigo, canal)
+            }  else {
+            
+            canalAtendimentoService.atualizar(canal.codigo, canal)
                 .then(() => {
                     show('Operação realizada com sucesso', 'success', 'Success');
                     navegacao("/canais-atendimento");
                 })
                 .catch(response => (show(response.response.data.detail, 'error', 'Error')));
         }
-        
     }
 
     useEffect(() => {
@@ -61,39 +61,41 @@ const CadastroCanalAtendimento = () => {
 
     return (
         <>
-            <div>
-                <Button label="Salvar" severity="success" onClick={salvar}/>
-                <a onClick={() => navegacao("/canais-atendimento")} className="p-button p-button-warning font-bold">Cancelar</a>
-            </div>
+            <div className="formcanalatendimento" style={{ display: 'flex', flexDirection: 'column' }} >
 
-            <div>
                 <div>
-                    <label htmlFor="nome">Nome</label>
+                    <div>
+                        <label htmlFor="nome">Nome</label>
+                    </div>
+                    <div>
+                        <InputText name="nome" value={canal.nome} onChange={atualizarValores} />
+                    </div>
                 </div>
-                <div>
-                    <InputText name="nome" value={canal.nome} onChange={atualizarValores} />
-                </div>
-            </div>
-            
-            <div>
-                <div>
-                    <label htmlFor="nome">Ícone</label>
-                </div>
-                <div>
-                    <Dropdown options={icones} name="icone" value={canal?.icone} onChange={atualizarValores} placeholder="Selecione" className="w-full md:w-14rem" />
-                </div>
-            </div>
 
-            <div>
                 <div>
-                    <label htmlFor="nome">Descrição</label>
+                    <div>
+                        <label htmlFor="nome">Ícone</label>
+                    </div>
+                    <div>
+                        <Dropdown options={icones} name="icone" value={canal?.icone} onChange={atualizarValores} placeholder="Selecione" className="w-full md:w-14rem" />
+                    </div>
                 </div>
-                <div>
-                    <InputTextarea name="descricao" value={canal?.descricao} onChange={atualizarValores} rows={5} cols={30} />
-                </div>
-            </div>
 
-            <Toast ref={toast} />
+                <div>
+                    <div>
+                        <label htmlFor="nome">Descrição</label>
+                    </div>
+                    <div>
+                        <InputTextarea name="descricao" value={canal?.descricao} onChange={atualizarValores} rows={5} cols={30} />
+                    </div>
+                </div>
+                <div>
+                    <Button label="Salvar" severity="success" onClick={salvar} />
+                    <a onClick={() => navegacao("/canais-atendimento")} className="p-button p-button-warning font-bold">Cancelar</a>
+                </div>
+
+                <Toast ref={toast} />
+            </div>
         </>
     )
 }

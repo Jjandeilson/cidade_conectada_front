@@ -72,7 +72,7 @@ const CadastroAtendimento = () => {
     function salvar() {
         cliente.endereco = endereco;
         atendimento.cliente = cliente;
-            
+        
         AtendimentoService.salvar(atendimento)
             .then(() => {
                 show('Operação realizada com sucesso', 'success', 'Success');
@@ -89,6 +89,7 @@ const CadastroAtendimento = () => {
         TipoOcorrenciaService.listaTodosTiposOcorrencias()
             .then(response =>  setTiposOcorrencia(response.data))
             .catch(response => console.log(response));
+
     }, [])
 
     return (
@@ -137,7 +138,6 @@ const CadastroAtendimento = () => {
                                 <InputMask name="telefone" mask="(99) 99999-9999" unmask={true} value={cliente.telefone} onChange={atualizarValoresCliente} />
                             </div>
                         </div>
-                        
                         <div>
                             <div>
                                 <label htmlFor="celular">Celular</label>
@@ -239,6 +239,11 @@ const CadastroAtendimento = () => {
                         </div>
                     </div>
                 </Panel>
+                
+                <div>
+                    <Button label="Salvar" severity="success" onClick={salvar} />
+                    <a onClick={() => navegacao("/atendimentos")} className="p-button p-button-warning font-bold">Cancelar</a>
+                </div>
 
                 <Toast ref={toast} />
             </div>

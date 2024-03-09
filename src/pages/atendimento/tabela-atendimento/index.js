@@ -29,7 +29,7 @@ const TabelaAtendimento = () => {
         AtendimentoService.listar(e.page)
             .then(response => {
                 let atendimentoBanco = response.data.content;
-               
+
                 atendimentoBanco.forEach(atendimento => {
                    atendimento.abertura = moment(atendimento.abertura).format("DD/MM/YYYY HH:mm:ss");
                    

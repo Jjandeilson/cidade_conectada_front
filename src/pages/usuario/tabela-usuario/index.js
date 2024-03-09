@@ -22,7 +22,7 @@ const TabelaUsuario = () => {
     const show = (mensagem, severity, summary) => {
         toast.current.show({ severity: severity, summary: summary, detail: mensagem });
     };
-    
+
     const excluir = (codigo) => {
         UsuarioService.excluir(codigo)
             .then(() => {
@@ -51,17 +51,17 @@ const TabelaUsuario = () => {
     }
 
     const botoesEditarExcluir = (usuario) => {
-        return  (
+        return (
             <>
-               <Button label="Editar" onClick={() => navegacao(`/usuarios/${usuario.codigo}/editar`)}/>
-               <Button label="Excluir" onClick={() => excluir(usuario.codigo)} severity="warning"/>
+                <Button label="Editar" onClick={() => navegacao(`/usuarios/${usuario.codigo}/editar`)} />
+                <Button label="Excluir" onClick={() => excluir(usuario.codigo)} severity="warning" />
             </>
         )
     }
 
     useEffect(() => {
         UsuarioService.listar()
-            .then(response =>  {
+            .then(response => {
                 setUsuarios(response.data.content);
                 setNumeroPagina(response.data.number);
                 setQuantidadePorPagina(response.data.size);
@@ -71,21 +71,23 @@ const TabelaUsuario = () => {
 
     return (
         <>
-             <div>
-                <a onClick={() => navegacao("/usuarios/novo")} className="p-button font-bold">Novo usuário</a>
+            <div>
+                <div>
+                    <a onClick={() => navegacao("/usuarios/novo")} className="p-button font-bold">Novo usuário</a>
+                </div>
+
+                <DataTable value={usuarios} tableStyle={{ minWidth: '50rem' }}>
+                    <Column field="nome" header="Nome"></Column>
+                    <Column field="email" header="E-amil"></Column>
+                    <Column field="telefone" header="Telefone"></Column>
+                    <Column field="celular" header="Celular"></Column>
+                    <Column field="atendente" header="Atendente"></Column>
+                    <Column field="acoes" header="Ações" body={botoesEditarExcluir}></Column>
+                </DataTable>
+                <Paginator first={numeroPagina} rows={quantidadePorPagina} totalRecords={totalRegistros} onPageChange={atualizarPagina} />
+
+                <Toast ref={toast} />
             </div>
-
-            <DataTable value={usuarios}  tableStyle={{ minWidth: '50rem' }}>
-                <Column field="nome" header="Nome"></Column>
-                <Column field="email" header="E-amil"></Column>
-                <Column field="telefone" header="Telefone"></Column>
-                <Column field="celular" header="Celular"></Column>
-                <Column field="atendente" header="Atendente"></Column>
-                <Column field="acoes" header="Ações" body={botoesEditarExcluir}></Column>
-            </DataTable>
-            <Paginator first={numeroPagina} rows={quantidadePorPagina} totalRecords={totalRegistros} onPageChange={atualizarPagina}/>
-
-            <Toast ref={toast} />
         </>
     )
 }

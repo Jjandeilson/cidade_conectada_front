@@ -17,7 +17,7 @@ import Endereco from '../../../dto/endereco';
 const CadastroCliente = () => {
     const navegacao = useNavigate();
     const toast = useRef(null);
-    const {codigo} = useParams();
+    const { codigo } = useParams();
     const [endereco, setEndereco] = useState(Endereco);
     const [cliente, setCliente] = useState(Cliente);
 
@@ -39,11 +39,11 @@ const CadastroCliente = () => {
         if (cliente.codigo === '') {
             cliente.endereco = endereco;
             ClienteService.salvar(cliente)
-            .then(() => {
-                show('Operação realizada com sucesso', 'success', 'Success');
-                navegacao("/clientes");
-            })
-            .catch(response => (show(response.response.data.detail, 'error', 'Error')));
+                .then(() => {
+                    show('Operação realizada com sucesso', 'success', 'Success');
+                    navegacao("/clientes");
+                })
+                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
         } else {
             cliente.endereco = endereco;
             ClienteService.atualizar(cliente.codigo, cliente)
@@ -54,17 +54,17 @@ const CadastroCliente = () => {
                 .catch(response => (show(response.response.data.detail, 'error', 'Error')));
         }
     }
-        
-        useEffect(() => {
-            if (codigo !== undefined) {
-                document.title = "Editar cliente";
-                ClienteService.buscar(codigo)
-                    .then(response => {
-                        response.data.dataNascimento = moment(response.data.dataNascimento).add(1, "days").toDate();
-                        setCliente(response.data);
-                        setEndereco(response.data.endereco);
-                    })
-                    .catch(response => console.log(response))
+
+    useEffect(() => {
+        if (codigo !== undefined) {
+            document.title = "Editar cliente";
+            ClienteService.buscar(codigo)
+                .then(response => {
+                    response.data.dataNascimento = moment(response.data.dataNascimento).add(1, "days").toDate();
+                    setCliente(response.data);
+                    setEndereco(response.data.endereco);
+                })
+                .catch(response => console.log(response))
         } else {
             document.title = 'Novo cliente';
         }
@@ -113,7 +113,6 @@ const CadastroCliente = () => {
                         <InputMask name="telefone" value={cliente.telefone} onChange={atualizarValores} mask="(99) 99999-9999" unmask={true} />
                     </div>
                 </div>
-            
                 <div>
                     <div>
                         <label htmlFor="celular">Celular</label>
@@ -137,7 +136,7 @@ const CadastroCliente = () => {
                             <label htmlFor="logradouro">Logradouro</label>
                         </div>
                         <div>
-                            <InputText name="logradouro" value={endereco.logradouro} onChange={atualizarValoresEndereco}/>
+                            <InputText name="logradouro" value={endereco.logradouro} onChange={atualizarValoresEndereco} />
                         </div>
                     </div>
                     <div>
@@ -145,7 +144,7 @@ const CadastroCliente = () => {
                             <label htmlFor="numero">Número</label>
                         </div>
                         <div>
-                            <InputText name="numero" value={endereco.numero} onChange={atualizarValoresEndereco}/>
+                            <InputText name="numero" value={endereco.numero} onChange={atualizarValoresEndereco} />
                         </div>
                     </div>
                     <div>
@@ -153,7 +152,7 @@ const CadastroCliente = () => {
                             <label htmlFor="bairro">Bairro</label>
                         </div>
                         <div>
-                            <InputText name="bairro" value={endereco.bairro} onChange={atualizarValoresEndereco}/>
+                            <InputText name="bairro" value={endereco.bairro} onChange={atualizarValoresEndereco} />
                         </div>
                     </div>
                     <div>

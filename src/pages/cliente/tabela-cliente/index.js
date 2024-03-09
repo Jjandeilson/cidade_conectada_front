@@ -13,7 +13,6 @@ import ClienteService from '../../../service/clienteService';
 
 const TabelaCliente = () => {
     document.title = 'Listagem de clientes';
-    
     const toast = useRef(null);
     const [clientes, setClientes] = useState([]);
     const [numeroPagina, setNumeroPagina] = useState(0);
@@ -24,7 +23,7 @@ const TabelaCliente = () => {
     const show = (mensagem, severity, summary) => {
         toast.current.show({ severity: severity, summary: summary, detail: mensagem });
     };
-    
+
     const excluir = (codigo) => {
         ClienteService.excluir(codigo)
             .then(() => {
@@ -46,9 +45,9 @@ const TabelaCliente = () => {
         ClienteService.listar(e.page)
             .then(response => {
                 let clientesBanco = response.data.content;
-                
+
                 clientesBanco.forEach(cliente => {
-                   cliente.dataNascimento = moment(cliente.dataNascimento).add(1, "days").format("DD/MM/YYYY");
+                    cliente.dataNascimento = moment(cliente.dataNascimento).add(1, "days").format("DD/MM/YYYY");
                 });
 
                 setClientes(clientesBanco);
@@ -60,23 +59,23 @@ const TabelaCliente = () => {
     }
 
     const botoesEditarExcluir = (setor) => {
-        return  (
+        return (
             <>
-               <Button label="Editar" onClick={() => navegacao(`/clientes/${setor.codigo}/editar`)}/>
-               <Button label="Excluir" onClick={() => excluir(setor.codigo)} severity="warning"/>
+                <Button label="Editar" onClick={() => navegacao(`/clientes/${setor.codigo}/editar`)} />
+                <Button label="Excluir" onClick={() => excluir(setor.codigo)} severity="warning" />
             </>
         )
     }
 
     useEffect(() => {
         ClienteService.listar()
-            .then(response =>  {
+            .then(response => {
                 let clientesBanco = response.data.content;
-                
+
                 clientesBanco.forEach(cliente => {
-                   cliente.dataNascimento = moment(cliente.dataNascimento).add(1, "days").format("DD/MM/YYYY");
+                    cliente.dataNascimento = moment(cliente.dataNascimento).add(1, "days").format("DD/MM/YYYY");
                 });
-                
+
                 setClientes(clientesBanco);
                 setNumeroPagina(response.data.number);
                 setQuantidadePorPagina(response.data.size);
@@ -87,21 +86,23 @@ const TabelaCliente = () => {
 
     return (
         <>
-             <div>
-                <a onClick={() => navegacao("/clientes/novo")} className="p-button font-bold">Novo cliente</a>
+            <div>
+                <div>
+                    <a onClick={() => navegacao("/clientes/novo")} className="p-button font-bold">Novo cliente</a>
+                </div>
+
+                <DataTable value={clientes} tableStyle={{ minWidth: '50rem' }}>
+                    <Column field="nome" header="Nome"></Column>
+                    <Column field="email" header="E-mail"></Column>
+                    <Column field="telefone" header="Telefone"></Column>
+                    <Column field="celular" header="Celular"></Column>
+                    <Column field="dataNascimento" header="Data de nascimento"></Column>
+                    <Column field="acoes" header="Ações" body={botoesEditarExcluir}></Column>
+                </DataTable>
+                <Paginator first={numeroPagina} rows={quantidadePorPagina} totalRecords={totalRegistros} onPageChange={atualizarPagina} />
+
+                <Toast ref={toast} />
             </div>
-
-            <DataTable value={clientes}  tableStyle={{ minWidth: '50rem' }}>
-                <Column field="nome" header="Nome"></Column>
-                <Column field="email" header="E-mail"></Column>
-                <Column field="telefone" header="Telefone"></Column>
-                <Column field="celular" header="Celular"></Column>
-                <Column field="dataNascimento" header="Data de nascimento"></Column>
-                <Column field="acoes" header="Ações" body={botoesEditarExcluir}></Column>
-            </DataTable>
-            <Paginator first={numeroPagina} rows={quantidadePorPagina} totalRecords={totalRegistros} onPageChange={atualizarPagina}/>
-
-            <Toast ref={toast} />
         </>
     )
 }

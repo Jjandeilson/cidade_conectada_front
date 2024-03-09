@@ -11,7 +11,7 @@ import CanalAntendimentoService from '../../../service/canalAtendimentoService';
 
 const TabelaCanalAtendimento = () => {
     document.title = 'Listagem de canais de atendimento';
-    
+
     const toast = useRef(null);
     const [canais, setCanais] = useState([]);
     const [numeroPagina, setNumeroPagina] = useState(0);
@@ -51,38 +51,41 @@ const TabelaCanalAtendimento = () => {
     }
 
     const botoesEditarExcluir = (canal) => {
-        return  (
+        return (
             <>
-               <Button label="Editar" onClick={() => navegacao(`/canais-atendimento/${canal.codigo}/editar`)}/>
-               <Button label="Excluir" onClick={() => excluir(canal.codigo)} severity="warning"/>
+                <Button label="Editar" onClick={() => navegacao(`/canais-atendimento/${canal.codigo}/editar`)} />
+                <Button label="Excluir" onClick={() => excluir(canal.codigo)} severity="warning" />
             </>
         )
     }
 
     useEffect(() => {
         CanalAntendimentoService.listar()
-            .then(response =>  {
+            .then(response => {
                 setCanais(response.data.content);
                 setNumeroPagina(response.data.number);
                 setQuantidadePorPagina(response.data.size);
                 setTotalRegistros(response.data.totalElements);
-            });
+            })
+            .catch(response => console.log(response));
     }, [])
 
     return (
         <>
             <div>
-                <a onClick={() => navegacao("/canais-atendimento/novo")} className="p-button font-bold">Novo canal de atendimento</a>
-            </div>
+                <div>
+                    <a onClick={() => navegacao("/canais-atendimento/novo")} className="p-button font-bold">Novo canal de atendimento</a>
+                </div>
 
-            <DataTable value={canais}  tableStyle={{ minWidth: '50rem' }}>
-                <Column field="nome" header="Nome"></Column>
-                <Column field="descricao" header="Descrição"></Column>
-                <Column field="acoes" header="Ações" body={botoesEditarExcluir}></Column>
-            </DataTable>
-            <Paginator first={numeroPagina} rows={quantidadePorPagina} totalRecords={totalRegistros} onPageChange={atualizarPagina}/>
+                <DataTable value={canais} tableStyle={{ minWidth: '50rem' }}>
+                    <Column field="nome" header="Nome"></Column>
+                    <Column field="descricao" header="Descrição"></Column>
+                    <Column field="acoes" header="Ações" body={botoesEditarExcluir}></Column>
+                </DataTable>
+                <Paginator first={numeroPagina} rows={quantidadePorPagina} totalRecords={totalRegistros} onPageChange={atualizarPagina} />
 
-            <Toast ref={toast} />
+                <Toast ref={toast} />
+            </div >
         </>
     )
 }

@@ -1,0 +1,59 @@
+h1 {
+  text-align: center;
+}
+
+.cadastroForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #fff;
+  width: 500px;
+  height: 400px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.formField {
+  margin-bottom: 1rem;
+}
+
+.formLabel {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.formInput,
+.formTextarea {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.formTextarea {
+  resize: none;
+}
+
+.formActions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.submitButton {
+  background-color: green;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  padding: 10px 15px;
+}
+
+.cancelButton {
+  background-color: red;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  padding: 10px 15px;
+}

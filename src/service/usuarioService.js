@@ -43,7 +43,7 @@ const UsuarioService = {
         const response = await http.get(`${urlUsuario}/${codigoUsuario}/filas/nao-associadas`);
         return response;
     },
-    
+
     listarFilasUsuario: async function(codigoUsuario) {
         const response = await http.get(`${urlUsuario}/${codigoUsuario}/filas`);
         return response;

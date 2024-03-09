@@ -41,14 +41,14 @@ const AcompanhamentoAtendimento = () => {
 
     function podeIniciarEtapa(etapa) {
         let executarEtapa = true;
-        
-        if (((etapa.inicio !== null && etapa.posicao === 1) || etapa.status !== 'PENDENTE') || (etapa.inicio === null && etapa.posicao > 1 && etapa.status !== 'PENDENTE' && etapaAtual)) {
+
+        if ((etapa.inicio != null && etapa.posicao == 1 || etapa.status !== 'PENDENTE') || (etapa.inicio == null && etapa.posicao > 1 && etapa.status !== 'PENDENTE' && etapaAtual)) {
             executarEtapa = false;
         }
         
-        if (etapa.status === 'FINALIZADO') {
+        if (etapa.status == 'FINALIZADO') {
            etapaAtual = true;
-        } else if ((etapa.status === 'PENDENTE' && etapaAtual) || (etapa.posicao === numeroEtapaAtual)) {
+        } else if (etapa.status == 'PENDENTE' && etapaAtual || (etapa.posicao == numeroEtapaAtual)) {
             etapaAtual = false;
             numeroEtapaAtual = etapa.posicao;
         }
@@ -153,6 +153,7 @@ const AcompanhamentoAtendimento = () => {
                 }
 
                 setAtendimento(atendimentoBanco);
+
                 OcorrenciaService.listar(response.data.tipoOcorrencia.codigo)
                     .then(response => setOcorrencias(response.data))
                     .catch(response => console.log(response));
@@ -291,6 +292,8 @@ const AcompanhamentoAtendimento = () => {
                         <div>
                             <span><label>Data de abertura: {atendimento.abertura}</label></span> | <span><label>Data de finalização: {atendimento.fechamento}</label></span> | <span><label>Status: {atendimento.status}</label></span>
                         </div>
+                    </div>
+                    <div>
                         <div>
                             <div>
                                 <label htmlFor="canalAtendimento">Canal de atendimento</label>

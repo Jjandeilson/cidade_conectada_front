@@ -51,17 +51,28 @@ const TabelaFila = () => {
     }
 
     const botoesEditarExcluir = (fila) => {
+<<<<<<< HEAD
         return  (
             <>
                <Button label="Editar" onClick={() => navegacao(`/filas/${fila.codigo}/editar`)}/>
                <Button label="Excluir" onClick={() => excluir(fila.codigo)} severity="warning"/>
+=======
+        return (
+            <>
+                <Button label="Editar" onClick={() => navegacao(`/filas/${fila.codigo}/editar`)} />
+                <Button label="Excluir" onClick={() => excluir(fila.codigo)} severity="warning" />
+>>>>>>> 9c2db3f87547a638fd0d3a736e38eb0d8bdb5726
             </>
         )
     }
 
     useEffect(() => {
         FilaService.listar()
+<<<<<<< HEAD
             .then(response =>  {
+=======
+            .then(response => {
+>>>>>>> 9c2db3f87547a638fd0d3a736e38eb0d8bdb5726
                 setFilas(response.data.content);
                 setNumeroPagina(response.data.number);
                 setQuantidadePorPagina(response.data.size);
@@ -71,6 +82,7 @@ const TabelaFila = () => {
 
     return (
         <>
+<<<<<<< HEAD
             <div>
                 <a onClick={() => navegacao("/filas/novo")} className="p-button font-bold">Nova fila</a>
             </div>
@@ -83,8 +95,28 @@ const TabelaFila = () => {
             <Paginator first={numeroPagina} rows={quantidadePorPagina} totalRecords={totalRegistros} onPageChange={atualizarPagina}/>
 
             <Toast ref={toast} />
+=======
+            <div className="fila-container">
+                <div>
+                    <a onClick={() => navegacao("/filas/novo")} className="p-button font-bold">Nova fila</a>
+                </div>
+
+                <DataTable value={filas} tableStyle={{ minWidth: '50rem' }}>
+                    <Column field="nome" header="Nome"></Column>
+                    <Column field="descricao" header="Descrição"></Column>
+                    <Column field="acoes" header="Ações" body={botoesEditarExcluir}></Column>
+                </DataTable>
+                <Paginator first={numeroPagina} rows={quantidadePorPagina} totalRecords={totalRegistros} onPageChange={atualizarPagina} />
+
+                <Toast ref={toast} />
+            </div>
+>>>>>>> 9c2db3f87547a638fd0d3a736e38eb0d8bdb5726
         </>
     )
 }
 
+<<<<<<< HEAD
 export default  TabelaFila
+=======
+export default TabelaFila
+>>>>>>> 9c2db3f87547a638fd0d3a736e38eb0d8bdb5726
