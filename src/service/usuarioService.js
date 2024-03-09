@@ -67,6 +67,11 @@ const UsuarioService = {
     logoutFila: async function(codigoUsuario) {
         const response = await http.put(`/chats/logout/${codigoUsuario}/fila`);
         return response;
+    },
+
+    login: async function(usuarioLogin) {
+        const response = await http.post(`/auth/login`, usuarioLogin);
+        return response;
     }
     
 }

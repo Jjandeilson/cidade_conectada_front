@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
 
@@ -21,53 +22,58 @@ import AcompanharAtendimentoCliente from './pages/atendimento/acompanhar-atendim
 import Login from './pages/login';
 import TelaAtendente from './pages/atendente/tela-atendente';
 
+import CodigoUsuarioContext from './context/CodigoUsuarioContext';
+
 function App() {
+  const [codigoUsuario, setCodigoUsuario] = useState('');
   return (
     <>
-      <Routes>
-        <Route path="/" element={<Main />} >
-          <Route path="setores">
-            <Route path="" element={<TabelaSetor />} />
-            <Route path="novo" element={<CadastroSetor />} />
-            <Route path=":codigo/editar" element={<CadastroSetor />} />
+      <CodigoUsuarioContext.Provider value={{codigoUsuario, setCodigoUsuario}}>
+        <Routes>
+          <Route path="/login"  element={<Login />} />
+          <Route path="/" element={<Main />} >
+              <Route path="setores">
+                <Route path="" element={<TabelaSetor />} />
+                <Route path="novo" element={<CadastroSetor />} />
+                <Route path=":codigo/editar" element={<CadastroSetor />} />
+              </Route>
+              <Route path="filas">
+                <Route path="" element={<TabelaFila />} />
+                <Route path="novo" element={<CadastroFila />} />
+                <Route path=":codigo/editar" element={<CadastroFila />} />
+              </Route>
+              <Route path="usuarios">
+                <Route path="" element={<TabelaUsuario />} />
+                <Route path="novo" element={<CadastroUsuario />} />
+                <Route path=":codigo/editar" element={<CadastroUsuario />} />
+              </Route>
+              <Route path="canais-atendimento">
+                <Route path="" element={<TabelaCanalAtendimento />} />
+                <Route path="novo" element={<CadastroCanalAtendimento />} />
+                <Route path=":codigo/editar" element={<CadastroCanalAtendimento />} />
+              </Route>
+              <Route path="clientes">
+                <Route path="" element={<TabelaCliente />} />
+                <Route path="novo" element={<CadastroCliente />} />
+                <Route path=":codigo/editar" element={<CadastroCliente />} />
+              </Route>
+              <Route path="tipos-ocorrencia">
+                <Route path="" element={<TabelaTipoOcorrencia />} />
+                <Route path="novo" element={<CadastroTipoOcorencia />} />
+                <Route path=":codigo/editar" element={<CadastroTipoOcorencia />} />
+              </Route>
+              <Route path="atendimentos">
+                <Route path="" element={<TabelaAtendimento />} />
+                <Route path="novo" element={<CadastroAtendimento />} />
+                <Route path=":codigo/editar" element={<AcompanhamentoAtendimento />} />
+              </Route>
           </Route>
-          <Route path="filas">
-            <Route path="" element={<TabelaFila />} />
-            <Route path="novo" element={<CadastroFila />} />
-            <Route path=":codigo/editar" element={<CadastroFila />} />
-          </Route>
-          <Route path="usuarios">
-            <Route path="" element={<TabelaUsuario />} />
-            <Route path="novo" element={<CadastroUsuario />} />
-            <Route path=":codigo/editar" element={<CadastroUsuario />} />
-          </Route>
-          <Route path="canais-atendimento">
-            <Route path="" element={<TabelaCanalAtendimento />} />
-            <Route path="novo" element={<CadastroCanalAtendimento />} />
-            <Route path=":codigo/editar" element={<CadastroCanalAtendimento />} />
-          </Route>
-          <Route path="clientes">
-            <Route path="" element={<TabelaCliente />} />
-            <Route path="novo" element={<CadastroCliente />} />
-            <Route path=":codigo/editar" element={<CadastroCliente />} />
-          </Route>
-          <Route path="tipos-ocorrencia">
-            <Route path="" element={<TabelaTipoOcorrencia />} />
-            <Route path="novo" element={<CadastroTipoOcorencia />} />
-            <Route path=":codigo/editar" element={<CadastroTipoOcorencia />} />
-          </Route>
-          <Route path="atendimentos">
-            <Route path="" element={<TabelaAtendimento />} />
-            <Route path="novo" element={<CadastroAtendimento />} />
-            <Route path=":codigo/editar" element={<AcompanhamentoAtendimento />} />
-          </Route>
-        </Route>
-        <Route path="consultar-protocolo">
-           <Route path="" element={<AcompanharAtendimentoCliente />} />
-        </Route>
-        <Route path="/login" index element={<Login />} />
-        <Route path="atendentes" element={<TelaAtendente />} />
-      </Routes>
+            <Route path="consultar-protocolo">
+              <Route path="" element={<AcompanharAtendimentoCliente />} />
+            </Route>
+            <Route path="atendentes" element={<TelaAtendente />} />
+        </Routes>
+      </CodigoUsuarioContext.Provider>
     </>
   );
 }

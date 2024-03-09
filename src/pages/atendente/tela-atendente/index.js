@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { ScrollPanel } from 'primereact/scrollpanel';
 import { Button } from 'primereact/button';
@@ -11,6 +12,8 @@ import { Calendar } from 'primereact/calendar';
 import { Toolbar } from 'primereact/toolbar';
 import { SplitButton } from 'primereact/splitbutton';
 import { Toast } from 'primereact/toast';
+
+import CodigoUsuarioContext from '../../../context/CodigoUsuarioContext';
 
 import CanalAtendimentoService from '../../../service/canalAtendimentoService';
 import TipoOcorrenciaService from '../../../service/tipoOcorrenciaService';
@@ -29,7 +32,7 @@ import * as moment from 'moment-timezone';
 
 const TelaAtendente = () => {
     const toast = useRef(null);
-
+    const navegacao = useNavigate();
     const [canaisAtendimento, setCanaisAntendimento] = useState([]);
     const [tiposOcorrencia, setTiposOcorrencia] = useState([]);
     const [ocorrencias, setOcorrencias] = useState([]);
@@ -39,8 +42,8 @@ const TelaAtendente = () => {
     const [cliente, setCliente] = useState(Cliente);
     const [atendimento, setAtendimento] = useState(Atendimento);
     const [mensagemNotificacao, setMensagemNotificacao] = useState(MensagemNotificacao);
-    const [codigoUsuario, setCodigoUsuario] = useState('93441ba0-166d-4220-9310-de01481cf12d');
     const [desativarSelectFila, setDesativarSelectFila] = useState(false);
+    const {codigoUsuario, setCodigoUsuario} = useContext(CodigoUsuarioContext); 
 
     const items = [
         {
@@ -148,6 +151,12 @@ const TelaAtendente = () => {
             .catch(response => console.log(response));
     }
 
+    const botaologout = (
+        <>
+            <a onClick={() => navegacao("/login")} className="p-button font-bold">Logout</a>
+        </>
+    )
+
     const botoesAtendimento = (
         <>
             <Button className="mr-2" label="Salvar" onClick={salvar} />
@@ -167,6 +176,8 @@ const TelaAtendente = () => {
     )
 
     useEffect(() => {
+        console.log(codigoUsuario);
+        
         CanalAtendimentoService.listaTodosCanais()
             .then(response =>  setCanaisAntendimento(response.data))
             .catch(response => console.log(response));
@@ -185,7 +196,7 @@ const TelaAtendente = () => {
     return (
         <>
             <div>
-                <Toolbar center={botoesAtendimento} end={botoesFila} />
+                <Toolbar start={botaologout} center={botoesAtendimento} end={botoesFila} />
             </div>    
 
             {/* chat do atendente */}

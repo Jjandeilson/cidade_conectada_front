@@ -3,9 +3,6 @@ import { PanelMenu } from 'primereact/panelmenu';
 
 import '../menu_navegacao/index.css';
 
-
-
-
 const MenuNavegacao = () => {
     document.title = "Home";
     const navegacao = useNavigate();
@@ -22,7 +19,8 @@ const MenuNavegacao = () => {
             ]
         },
         { label: "Atendimentos", command: () => { navegacao("/atendimentos") } },
-        { label: "Clientes", command: () => { navegacao("/clientes") } }
+        { label: "Clientes", command: () => { navegacao("/clientes") } },
+        {label: "Logout", command: () => {navegacao("/login")}}
     ]
 
     return (
