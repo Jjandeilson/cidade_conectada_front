@@ -15,6 +15,7 @@ const CadastroUsuarioFila = ({filas}) => {
     const {codigo} = useParams();
     const [codigoFila, setCodigoFila] = useState('');
     const [filasUsuario, setFilasUsuario] = useState([]);
+    const [listaFilas, setListaFilas] = useState(filas);
 
     const show = (mensagem, severity, summary) => {
         toast.current.show({ severity: severity, summary: summary, detail: mensagem });
@@ -28,6 +29,11 @@ const CadastroUsuarioFila = ({filas}) => {
                     UsuarioService.listarFilasUsuario(codigo)
                         .then(response => setFilasUsuario(response.data))
                         .catch(response => console.log(response));
+                    
+                    UsuarioService.listarFilasNaoAssociadasUsuario(codigo)
+                        .then(response => setListaFilas(response.data))
+                        .catch(response => console.log(response));
+
                     setCodigoFila('');
                 })
                 .catch(response => console.log(response))
@@ -42,8 +48,12 @@ const CadastroUsuarioFila = ({filas}) => {
                 UsuarioService.listar()
                     .then(() => {
                         UsuarioService.listarFilasUsuario(codigo)
-                        .then(response => setFilasUsuario(response.data))
-                        .catch(response => console.log(response));
+                            .then(response => setFilasUsuario(response.data))
+                            .catch(response => console.log(response));
+
+                        UsuarioService.listarFilasNaoAssociadasUsuario(codigo)
+                            .then(response => setListaFilas(response.data))
+                            .catch(response => console.log(response));
                     })
                     .catch(response => console.log(response));
             })
@@ -75,7 +85,7 @@ const CadastroUsuarioFila = ({filas}) => {
                                 <label htmlFor="fila">Fila</label>
                             </div>
                             <div>
-                                <Dropdown placeholder="Selecione" value={codigoFila} options={filas} optionLabel="nome" optionValue="codigo" onChange={(event) => setCodigoFila(event.value)} />
+                                <Dropdown placeholder="Selecione" value={codigoFila} options={listaFilas} optionLabel="nome" optionValue="codigo" onChange={(event) => setCodigoFila(event.value)} />
                                 <Button label="Adicionar" onClick={salvarFila}/>
                             </div>
                         </div>

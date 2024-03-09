@@ -18,6 +18,8 @@ import TabelaAtendimento from './pages/atendimento/tabela-atendimento';
 import CadastroAtendimento from './pages/atendimento/cadastro-atendimento';
 import AcompanhamentoAtendimento from './pages/atendimento/acompanhamento-atendimento';
 import AcompanharAtendimentoCliente from './pages/atendimento/acompanhar-atendimento-cliente';
+import Login from './pages/login';
+import TelaAtendente from './pages/atendente/tela-atendente';
 
 function App() {
   return (
@@ -63,6 +65,8 @@ function App() {
         <Route path="consultar-protocolo">
            <Route path="" element={<AcompanharAtendimentoCliente />} />
         </Route>
+        <Route path="/login" index element={<Login />} />
+        <Route path="atendentes" element={<TelaAtendente />} />
       </Routes>
     </>
   );

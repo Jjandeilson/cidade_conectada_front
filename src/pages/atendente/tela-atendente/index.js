@@ -1,6 +1,6 @@
-import { useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 
+import { ScrollPanel } from 'primereact/scrollpanel';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { InputMask } from 'primereact/inputmask';
@@ -8,28 +8,57 @@ import { Panel } from 'primereact/panel';
 import { Dropdown } from 'primereact/dropdown';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Calendar } from 'primereact/calendar';
+import { Toolbar } from 'primereact/toolbar';
+import { SplitButton } from 'primereact/splitbutton';
 import { Toast } from 'primereact/toast';
-
-import * as moment from 'moment-timezone';
 
 import CanalAtendimentoService from '../../../service/canalAtendimentoService';
 import TipoOcorrenciaService from '../../../service/tipoOcorrenciaService';
 import OcorrenciaService from '../../../service/ocorrenciaService';
 import ClienteService from '../../../service/clienteService';
 import AtendimentoService from '../../../service/atendimentoService';
+import UsuarioService from '../../../service/usuarioService';
+import EnviarNotificacaoService from '../../../service/enviarNotificacaoService';
 import Endereco from '../../../dto/endereco';
 import Cliente from '../../../dto/cliente';
+import Fila from '../../../dto/fila';
+import MensagemNotificacao from '../../../dto/mensagem-notificacao';
 import Atendimento from '../../../dto/atendimento';
 
-const CadastroAtendimento = () => {
+import * as moment from 'moment-timezone';
+
+const TelaAtendente = () => {
     const toast = useRef(null);
-    const navegacao = useNavigate();
+
     const [canaisAtendimento, setCanaisAntendimento] = useState([]);
     const [tiposOcorrencia, setTiposOcorrencia] = useState([]);
     const [ocorrencias, setOcorrencias] = useState([]);
+    const [fila, setFila] = useState(Fila)
+    const [filas, setFilas] = useState([]);
     const [endereco, setEndereco] = useState(Endereco);
     const [cliente, setCliente] = useState(Cliente);
     const [atendimento, setAtendimento] = useState(Atendimento);
+    const [mensagemNotificacao, setMensagemNotificacao] = useState(MensagemNotificacao);
+    const [codigoUsuario, setCodigoUsuario] = useState('93441ba0-166d-4220-9310-de01481cf12d');
+    const [desativarSelectFila, setDesativarSelectFila] = useState(false);
+
+    const items = [
+        {
+            label: 'E-mail',
+            icon: 'pi pi-file',
+            command: () => {notificar('EMAIL')}
+        },
+        {
+            label: 'Whatsapp',
+            icon: 'pi pi-whatsapp',
+            command: () => {notificar('WHATSAPP')}
+        },
+        {
+            label: 'SMS',
+            icon: 'pi pi-comment',
+            command: () => {notificar('SMS')}
+        }
+    ];
 
     const show = (mensagem, severity, summary) => {
         toast.current.show({ severity: severity, summary: summary, detail: mensagem });
@@ -76,10 +105,66 @@ const CadastroAtendimento = () => {
         AtendimentoService.salvar(atendimento)
             .then(() => {
                 show('Operação realizada com sucesso', 'success', 'Success');
-                navegacao("/atendimentos");
+                setEndereco(Endereco);
+                setCliente(Cliente);
+                setAtendimento(Atendimento);
             })
             .catch(response => (show(response.response.data.detail, 'error', 'Error')));
     }
+
+    function logarFila(fila) {
+        UsuarioService.loginFila(codigoUsuario, fila.value.codigo)
+            .then(() => {
+                setDesativarSelectFila(true);
+                setFila(fila.target.value);
+            })
+            .catch(response => console.log(response));
+    }
+
+    function logoutFila() {
+        UsuarioService.logoutFila(codigoUsuario)
+            .then(() => {
+                setDesativarSelectFila(false);
+                setFila(Fila);
+            })
+            .catch(response => console.log(response));
+    }
+
+    function notificar(midia) {
+        if (midia == 'EMAIL') {
+            mensagemNotificacao.to = cliente.email;
+        } else {
+            mensagemNotificacao.to = "55" + cliente.celular;
+        }
+
+        mensagemNotificacao.nome = cliente.nome;
+        mensagemNotificacao.channel = midia;
+        mensagemNotificacao.content.text = atendimento.protocolo;
+
+        EnviarNotificacaoService.enviar(mensagemNotificacao)
+            .then(() => {
+                setMensagemNotificacao(MensagemNotificacao);
+            })
+            .catch(response => console.log(response));
+    }
+
+    const botoesAtendimento = (
+        <>
+            <Button className="mr-2" label="Salvar" onClick={salvar} />
+            <SplitButton className="mr-2" label="Enviar protocolo para o cliente" icon="pi pi-send" model={items}></SplitButton>
+        </>
+    )
+
+    const botoesFila = (
+        <>
+            {filas.length > 0 && (
+                <>
+                    <Dropdown disabled={desativarSelectFila} name="fila" placeholder="Selecione a fila" value={fila} options={filas} optionLabel="nome" onChange={logarFila} />
+                    <Button className="mr-2" label="Logout" disabled={!desativarSelectFila} onClick={logoutFila} />
+                </>
+            )}
+        </>
+    )
 
     useEffect(() => {
         CanalAtendimentoService.listaTodosCanais()
@@ -89,15 +174,50 @@ const CadastroAtendimento = () => {
         TipoOcorrenciaService.listaTodosTiposOcorrencias()
             .then(response =>  setTiposOcorrencia(response.data))
             .catch(response => console.log(response));
+
+        UsuarioService.listarFilasUsuario(codigoUsuario)
+            .then(response => setFilas(response.data))
+            .catch(response => console.log(response));
+
+        atendimento.protocolo = '202401141';
     }, [])
 
     return (
         <>
-             <div>
-                <Button label="Salvar" severity="success" onClick={salvar} />
-                <a onClick={() => navegacao("/atendimentos")} className="p-button p-button-warning font-bold">Cancelar</a>
+            <div>
+                <Toolbar center={botoesAtendimento} end={botoesFila} />
+            </div>    
+
+            {/* chat do atendente */}
+            <div className="card">
+                <ScrollPanel style={{ width: '100%', height: '200px' }}>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </p>
+                    <p>
+                        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, 
+                        eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo
+                        enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui 
+                        ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam eius modi.
+                    </p>
+                    <p className="m-0">
+                        At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti 
+                        quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in
+                        culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. 
+                        Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.
+                    </p>
+                </ScrollPanel>
+
+                <div className="p-inputgroup">
+                    <InputText name="mensagemAgente" />
+                    <Button label="Enviar" className="p-button-success" />
+                </div>
             </div>
 
+            {/* cadastro de cliente e atendimento */}
             <div>
                 <Panel header="Informações do cliente">
                     <div>
@@ -239,11 +359,11 @@ const CadastroAtendimento = () => {
                         </div>
                     </div>
                 </Panel>
-
-                <Toast ref={toast} />
             </div>
+
+            <Toast ref={toast} />
         </>
     )
 }
 
-export default CadastroAtendimento
+export default TelaAtendente

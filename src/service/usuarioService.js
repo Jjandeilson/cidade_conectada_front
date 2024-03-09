@@ -39,6 +39,11 @@ const UsuarioService = {
         return response;
     },
 
+    listarFilasNaoAssociadasUsuario: async function(codigoUsuario) {
+        const response = await http.get(`${urlUsuario}/${codigoUsuario}/filas/nao-associadas`);
+        return response;
+    },
+    
     listarFilasUsuario: async function(codigoUsuario) {
         const response = await http.get(`${urlUsuario}/${codigoUsuario}/filas`);
         return response;
@@ -51,6 +56,16 @@ const UsuarioService = {
     
     removerFila: async function(codigoUsuario, codigoFila) {
         const response = await http.delete(`${urlUsuario}/${codigoUsuario}/filas/${codigoFila}`);
+        return response;
+    },
+
+    loginFila: async function(codigoUsuario, codigoFila) {
+        const response = await http.put(`/chats/login/${codigoUsuario}/fila/${codigoFila}`);
+        return response;
+    },
+
+    logoutFila: async function(codigoUsuario) {
+        const response = await http.put(`/chats/logout/${codigoUsuario}/fila`);
         return response;
     }
     

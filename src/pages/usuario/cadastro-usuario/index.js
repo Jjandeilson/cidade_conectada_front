@@ -95,8 +95,8 @@ const CadastroUsuario = () => {
                 })
                 .catch(response => console.log(response));
 
-            FilaService.listar()
-                .then(response => setFilas(response.data.content))
+            UsuarioService.listarFilasNaoAssociadasUsuario(codigo)
+                .then(response => setFilas(response.data))
                 .catch(response => console.log(response));
         } else {
             document.title = 'Novo usuário';
