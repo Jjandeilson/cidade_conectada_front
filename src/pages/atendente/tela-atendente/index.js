@@ -22,11 +22,13 @@ import ClienteService from '../../../service/clienteService';
 import AtendimentoService from '../../../service/atendimentoService';
 import UsuarioService from '../../../service/usuarioService';
 import EnviarNotificacaoService from '../../../service/enviarNotificacaoService';
+import WebSocket from '../../../service/websocket';
 import Endereco from '../../../dto/endereco';
 import Cliente from '../../../dto/cliente';
 import Fila from '../../../dto/fila';
 import MensagemNotificacao from '../../../dto/mensagem-notificacao';
 import Atendimento from '../../../dto/atendimento';
+import MensagemChat from '../../../dto/mensagem-chat';
 
 import * as moment from 'moment-timezone';
 
@@ -43,7 +45,11 @@ const TelaAtendente = () => {
     const [atendimento, setAtendimento] = useState(Atendimento);
     const [mensagemNotificacao, setMensagemNotificacao] = useState(MensagemNotificacao);
     const [desativarSelectFila, setDesativarSelectFila] = useState(false);
-    const {codigoUsuario, setCodigoUsuario} = useContext(CodigoUsuarioContext); 
+    const {codigoUsuario, setCodigoUsuario} = useContext(CodigoUsuarioContext);
+    const [protocoloCliente, setProtocoloCliente] = useState('');
+    const [mensagemChat, setMensagemChat] = useState(MensagemChat);
+    const [textoChat, setTextoChat] = useState('');
+    const [client, setClient] = useState({}); 
 
     const items = [
         {
@@ -66,6 +72,11 @@ const TelaAtendente = () => {
     const show = (mensagem, severity, summary) => {
         toast.current.show({ severity: severity, summary: summary, detail: mensagem });
     };
+    
+    function atualizarValores(event) {
+        const {value} = event.target;
+        setTextoChat(value);
+    }
 
     function atualizarValoresAtendimento(event) {
         const {name, value} = event.target;
@@ -115,11 +126,24 @@ const TelaAtendente = () => {
             .catch(response => (show(response.response.data.detail, 'error', 'Error')));
     }
 
+    function escreverFila() {
+        client.subscribe("/chat/cliente", function(result) {
+            let mensagemCliente = JSON.parse(result.body);
+            setProtocoloCliente(mensagemCliente.protocolo);
+            const chatMessage = document.getElementById('chatId');
+            const divMensagem = document.createElement("div");
+
+            divMensagem.textContent = mensagemCliente.mensagem;
+            chatMessage.appendChild(divMensagem);
+        })
+    }
+
     function logarFila(fila) {
         UsuarioService.loginFila(codigoUsuario, fila.value.codigo)
             .then(() => {
                 setDesativarSelectFila(true);
                 setFila(fila.target.value);
+                escreverFila();
             })
             .catch(response => console.log(response));
     }
@@ -134,7 +158,7 @@ const TelaAtendente = () => {
     }
 
     function notificar(midia) {
-        if (midia == 'EMAIL') {
+        if (midia === 'EMAIL') {
             mensagemNotificacao.to = cliente.email;
         } else {
             mensagemNotificacao.to = "55" + cliente.celular;
@@ -149,6 +173,21 @@ const TelaAtendente = () => {
                 setMensagemNotificacao(MensagemNotificacao);
             })
             .catch(response => console.log(response));
+    }
+
+    function enviarMensagem() {
+        mensagemChat.fluxo = 'SAIDA';
+        mensagemChat.midia = 'CHAT';
+        mensagemChat.envioMensagem = "ATENDENTE";
+        mensagemChat.protocolo = protocoloCliente;
+        mensagemChat.mensagem = 'Atendente: ' + textoChat;
+
+        client.send("/app/chat", {}, JSON.stringify({
+            ...mensagemChat
+        }));
+
+        setTextoChat('');
+        setMensagemChat(MensagemChat);
     }
 
     const botaologout = (
@@ -176,8 +215,6 @@ const TelaAtendente = () => {
     )
 
     useEffect(() => {
-        console.log(codigoUsuario);
-        
         CanalAtendimentoService.listaTodosCanais()
             .then(response =>  setCanaisAntendimento(response.data))
             .catch(response => console.log(response));
@@ -189,6 +226,14 @@ const TelaAtendente = () => {
         UsuarioService.listarFilasUsuario(codigoUsuario)
             .then(response => setFilas(response.data))
             .catch(response => console.log(response));
+
+        WebSocket.login()
+            .then(response => {
+                setClient(response);
+            })
+            .catch(response => {
+                console.log(response);
+            });
 
         atendimento.protocolo = '202401141';
     }, [])
@@ -202,29 +247,12 @@ const TelaAtendente = () => {
             {/* chat do atendente */}
             <div className="card">
                 <ScrollPanel style={{ width: '100%', height: '200px' }}>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </p>
-                    <p>
-                        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, 
-                        eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo
-                        enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui 
-                        ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam eius modi.
-                    </p>
-                    <p className="m-0">
-                        At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti 
-                        quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in
-                        culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. 
-                        Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.
-                    </p>
+                    <div id="chatId"></div>
                 </ScrollPanel>
 
                 <div className="p-inputgroup">
-                    <InputText name="mensagemAgente" />
-                    <Button label="Enviar" className="p-button-success" />
+                    <InputText name="textoChat" value={textoChat} onChange={atualizarValores} />
+                    <Button label="Enviar" className="p-button-success" onClick={enviarMensagem} />
                 </div>
             </div>
 

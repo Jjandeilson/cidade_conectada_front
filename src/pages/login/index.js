@@ -29,8 +29,9 @@ const Login = () => {
 
             if (atendente) {
                 setCodigoUsuario(codigoUsuario);
-               navegacao("/atendentes");
+                navegacao("/atendentes");
             } else {
+                setCodigoUsuario(codigoUsuario);
                 navegacao("/", codigoUsuario);
             }
 

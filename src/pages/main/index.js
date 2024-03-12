@@ -11,7 +11,6 @@ const Main = () => {
 
     useEffect(() => {
         if (codigoUsuario === '') {
-            console.log(codigoUsuario)
             navegacao("/login");
         }
     }, [])

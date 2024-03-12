@@ -23,6 +23,7 @@ import Login from './pages/login';
 import TelaAtendente from './pages/atendente/tela-atendente';
 
 import CodigoUsuarioContext from './context/CodigoUsuarioContext';
+import ChatCliente from './pages/chat-cliente';
 
 function App() {
   const [codigoUsuario, setCodigoUsuario] = useState('');
@@ -68,10 +69,11 @@ function App() {
                 <Route path=":codigo/editar" element={<AcompanhamentoAtendimento />} />
               </Route>
           </Route>
-            <Route path="consultar-protocolo">
-              <Route path="" element={<AcompanharAtendimentoCliente />} />
-            </Route>
-            <Route path="atendentes" element={<TelaAtendente />} />
+          <Route path="consultar-protocolo">
+            <Route path="" element={<AcompanharAtendimentoCliente />} />
+          </Route>
+          <Route path="atendentes" element={<TelaAtendente />} />
+          <Route path="chat-cliente" element={<ChatCliente />} />
         </Routes>
       </CodigoUsuarioContext.Provider>
     </>
