@@ -26,7 +26,7 @@ const TabelaUsuario = () => {
     const excluir = (codigo) => {
         UsuarioService.excluir(codigo)
             .then(() => {
-                show('Operação realizada com sucesso', 'success', 'Success')
+                show('Operação realizada com sucesso', 'success', 'Success');
                 UsuarioService.listar()
                     .then(response => {
                         setUsuarios(response.data.content);
@@ -34,10 +34,11 @@ const TabelaUsuario = () => {
                         setQuantidadePorPagina(response.data.size);
                         setTotalRegistros(response.data.totalElements);
                     })
+                    .catch(response => console.log(response));
             })
-            .catch(response => (
-                show(response.response.data.detail, 'error', 'Error')
-            ))
+            .catch(response => {
+                show(response.response.data.detail, 'error', 'Error');
+            });
     }
 
     const atualizarPagina = (e) => {
@@ -48,6 +49,7 @@ const TabelaUsuario = () => {
                 setQuantidadePorPagina(response.data.size);
                 setTotalRegistros(response.data.totalElements);
             })
+            .catch(response => console.log(response));
     }
 
     const botoesEditarExcluir = (usuario) => {
@@ -66,7 +68,8 @@ const TabelaUsuario = () => {
                 setNumeroPagina(response.data.number);
                 setQuantidadePorPagina(response.data.size);
                 setTotalRegistros(response.data.totalElements);
-            });
+            })
+            .catch(response => console.log(response));
     }, [])
 
     return (

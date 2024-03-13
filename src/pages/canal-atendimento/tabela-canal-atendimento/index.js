@@ -34,6 +34,7 @@ const TabelaCanalAtendimento = () => {
                         setQuantidadePorPagina(response.data.size);
                         setTotalRegistros(response.data.totalElements);
                     })
+                    .catch(response => console.log(response));
             })
             .catch(response => (
                 show(response.response.data.detail, 'error', 'Error')
@@ -48,6 +49,7 @@ const TabelaCanalAtendimento = () => {
                 setQuantidadePorPagina(response.data.size);
                 setTotalRegistros(response.data.totalElements);
             })
+            .catch(response => console.log(response));
     }
 
     const botoesEditarExcluir = (canal) => {

@@ -32,16 +32,16 @@ const CadastroTipoOcorencia = () => {
     function salvar() {
         if (tipoOcorrencia.codigo === '') {
             TipoOcorrenciaService.salvar(tipoOcorrencia)
-                .then(() => {
+                .then(response => {
                     show('Operação realizada com sucesso', 'success', 'Success');
-                    navegacao("/tipos-ocorrencia");
+                    navegacao(`/tipos-ocorrencia/${response.data.codigo}/editar`);
                 })
                 .catch(response => (show(response.response.data.detail, 'error', 'Error')));
         } else {
             TipoOcorrenciaService.atualizar(tipoOcorrencia.codigo, tipoOcorrencia)
-                .then(() => {
+                .then(response => {
                     show('Operação realizada com sucesso', 'success', 'Success');
-                    navegacao("/tipos-ocorrencia");
+                    navegacao(`/tipos-ocorrencia/${response.data.codigo}/editar`);
                 })
                 .catch(response => (show(response.response.data.detail, 'error', 'Error')));
         }
@@ -68,6 +68,11 @@ const CadastroTipoOcorencia = () => {
     return (
         <>
             <div className="formotipocorrencia" style={{ display: 'flex', flexDirection: 'column' }} >
+                <div>
+                    <Button label="Salvar" severity="success" onClick={salvar} />
+                    <a onClick={() => navegacao("/tipos-ocorrencia")} className="p-button p-button-warning font-bold">Cancelar</a>
+                </div>
+
                 <div>
                     <div>
                         <label htmlFor="nome">Nome</label>
@@ -98,10 +103,6 @@ const CadastroTipoOcorencia = () => {
                 {tipoOcorrencia.codigo && (
                     <CadastroOcorrencia />
                 )}
-                <div>
-                    <Button label="Salvar" severity="success" onClick={salvar} />
-                    <a onClick={() => navegacao("/tipos-ocorrencia")} className="p-button p-button-warning font-bold">Cancelar</a>
-                </div>
 
                 <Toast ref={toast} />
             </div>

@@ -31,17 +31,16 @@ const CadastroCanalAtendimento = () => {
     function salvar() {
         if (canal.codigo === '') {
             canalAtendimentoService.salvar(canal)
-                .then(() => {
+                .then(response => {
                     show('Operação realizada com sucesso', 'success', 'Success');
-                    navegacao("/canais-atendimento");
+                    navegacao(`/canais-atendimento/${response.data.codigo}/editar`);
                 })
                 .catch(response => (show(response.response.data.detail, 'error', 'Error')));
-            }  else {
-            
+        }  else {
             canalAtendimentoService.atualizar(canal.codigo, canal)
-                .then(() => {
+                .then(response => {
                     show('Operação realizada com sucesso', 'success', 'Success');
-                    navegacao("/canais-atendimento");
+                    navegacao(`/canais-atendimento/${response.data.codigo}/editar`);
                 })
                 .catch(response => (show(response.response.data.detail, 'error', 'Error')));
         }
@@ -57,11 +56,15 @@ const CadastroCanalAtendimento = () => {
             document.title = 'Novo canal de atendimento';
         }
 
-    }, [])
+    }, [codigo])
 
     return (
         <>
             <div className="formcanalatendimento" style={{ display: 'flex', flexDirection: 'column' }} >
+                <div>
+                    <Button label="Salvar" severity="success" onClick={salvar} />
+                    <a onClick={() => navegacao("/canais-atendimento")} className="p-button p-button-warning font-bold">Cancelar</a>
+                </div>
 
                 <div>
                     <div>
@@ -88,10 +91,6 @@ const CadastroCanalAtendimento = () => {
                     <div>
                         <InputTextarea name="descricao" value={canal?.descricao} onChange={atualizarValores} rows={5} cols={30} />
                     </div>
-                </div>
-                <div>
-                    <Button label="Salvar" severity="success" onClick={salvar} />
-                    <a onClick={() => navegacao("/canais-atendimento")} className="p-button p-button-warning font-bold">Cancelar</a>
                 </div>
 
                 <Toast ref={toast} />

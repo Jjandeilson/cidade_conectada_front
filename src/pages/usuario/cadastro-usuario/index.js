@@ -36,11 +36,10 @@ const CadastroUsuario = () => {
     function atualizarValores(envet) {
         const {name, value} = envet.target
         setUsuario({...usuario,[name]: value});
-
     }
 
     function exibirBotaoAtendente() {
-        return !usuario.atendente
+        return !usuario.atendente;
     }
 
     function ativarDesativarAtendente(event) {
@@ -50,19 +49,20 @@ const CadastroUsuario = () => {
                     show('Operação realizada com sucesso', 'success', 'Success');
 
                     FilaService.listar()
-                        .then(response => setFilas(response.data.content))    
+                        .then(response => setFilas(response.data.content))
+                        .catch(response => console.log(response));    
 
-                   atualizarValores(event)
+                    atualizarValores(event);
                 })
-                .catch(response => console.log(response))
-            } else {
+                .catch(response => console.log(response));
+        }   else {
                 UsuarioService.desativarAtendente(usuario.codigo)
                     .then(() => {
                         show('Operação realizada com sucesso', 'success', 'Success');
-                        atualizarValores(event)
+                        atualizarValores(event);
                 })
-                .catch(response => console.log(response))
-        }
+                .catch(response => console.log(response));
+            }
     }
 
     function salvar() {
@@ -70,22 +70,23 @@ const CadastroUsuario = () => {
             UsuarioService.salvar(usuario)
                 .then(() => {
                     show('Operação realizada com sucesso', 'success', 'Success');
-                    navegacao("/usuarios")
+                    navegacao("/usuarios");
                 })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')))
-            } else {
-            UsuarioService.atualizar(usuario.codigo, usuario)
-                .then(() => {
-                    show('Operação realizada com sucesso', 'success', 'Success')
-                    navegacao("/usuarios")
-                })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')))
-        }
+                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
+        }   else {
+                UsuarioService.atualizar(usuario.codigo, usuario)
+                    .then(() => {
+                        show('Operação realizada com sucesso', 'success', 'Success');
+                        navegacao("/usuarios");
+                    })
+                    .catch(response => (show(response.response.data.detail, 'error', 'Error')));
+            }
     }
 
     useEffect(() => {
         SetorService.listar()
-            .then(response => setSetores(response.data.content));
+            .then(response => setSetores(response.data.content))
+            .catch(response => console.log(response));
 
         if (codigo !== undefined) {
             document.title = "Editar usuário";
@@ -98,6 +99,7 @@ const CadastroUsuario = () => {
 
             UsuarioService.listarFilasNaoAssociadasUsuario(codigo)
                 .then(response => setFilas(response.data))
+                .catch(response => console.log(response));
             
                 FilaService.listar()
                 .then(response => setFilas(response.data.content))
@@ -111,6 +113,11 @@ const CadastroUsuario = () => {
     return (
         <>
             <div className="formusuario" style={{ display: 'flex', flexDirection: 'column' }} >
+                <div>
+                    <Button label="Salvar" severity="success" onClick={salvar} />
+                    <a onClick={() => navegacao("/usuarios")} className="p-button p-button-warning font-bold">Cancelar</a>
+                </div>
+
                 <div>
                     <div>
                         <label htmlFor="nome">Nome</label>
@@ -191,10 +198,6 @@ const CadastroUsuario = () => {
                         <CadastroUsuarioFila filas={filas} />
                     </div>
                 )}
-                <div>
-                    <Button label="Salvar" severity="success" onClick={salvar} />
-                    <a onClick={() => navegacao("/usuarios")} className="p-button p-button-warning font-bold">Cancelar</a>
-                </div>
 
                 <Toast ref={toast} />
             </div>

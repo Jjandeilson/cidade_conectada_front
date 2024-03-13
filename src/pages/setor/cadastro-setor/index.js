@@ -30,16 +30,16 @@ const CadastroSetor = () => {
     function salvar() {
         if (setor.codigo === '') {
             SetorService.salvar(setor)
-                .then(() => {
+                .then(response => {
                     show('Operação realizada com sucesso', 'success', 'Success');
-                    navegacao("/setores");
+                    navegacao(`/setores/${response.data.codigo}/editar`);
                 })
                 .catch(response => (show(response.response.data.detail, 'error', 'Error')));
             } else {
             SetorService.atualizar(setor.codigo, setor)
-                .then(() => {
+                .then(response => {
                     show('Operação realizada com sucesso', 'success', 'Success');
-                    navegacao("/setores");
+                    navegacao(`/setores/${response.data.codigo}/editar`);
                 })
                 .catch(response => (show(response.response.data.detail, 'error', 'Error')));
         }

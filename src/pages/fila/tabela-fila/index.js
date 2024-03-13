@@ -37,7 +37,7 @@ const TabelaFila = () => {
             })
             .catch(response => (
                 show(response.response.data.detail, 'error', 'Error')
-            ))
+            ));
     }
 
     const atualizarPagina = (e) => {
@@ -48,6 +48,7 @@ const TabelaFila = () => {
                 setQuantidadePorPagina(response.data.size);
                 setTotalRegistros(response.data.totalElements);
             })
+            .catch(response => console.log(response));
     }
 
     const botoesEditarExcluir = (fila) => {

@@ -29,16 +29,16 @@ const CadastroFila = () => {
     function salvar() {
         if (fila.codigo === '') {
             FilaService.salvar(fila)
-                .then(() => {
+                .then(response => {
                     show('Operação realizada com sucesso', 'success', 'Success');
-                    navegacao("/filas");
+                    navegacao(`/filas/${response.data.codigo}/editar`);
                 })
                 .catch(response => (show(response.response.data.detail, 'error', 'Error')));
-            } else {
+        } else {
             FilaService.atualizar(fila.codigo, fila)
-                .then(() => {
+                .then(response => {
                     show('Operação realizada com sucesso', 'success', 'Success');
-                    navegacao("/filas");
+                    navegacao(`/filas/${response.data.codigo}/editar`);
                 })
                 .catch(response => (show(response.response.data.detail, 'error', 'Error')));
         }
@@ -60,6 +60,11 @@ const CadastroFila = () => {
         <>
             <div className="formfila" style={{ display: 'flex', flexDirection: 'column' }}>
                 <div>
+                    <Button label="Salvar" severity="success" onClick={salvar} />
+                    <a onClick={() => navegacao("/filas")} className="p-button p-button-warning font-bold">Cancelar</a>
+                </div>
+
+                <div>
                     <div>
                         <label htmlFor="nome">Nome</label>
                     </div>
@@ -75,10 +80,6 @@ const CadastroFila = () => {
                     <div>
                         <InputTextarea name="descricao" value={fila?.descricao} onChange={atualizarValores} rows={5} cols={30} />
                     </div>
-                </div>
-                <div>
-                    <Button label="Salvar" severity="success" onClick={salvar} />
-                    <a onClick={() => navegacao("/filas")} className="p-button p-button-warning font-bold">Cancelar</a>
                 </div>
 
                 <Toast ref={toast} />
