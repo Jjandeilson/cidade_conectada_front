@@ -7,7 +7,7 @@ import { InputMask } from 'primereact/inputmask';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Calendar } from 'primereact/calendar';
 import { Toast } from 'primereact/toast';
-
+import { Panel } from 'primereact/panel';
 import * as moment from 'moment-timezone';
 
 import ClienteService from '../../../service/clienteService';
@@ -72,110 +72,116 @@ const CadastroCliente = () => {
 
     return (
         <>
-            <div>
-                <Button label="Salvar" severity="success" onClick={salvar} />
-                <a onClick={() => navegacao("/clientes")} className="p-button p-button-warning font-bold">Cancelar</a>
+            <div className="container" style={{marginLeft: '20px'}}>
+                <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '20px', marginTop: '20px'}}> 
+                        <Button label="Salvar" severity="success" onClick={salvar}  style={{ width: '150px', height: '50px', marginRight: '10px' }}/>
+                        <a onClick={() => navegacao("/clientes")} className="p-button p-button-warning font-bold" style={{ width: '150px', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Cancelar</a>
+                </div>
+
+                <div className='panel-container' style={{ display: 'flex', gap: '20px', width: '100%', margin: '0 auto' }}>
+                    <Panel header="Informações do cliente" style={{ width: '100%' }}>
+                            <div>
+                                <div>
+                                    <label htmlFor="nome">Nome</label>
+                                </div>
+                                <div>
+                                    <InputText name="nome" value={cliente.nome} onChange={atualizarValores} />
+                                </div>
+                            </div>
+
+                            <div>
+                                <div>
+                                    <label htmlFor="cpf">CPF</label>
+                                </div>
+                                <div>
+                                    <InputMask name="cpf" value={cliente.cpf} onChange={atualizarValores} mask="999.999.999-99" unmask={true} />
+                                </div>
+                            </div>
+
+                            <div>
+                                <div>
+                                    <label htmlFor="email">E-mail</label>
+                                </div>
+                                <div>
+                                    <InputText name="email" value={cliente?.email} onChange={atualizarValores} />
+                                </div>
+                            </div>
+
+                            <div>
+                                <div>
+                                    <label htmlFor="telefone">Telefone</label>
+                                </div>
+                                <div>
+                                    <InputMask name="telefone" value={cliente.telefone} onChange={atualizarValores} mask="(99) 99999-9999" unmask={true} />
+                                </div>
+                            </div>
+                            <div>
+                                <div>
+                                    <label htmlFor="celular">Celular</label>
+                                </div>
+                                <div>
+                                    <InputMask name="celular" value={cliente.celular} onChange={atualizarValores} mask="(99) 99999-9999" unmask={true} />
+                                </div>
+                            </div>
+
+                            <div>
+                                <div>
+                                    <label htmlFor="datanascimento">Data de nascimento</label>
+                                </div>
+                                <div>
+                                    <Calendar name="dataNascimento" value={cliente.dataNascimento} onChange={atualizarValores} dateFormat="dd/mm/yy" showIcon />
+                                </div>
+                            </div>
+                            <div>
+                                <div>
+                                    <div>
+                                        <label htmlFor="logradouro">Logradouro</label>
+                                    </div>
+                                    <div>
+                                        <InputText name="logradouro" value={endereco.logradouro} onChange={atualizarValoresEndereco} />
+                                    </div>
+                                </div>
+                                <div>
+                                    <div>
+                                        <label htmlFor="numero">Número</label>
+                                    </div>
+                                    <div>
+                                        <InputText name="numero" value={endereco.numero} onChange={atualizarValoresEndereco} />
+                                    </div>
+                                </div>
+                                <div>
+                                    <div>
+                                        <label htmlFor="bairro">Bairro</label>
+                                    </div>
+                                    <div>
+                                        <InputText name="bairro" value={endereco.bairro} onChange={atualizarValoresEndereco} />
+                                    </div>
+                                </div>
+                                <div>
+                                    <div>
+                                        <label htmlFor="cep">CEP</label>
+                                    </div>
+                                    <div>
+                                        <InputMask name="cep" value={endereco.cep} onChange={atualizarValoresEndereco} mask="99.999-999" unmask={true} />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div>
+                                    <label htmlFor="observacao">Observação</label>
+                                </div>
+                                <div>
+                                    <InputTextarea name="observacao" rows={5} cols={30} value={cliente.observacao} onChange={atualizarValores} />
+                                </div>
+                            </div>
+                            
+                    </Panel>
+                </div>
+
+                <Toast ref={toast} />
             </div>
-
-            <div>
-                <div>
-                    <div>
-                        <label htmlFor="nome">Nome</label>
-                    </div>
-                    <div>
-                        <InputText name="nome" value={cliente.nome} onChange={atualizarValores} />
-                    </div>
-                </div>
-
-                <div>
-                    <div>
-                        <label htmlFor="cpf">CPF</label>
-                    </div>
-                    <div>
-                        <InputMask name="cpf" value={cliente.cpf} onChange={atualizarValores} mask="999.999.999-99" unmask={true} />
-                    </div>
-                </div>
-
-                <div>
-                    <div>
-                        <label htmlFor="email">E-mail</label>
-                    </div>
-                    <div>
-                        <InputText name="email" value={cliente?.email} onChange={atualizarValores} />
-                    </div>
-                </div>
-
-                <div>
-                    <div>
-                        <label htmlFor="telefone">Telefone</label>
-                    </div>
-                    <div>
-                        <InputMask name="telefone" value={cliente.telefone} onChange={atualizarValores} mask="(99) 99999-9999" unmask={true} />
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        <label htmlFor="celular">Celular</label>
-                    </div>
-                    <div>
-                        <InputMask name="celular" value={cliente.celular} onChange={atualizarValores} mask="(99) 99999-9999" unmask={true} />
-                    </div>
-                </div>
-
-                <div>
-                    <div>
-                        <label htmlFor="datanascimento">Data de nascimento</label>
-                    </div>
-                    <div>
-                        <Calendar name="dataNascimento" value={cliente.dataNascimento} onChange={atualizarValores} dateFormat="dd/mm/yy" showIcon />
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        <div>
-                            <label htmlFor="logradouro">Logradouro</label>
-                        </div>
-                        <div>
-                            <InputText name="logradouro" value={endereco.logradouro} onChange={atualizarValoresEndereco} />
-                        </div>
-                    </div>
-                    <div>
-                        <div>
-                            <label htmlFor="numero">Número</label>
-                        </div>
-                        <div>
-                            <InputText name="numero" value={endereco.numero} onChange={atualizarValoresEndereco} />
-                        </div>
-                    </div>
-                    <div>
-                        <div>
-                            <label htmlFor="bairro">Bairro</label>
-                        </div>
-                        <div>
-                            <InputText name="bairro" value={endereco.bairro} onChange={atualizarValoresEndereco} />
-                        </div>
-                    </div>
-                    <div>
-                        <div>
-                            <label htmlFor="cep">CEP</label>
-                        </div>
-                        <div>
-                            <InputMask name="cep" value={endereco.cep} onChange={atualizarValoresEndereco} mask="99.999-999" unmask={true} />
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <div>
-                        <label htmlFor="observacao">Observação</label>
-                    </div>
-                    <div>
-                        <InputTextarea name="observacao" rows={5} cols={30} value={cliente.observacao} onChange={atualizarValores} />
-                    </div>
-                </div>
-            </div>
-
-            <Toast ref={toast} />
+        
         </>
     )
 }

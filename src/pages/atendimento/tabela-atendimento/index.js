@@ -76,24 +76,29 @@ const TabelaAtendimento = () => {
     }, [])
 
     return (
-        <>
-            <div>
-                <a onClick={() => navegacao('/atendimentos/novo')} className="p-button font-bold">Novo Atendimento</a>
+        <div className="container" style={{marginTop: '20px', marginLeft: '20px'}}>
+            <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+                <a onClick={() => navegacao('/atendimentos/novo')} className="p-button font-bold">
+                    Novo Atendimento
+                </a>
             </div>
-
-            <DataTable value={atendimentos}  tableStyle={{ minWidth: '50rem' }}>
-                <Column field="protocolo" header="Protocolo"></Column>
-                <Column field="status" header="Status"></Column>
-                <Column field="abertura" header="Data de abertura"></Column>
-                <Column field="finalizamento" header="Data de finalização"></Column>
-                <Column field="clienteNome" header="Cliente"></Column>
-                <Column field="acoes" header="Ações" body={botoesEditar}></Column>
-            </DataTable>
-            <Paginator first={numeroPagina} rows={quantidadePorPagina} totalRecords={totalRegistros} onPageChange={atualizarPagina}/>
-
+    
+            <div className="table-container" style={{ marginTop: '20px' }}>
+                <DataTable value={atendimentos} tableStyle={{ minWidth: '50rem' }}>
+                    <Column field="protocolo" header="Protocolo"></Column>
+                    <Column field="status" header="Status"></Column>
+                    <Column field="abertura" header="Data de abertura"></Column>
+                    <Column field="finalizamento" header="Data de finalização"></Column>
+                    <Column field="clienteNome" header="Cliente"></Column>
+                    <Column field="acoes" header="Ações" body={botoesEditar}></Column>
+                </DataTable>
+                <Paginator first={numeroPagina} rows={quantidadePorPagina} totalRecords={totalRegistros} onPageChange={atualizarPagina}/>
+            </div>
+    
             <Toast ref={toast} />
-        </>
+        </div>
     )
+    
 }
 
 export default TabelaAtendimento

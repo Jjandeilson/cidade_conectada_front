@@ -86,21 +86,21 @@ const TabelaCliente = () => {
 
     return (
         <>
-            <div>
-                <div>
+            <div className="container" style={{marginTop: '20px', marginLeft: '20px'}}>
+                <div style={{display: 'flex', justifyContent: 'flex-end'}}>
                     <a onClick={() => navegacao("/clientes/novo")} className="p-button font-bold">Novo cliente</a>
                 </div>
-
-                <DataTable value={clientes} tableStyle={{ minWidth: '50rem' }}>
-                    <Column field="nome" header="Nome"></Column>
-                    <Column field="email" header="E-mail"></Column>
-                    <Column field="telefone" header="Telefone"></Column>
-                    <Column field="celular" header="Celular"></Column>
-                    <Column field="dataNascimento" header="Data de nascimento"></Column>
-                    <Column field="acoes" header="Ações" body={botoesEditarExcluir}></Column>
-                </DataTable>
-                <Paginator first={numeroPagina} rows={quantidadePorPagina} totalRecords={totalRegistros} onPageChange={atualizarPagina} />
-
+                <div className="table-container" style={{ marginTop: '20px' }}>
+                    <DataTable value={clientes} tableStyle={{ minWidth: '50rem' }}>
+                        <Column field="nome" header="Nome"></Column>
+                        <Column field="email" header="E-mail"></Column>
+                        <Column field="telefone" header="Telefone"></Column>
+                        <Column field="celular" header="Celular"></Column>
+                        <Column field="dataNascimento" header="Data de nascimento"></Column>
+                        <Column field="acoes" header="Ações" body={botoesEditarExcluir}></Column>
+                    </DataTable>
+                    <Paginator first={numeroPagina} rows={quantidadePorPagina} totalRecords={totalRegistros} onPageChange={atualizarPagina} />
+                </div>
                 <Toast ref={toast} />
             </div>
         </>

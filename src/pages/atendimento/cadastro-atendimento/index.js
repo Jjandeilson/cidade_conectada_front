@@ -94,158 +94,156 @@ const CadastroAtendimento = () => {
 
     return (
         <>
-             <div>
-                <Button label="Salvar" severity="success" onClick={salvar} />
-                <a onClick={() => navegacao("/atendimentos")} className="p-button p-button-warning font-bold">Cancelar</a>
-            </div>
-
-            <div>
-                <Panel header="Informações do cliente">
-                    <div>
-                        <div>
-                            <div>
-                                <label htmlFor="nome">Nome</label>
-                            </div>
-                            <div>
-                                <InputText name="nome" value={cliente.nome} onChange={atualizarValoresCliente} />
-                            </div>
-                        </div>
-
-                        <div>
-                            <div>
-                                <label htmlFor="cpf">CPF</label>
-                            </div>
-                            <div className="p-inputgroup">
-                                <InputMask name="cpf" mask="999.999.999-99" unmask={true} value={cliente.cpf} onChange={atualizarValoresCliente} />
-                                <Button icon="pi pi-search" className="p-button-warning" onClick={buscarClientePorCpf} />
-                            </div>
-                        </div>
-
-                        <div>
-                            <div>
-                                <label htmlFor="email">E-mail</label>
-                            </div>
-                            <div>
-                                <InputText name="email" value={cliente.email} onChange={atualizarValoresCliente} />
-                            </div>
-                        </div>
-
-                        <div>
-                            <div>
-                                <label htmlFor="telefone">Telefone</label>
-                            </div>
-                            <div>
-                                <InputMask name="telefone" mask="(99) 99999-9999" unmask={true} value={cliente.telefone} onChange={atualizarValoresCliente} />
-                            </div>
-                        </div>
-                        <div>
-                            <div>
-                                <label htmlFor="celular">Celular</label>
-                            </div>
-                            <div>
-                                <InputMask name="celular" mask="(99) 99999-9999" unmask={true} value={cliente.celular} onChange={atualizarValoresCliente} />
-                            </div>
-                        </div>
-
-                        <div>
-                            <div>
-                                <label htmlFor="datanascimento">Data de nascimento</label>
-                            </div>
-                            <div>
-                                <Calendar name="dataNascimento" dateFormat="dd/mm/yy" showIcon value={cliente.dataNascimento} onChange={atualizarValoresCliente} />
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <div>
-                            <div>
-                                <label htmlFor="logradouro">Logradouro</label>
-                            </div>
-                            <div>
-                                <InputText name="logradouro" value={endereco.logradouro} onChange={atualizarValoresEndereco} />
-                            </div>
-                        </div>
-                        <div>
-                            <div>
-                                <label htmlFor="numero">Número</label>
-                            </div>
-                            <div>
-                                <InputText name="numero" value={endereco.numero} onChange={atualizarValoresEndereco} />
-                            </div>
-                        </div>
-                        <div>
-                            <div>
-                                <label htmlFor="bairro">Bairro</label>
-                            </div>
-                            <div>
-                                <InputText name="bairro" value={endereco.bairro} onChange={atualizarValoresEndereco} />
-                            </div>
-                        </div>
-                        <div>
-                            <div>
-                                <label htmlFor="cep">CEP</label>
-                            </div>
-                            <div>
-                                <InputMask name="cep" mask="99.999-999" unmask={true} value={endereco.cep} onChange={atualizarValoresEndereco} />
-                            </div>
-                        </div>
-
-                        <div>
-                            <div>
-                                <label htmlFor="observacao">Observação</label>
-                            </div>
-                            <div>
-                                <InputTextarea name="observacao" rows={5} cols={30} value={cliente.observacao} onChange={atualizarValoresCliente} />
-                            </div>
-                        </div>
-                    </div>
-                </Panel>
-                <Panel header="Informações do atendimento">
-                    <div>
-                        <div>
-                            <div>
-                                <label htmlFor="canalAtendimento">Canal de atendimento</label>
-                            </div>
-                            <div>
-                                <Dropdown name="canalAtendimento" placeholder="Selecione" options={canaisAtendimento} optionLabel="nome"
-                                   value={atendimento.canalAtendimento} onChange={atualizarValoresAtendimento} />
-                            </div>
-                        </div>
-                        <div>
-                            <div>
-                                <label htmlFor="tipoOcorrencia">Tipo de ocorrência</label>
-                            </div>
-                            <div>
-                                <Dropdown name="tipoOcorrencia" placeholder="Selecione" options={tiposOcorrencia}  optionLabel="nome" 
-                                    value={atendimento.tipoOcorrencia} onChange={atualizarSelectOcorrencia} />
-                            </div>
-                        </div>
-                        <div>
-                            <div>
-                                <label htmlFor="ocorrencia">Ocorrência</label>
-                            </div>
-                            <div>
-                                <Dropdown name="ocorrencia" placeholder="Selecione" options={ocorrencias} optionLabel="nome"
-                                    value={atendimento.ocorrencia} onChange={atualizarValoresAtendimento} />
-                            </div>
-                        </div>
-                        <div>
-                            <div>
-                                <label htmlFor="descricao">Descrição</label>
-                            </div>
-                            <div>
-                                <InputTextarea name="descricao" rows={5} cols={30} value={atendimento.descricao} onChange={atualizarValoresAtendimento} />
-                            </div>
-                        </div>
-                    </div>
-                </Panel>
-                
-                <div>
-                    <Button label="Salvar" severity="success" onClick={salvar} />
-                    <a onClick={() => navegacao("/atendimentos")} className="p-button p-button-warning font-bold">Cancelar</a>
+            <div className="container" style={{marginLeft: '20px'}}>
+                <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '20px', marginTop: '20px' }}>
+                    <Button label="Salvar" severity="success" style={{ width: '150px', height: '50px', marginRight: '10px' }} onClick={salvar} />
+                    <a onClick={() => navegacao("/atendimentos")} className="p-button p-button-warning font-bold" style={{ width: '150px', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    Cancelar
+                    </a>
                 </div>
 
-                <Toast ref={toast} />
+                <div className='panel-container' style={{ display: 'flex', gap: '20px' }}>
+                    <Panel header="Informações do cliente">
+                        <div>
+                            <div>
+                                <div>
+                                    <label htmlFor="nome">Nome</label>
+                                </div>
+                                <div>
+                                    <InputText name="nome" value={cliente.nome} onChange={atualizarValoresCliente} />
+                                </div>
+                            </div>
+
+                            <div>
+                                <div>
+                                    <label htmlFor="cpf">CPF</label>
+                                </div>
+                                <div className="p-inputgroup">
+                                    <InputMask name="cpf" mask="999.999.999-99" unmask={true} value={cliente.cpf} onChange={atualizarValoresCliente} />
+                                    <Button icon="pi pi-search" className="p-button-warning" onClick={buscarClientePorCpf} />
+                                </div>
+                            </div>
+
+                            <div>
+                                <div>
+                                    <label htmlFor="email">E-mail</label>
+                                </div>
+                                <div>
+                                    <InputText name="email" value={cliente.email} onChange={atualizarValoresCliente} />
+                                </div>
+                            </div>
+
+                            <div>
+                                <div>
+                                    <label htmlFor="telefone">Telefone</label>
+                                </div>
+                                <div>
+                                    <InputMask name="telefone" mask="(99) 99999-9999" unmask={true} value={cliente.telefone} onChange={atualizarValoresCliente} />
+                                </div>
+                            </div>
+                            <div>
+                                <div>
+                                    <label htmlFor="celular">Celular</label>
+                                </div>
+                                <div>
+                                    <InputMask name="celular" mask="(99) 99999-9999" unmask={true} value={cliente.celular} onChange={atualizarValoresCliente} />
+                                </div>
+                            </div>
+
+                            <div>
+                                <div>
+                                    <label htmlFor="datanascimento">Data de nascimento</label>
+                                </div>
+                                <div>
+                                    <Calendar name="dataNascimento" dateFormat="dd/mm/yy" showIcon value={cliente.dataNascimento} onChange={atualizarValoresCliente} />
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div>
+                                <div>
+                                    <label htmlFor="logradouro">Logradouro</label>
+                                </div>
+                                <div>
+                                    <InputText name="logradouro" value={endereco.logradouro} onChange={atualizarValoresEndereco} />
+                                </div>
+                            </div>
+                            <div>
+                                <div>
+                                    <label htmlFor="numero">Número</label>
+                                </div>
+                                <div>
+                                    <InputText name="numero" value={endereco.numero} onChange={atualizarValoresEndereco} />
+                                </div>
+                            </div>
+                            <div>
+                                <div>
+                                    <label htmlFor="bairro">Bairro</label>
+                                </div>
+                                <div>
+                                    <InputText name="bairro" value={endereco.bairro} onChange={atualizarValoresEndereco} />
+                                </div>
+                            </div>
+                            <div>
+                                <div>
+                                    <label htmlFor="cep">CEP</label>
+                                </div>
+                                <div>
+                                    <InputMask name="cep" mask="99.999-999" unmask={true} value={endereco.cep} onChange={atualizarValoresEndereco} />
+                                </div>
+                            </div>
+
+                            <div>
+                                <div>
+                                    <label htmlFor="observacao">Observação</label>
+                                </div>
+                                <div>
+                                    <InputTextarea name="observacao" rows={5} cols={30} value={cliente.observacao} onChange={atualizarValoresCliente} />
+                                </div>
+                            </div>
+                        </div>
+                    </Panel>
+                    <Panel header="Informações do atendimento">
+                        <div>
+                            <div>
+                                <div>
+                                    <label htmlFor="canalAtendimento">Canal de atendimento</label>
+                                </div>
+                                <div>
+                                    <Dropdown name="canalAtendimento" placeholder="Selecione" options={canaisAtendimento} optionLabel="nome"
+                                    value={atendimento.canalAtendimento} onChange={atualizarValoresAtendimento} />
+                                </div>
+                            </div>
+                            <div>
+                                <div>
+                                    <label htmlFor="tipoOcorrencia">Tipo de ocorrência</label>
+                                </div>
+                                <div>
+                                    <Dropdown name="tipoOcorrencia" placeholder="Selecione" options={tiposOcorrencia}  optionLabel="nome" 
+                                        value={atendimento.tipoOcorrencia} onChange={atualizarSelectOcorrencia} />
+                                </div>
+                            </div>
+                            <div>
+                                <div>
+                                    <label htmlFor="ocorrencia">Ocorrência</label>
+                                </div>
+                                <div>
+                                    <Dropdown name="ocorrencia" placeholder="Selecione" options={ocorrencias} optionLabel="nome"
+                                        value={atendimento.ocorrencia} onChange={atualizarValoresAtendimento} />
+                                </div>
+                            </div>
+                            <div>
+                                <div>
+                                    <label htmlFor="descricao">Descrição</label>
+                                </div>
+                                <div>
+                                    <InputTextarea name="descricao" rows={5} cols={30} value={atendimento.descricao} onChange={atualizarValoresAtendimento} />
+                                </div>
+                            </div>
+                        </div>
+                    </Panel>
+                    <Toast ref={toast} />
+                </div>
             </div>
         </>
     )

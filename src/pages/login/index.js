@@ -41,31 +41,33 @@ const Login = () => {
 
     return  (
         <>
-            <Card>
-                <div>
-
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', width: '100vw' }}>
+                <Card>
                     <div>
-                        <label> Login</label>
-                        
+    
                         <div>
-                            <InputText name="login" value={usuarioLogin.login} onChange={atualizarValores}/>
+                            <label> Login</label>
+                            
+                            <div>
+                                <InputText name="login" value={usuarioLogin.login} onChange={atualizarValores}/>
+                            </div>
+                        </div>
+    
+                        <div>
+                            <label>Senha</label>
+    
+                            <div>
+                                <Password name="senha" feedback={false} value={usuarioLogin.senha} onChange={atualizarValores} />
+                            </div>
+                        </div>
+    
+                        <div>
+                            <Button label="Entar" onClick={logar} />
                         </div>
                     </div>
-
-                    <div>
-                        <label>Senha</label>
-
-                        <div>
-                            <Password name="senha" feedback={false} value={usuarioLogin.senha} onChange={atualizarValores} />
-                        </div>
-                    </div>
-
-                    <div>
-                        <Button label="Entar" onClick={logar} />
-                    </div>
-                </div>
-            </Card>
-
+                </Card>
+            </div>
+    
             <Outlet />
         </>
     )
