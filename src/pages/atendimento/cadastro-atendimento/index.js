@@ -55,7 +55,7 @@ const CadastroAtendimento = () => {
             .then(response => {
                 response.data.dataNascimento = moment(response.data.dataNascimento).add(1, "days").toDate();
                 setCliente(response.data);
-                setEndereco(response.data.endereco)
+                setEndereco(response.data.endereco);
             })
             .catch(response => console.log(response));
     }
@@ -76,7 +76,6 @@ const CadastroAtendimento = () => {
         AtendimentoService.salvar(atendimento)
             .then(() => {
                 show('Operação realizada com sucesso', 'success', 'Success');
-                navegacao("/atendimentos");
             })
             .catch(response => (show(response.response.data.detail, 'error', 'Error')));
     }
@@ -98,7 +97,7 @@ const CadastroAtendimento = () => {
                 <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '20px', marginTop: '20px' }}>
                     <Button label="Salvar" severity="success" style={{ width: '150px', height: '50px', marginRight: '10px' }} onClick={salvar} />
                     <a onClick={() => navegacao("/atendimentos")} className="p-button p-button-warning font-bold" style={{ width: '150px', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    Cancelar
+                        Cancelar
                     </a>
                 </div>
 
@@ -242,7 +241,8 @@ const CadastroAtendimento = () => {
                             </div>
                         </div>
                     </Panel>
-                    <Toast ref={toast} />
+                    
+                    <Toast ref={toast} onHide={() => navegacao("/atendimentos")}/>
                 </div>
             </div>
         </>

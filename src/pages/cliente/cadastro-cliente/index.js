@@ -39,17 +39,17 @@ const CadastroCliente = () => {
         if (cliente.codigo === '') {
             cliente.endereco = endereco;
             ClienteService.salvar(cliente)
-                .then(() => {
+                .then(response => {
                     show('Operação realizada com sucesso', 'success', 'Success');
-                    navegacao("/clientes");
+                    navegacao(`/clientes/${response.data.codigo}/editar`);
                 })
                 .catch(response => (show(response.response.data.detail, 'error', 'Error')));
         } else {
             cliente.endereco = endereco;
             ClienteService.atualizar(cliente.codigo, cliente)
-                .then(() => {
+                .then(response => {
                     show('Operação realizada com sucesso', 'success', 'Success');
-                    navegacao("/clientes");
+                    navegacao(`/clientes/${response.data.codigo}/editar`);
                 })
                 .catch(response => (show(response.response.data.detail, 'error', 'Error')));
         }
@@ -64,7 +64,7 @@ const CadastroCliente = () => {
                     setCliente(response.data);
                     setEndereco(response.data.endereco);
                 })
-                .catch(response => console.log(response))
+                .catch(response => console.log(response));
         } else {
             document.title = 'Novo cliente';
         }

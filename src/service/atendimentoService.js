@@ -57,6 +57,11 @@ const AtendimentoService = {
     gerarProtocolo: async function() {
         const response = await http.get(`${urlAtendimentos}/gerar-protocolo`);
         return response;
+    },
+
+    buscarConversaChat: async function (codidoAtendimento) {
+        const response = await http.get(`${urlAtendimentos}/${codidoAtendimento}/historico-chat`);
+        return response;
     }
 }
 

@@ -1,11 +1,10 @@
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Paginator } from 'primereact/paginator';
 import { Button } from 'primereact/button';
-import { Toast } from 'primereact/toast';
 
 import moment from 'moment-timezone';
 
@@ -14,16 +13,11 @@ import AtendimentoService from '../../../service/atendimentoService';
 const TabelaAtendimento = () => {
     document.title = 'Listagem de atendimentos';
 
-    const toast = useRef(null);
     const [atendimentos, setAtendimentos] = useState([]);
     const [numeroPagina, setNumeroPagina] = useState(0);
     const [quantidadePorPagina, setQuantidadePorPagina] = useState(0);
     const [totalRegistros, setTotalRegistros] = useState(0);
     const navegacao = useNavigate();
-
-    const show = (mensagem, severity, summary) => {
-        toast.current.show({ severity: severity, summary: summary, detail: mensagem });
-    };
 
     const atualizarPagina = (e) => {
         AtendimentoService.listar(e.page)
@@ -43,7 +37,7 @@ const TabelaAtendimento = () => {
                 setQuantidadePorPagina(response.data.size);
                 setTotalRegistros(response.data.totalElements);
             })
-            .catch(response => console.log(response))
+            .catch(response => console.log(response));
     }
 
     const botoesEditar = (atendimento) => {
@@ -58,7 +52,6 @@ const TabelaAtendimento = () => {
         AtendimentoService.listar()
             .then(response =>  {
                 let atendimentoBanco = response.data.content;
-                console.log(atendimentoBanco);
                 atendimentoBanco.forEach(atendimento => {
                    atendimento.abertura = moment(atendimento.abertura).format("DD/MM/YYYY HH:mm:ss");
                    
@@ -94,8 +87,6 @@ const TabelaAtendimento = () => {
                 </DataTable>
                 <Paginator first={numeroPagina} rows={quantidadePorPagina} totalRecords={totalRegistros} onPageChange={atualizarPagina}/>
             </div>
-    
-            <Toast ref={toast} />
         </div>
     )
     

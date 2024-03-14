@@ -1,10 +1,11 @@
-import { useContext, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 
 import { Card } from 'primereact/card';
 import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
 import { Button } from 'primereact/button';
+import { Toast } from 'primereact/toast';
 
 import CodigoUsuarioContext from '../../context/CodigoUsuarioContext';
 
@@ -12,9 +13,14 @@ import UsuarioService from '../../service/usuarioService';
 import UsuarioLogin from '../../dto/usuario-login';
 
 const Login = () => {
+    const toast = useRef(null);
     const navegacao = useNavigate();
     const [usuarioLogin, setUsuarioLogin] = useState(UsuarioLogin);
-    const {codigoUsuario, setCodigoUsuario} = useContext(CodigoUsuarioContext); 
+    const {codigoUsuario, setCodigoUsuario} = useContext(CodigoUsuarioContext);
+    
+    const show = (mensagem, severity, summary) => {
+        toast.current.show({ severity: severity, summary: summary, detail: mensagem });
+    };
 
     function atualizarValores(envet) {
         const {name, value} = envet.target
@@ -36,7 +42,9 @@ const Login = () => {
             }
 
         })
-        .catch(response => console.log(response));
+        .catch(response => {
+            show('Login ou senha inválida. Verificar se as informações estão corretas', 'error', 'Error');
+        });
     }
 
     return  (
@@ -66,6 +74,8 @@ const Login = () => {
                         </div>
                     </div>
                 </Card>
+
+                <Toast ref={toast} />
             </div>
     
             <Outlet />

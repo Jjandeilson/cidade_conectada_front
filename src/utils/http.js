@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const http = axios.create({
-    baseURL: 'https://cidadeconectadateste-production.up.railway.app',
+    baseURL: 'http://localhost:8080',
     timeout: 10000
 })
 
