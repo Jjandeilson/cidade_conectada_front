@@ -73,10 +73,7 @@ const CadastroCliente = () => {
     return (
         <>
             <div className="container" style={{marginLeft: '20px'}}>
-                <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '20px', marginTop: '20px'}}> 
-                        <Button label="Salvar" severity="success" onClick={salvar}  style={{ width: '150px', height: '50px', marginRight: '10px' }}/>
-                        <a onClick={() => navegacao("/clientes")} className="p-button p-button-warning font-bold" style={{ width: '150px', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Cancelar</a>
-                </div>
+                
 
                 <div className='panel-container' style={{ display: 'flex', gap: '20px', width: '100%', margin: '0 auto' }}>
                     <Panel header="Informações do cliente" style={{ width: '100%' }}>
@@ -174,6 +171,11 @@ const CadastroCliente = () => {
                                 <div>
                                     <InputTextarea name="observacao" rows={5} cols={30} value={cliente.observacao} onChange={atualizarValores} />
                                 </div>
+                            </div>
+
+                            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '20px', marginTop: '20px'}}> 
+                                <Button label="Salvar" severity="success" onClick={salvar}  style={{ width: '150px', height: '50px', marginRight: '10px' }}/>
+                                <Button label="Cancelar" severity="danger" onClick={() => navegacao("/clientes")}  style={{ width: '150px', height: '50px', marginRight: '10px' }}/>
                             </div>
                             
                     </Panel>

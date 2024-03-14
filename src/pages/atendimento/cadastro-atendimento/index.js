@@ -95,13 +95,9 @@ const CadastroAtendimento = () => {
     return (
         <>
             <div className="container" style={{marginLeft: '20px'}}>
-                <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '20px', marginTop: '20px' }}>
-                    <Button label="Salvar" severity="success" style={{ width: '150px', height: '50px', marginRight: '10px' }} onClick={salvar} />
-                    <a onClick={() => navegacao("/atendimentos")} className="p-button p-button-warning font-bold" style={{ width: '150px', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    Cancelar
-                    </a>
-                </div>
-
+            
+                
+                <Panel>
                 <div className='panel-container' style={{ display: 'flex', gap: '20px' }}>
                     <Panel header="Informações do cliente">
                         <div>
@@ -241,9 +237,18 @@ const CadastroAtendimento = () => {
                                 </div>
                             </div>
                         </div>
+                        
+                        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '20px', marginTop: '20px' }}>
+                            <Button label="Salvar" severity="success" style={{ width: '150px', height: '50px', marginRight: '10px' }} onClick={salvar} />
+                            <Button label="Cancelar" severity="danger" style={{ width: '150px', height: '50px', marginRight: '10px' }} onClick={() => navegacao("/atendimentos")} />
+                        </div>
+                        
                     </Panel>
                     <Toast ref={toast} />
+                    
                 </div>
+                </Panel>
+                
             </div>
         </>
     )

@@ -74,18 +74,18 @@ const TabelaTipoOcorrencia = () => {
 
     return (
         <>
-            <div>
-                <div>
+            <div className="container" style={{marginTop: '20px', marginLeft: '20px'}}>
+                <div style={{display: 'flex', justifyContent: 'flex-end'}}> 
                     <a onClick={() => navegacao("/tipos-ocorrencia/novo")} className="p-button font-bold">Novo tipo de ocorrência</a>
                 </div>
-
+                <div className="table-container" style={{ marginTop: '20px' }}>
                 <DataTable value={tiposOCorrencia} tableStyle={{ minWidth: '50rem' }}>
                     <Column field="nome" header="Nome"></Column>
                     <Column field="setorNome" header="Setor"></Column>
                     <Column field="acoes" header="Ações" body={botoesEditarExcluir}></Column>
                 </DataTable>
                 <Paginator first={numeroPagina} rows={quantidadePorPagina} totalRecords={totalRegistros} onPageChange={atualizarPagina} />
-
+                </div>
                 <Toast ref={toast} />
             </div>
         </>

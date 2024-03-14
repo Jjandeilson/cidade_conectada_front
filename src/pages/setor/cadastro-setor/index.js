@@ -1,12 +1,12 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 
+import { Panel } from 'primereact/panel'
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Toast } from 'primereact/toast';
 
-import '../cadastro-setor/index.css';
 
 import SetorService from '../../../service/sertorService';
 
@@ -59,27 +59,38 @@ const CadastroSetor = () => {
 
     return (
         <>
-            <div className="cadastroForm">
-                <h1>Cadastro Setor</h1>
-                <div className="formField">
-                    <label htmlFor="nome" className="formLabel">Nome</label>
-                    <InputText name="nome" value={setor.nome} onChange={atualizarValores} className="formInput" />
-                </div>
+            <div>
+                
 
-                <div className="formField">
-                    <label htmlFor="descricao" className="formLabel">Descrição</label>
-                    <InputTextarea name="descricao" value={setor?.descricao} onChange={atualizarValores} rows={5} className="formTextarea" autoResize />
-                </div>
+            
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '20px', width: '80%', margin: '20px' }}>
+                    
+                    <Panel style={{ width: '100%' }}>
+                        <h1 style={{ textAlign: 'center' }}>Cadastro Setor</h1>
+                        <div style={{ marginBottom: '10px' }}>
+                            <label htmlFor="nome">Nome</label>
+                            <InputText name="nome" value={setor.nome} onChange={atualizarValores} style={{ width: '100%' }} />
+                        </div>
+        
+                        <div style={{ marginBottom: '10px' }}>
+                            <label htmlFor="descricao">Descrição</label>
+                            <InputTextarea name="descricao" value={setor?.descricao} onChange={atualizarValores} rows={5} style={{ width: '100%' }} autoResize />
+                        </div>
 
-                <div className="formActions">
-                    <Button label="Salvar" className="submitButton" onClick={salvar} />
-                    <Button label="Cancelar" className="cancelButton" onClick={() => navegacao("/setores")} />
-                </div>
+                        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '20px' }}>
+                            <Button label="Salvar"  onClick={salvar} severity="success"/>
+                            <Button label="Cancelar" onClick={() => navegacao("/setores")} severity="danger"/>
+                        </div>
+                    </Panel>
+        
 
-                <Toast ref={toast} />
+        
+                    <Toast ref={toast} />
+                </div>
             </div>
         </>
     )
+    
 }
 
 export default CadastroSetor
