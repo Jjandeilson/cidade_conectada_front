@@ -63,7 +63,7 @@ const CadastroCanalAtendimento = () => {
             <div className="formcanalatendimento" style={{ display: 'flex', flexDirection: 'column' }} >
                 <div>
                     <Button label="Salvar" severity="success" onClick={salvar} />
-                    <a onClick={() => navegacao("/canais-atendimento")} className="p-button p-button-warning font-bold">Cancelar</a>
+                    <Button label="Cancelar" onClick={() => navegacao("/canais-atendimento")} severity="danger"/>
                 </div>
 
                 <div>

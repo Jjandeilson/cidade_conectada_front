@@ -241,9 +241,9 @@ const CadastroAtendimento = () => {
                             </div>
                         </div>
                     </Panel>
-                    
-                    <Toast ref={toast} onHide={() => navegacao("/atendimentos")}/>
-                </div>
+
+                    <Toast ref={toast} />
+                </div>                
             </div>
         </>
     )
