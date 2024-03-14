@@ -45,6 +45,11 @@ const ChatCliente = () => {
 
             divMensagem.textContent = mensagemCliente.mensagem;
             chatMessage.appendChild(divMensagem);
+
+            if (mensagemCliente.finalizado) {
+                document.getElementById('chatId').innerText = "";
+                setExibirChat(false);
+            }
         })
     }
 
@@ -67,15 +72,17 @@ const ChatCliente = () => {
 
     return (
         <>
-            <Card>
-                <div>
-                    <label>Chat</label>
-                </div>
+            {!exibirChat && (
+                <Card>
+                    <div>
+                        <label>Chat</label>
+                    </div>
 
-                <div>
-                    <Button label="Entrar" onClick={logarChat} />
-                </div>
-            </Card>
+                    <div>
+                        <Button label="Entrar" onClick={logarChat} />
+                    </div>
+                </Card>
+            )}
 
             {exibirChat && (
                 <>

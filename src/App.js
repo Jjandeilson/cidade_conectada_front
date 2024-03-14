@@ -69,9 +69,7 @@ function App() {
                 <Route path=":codigo/editar" element={<AcompanhamentoAtendimento />} />
               </Route>
           </Route>
-          <Route path="consultar-protocolo">
-            <Route path="" element={<AcompanharAtendimentoCliente />} />
-          </Route>
+          <Route path="consultar-protocolo" element={<AcompanharAtendimentoCliente />} />
           <Route path="atendentes" element={<TelaAtendente />} />
           <Route path="chat-cliente" element={<ChatCliente />} />
         </Routes>
