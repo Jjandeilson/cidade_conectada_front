@@ -66,17 +66,17 @@ const CadastroCanalAtendimento = (visible) => {
                 <div className="cadastro-form">
                     <h1>Cadastrar Canal</h1>
                     <div className="form-field">
-                        <label htmlFor="nome" className="form-label">Nome</label>
+                        <label htmlFor="nome" className="form-label">Nome:</label>
                         <InputText name="nome" value={canal.nome} onChange={atualizarValores} className="form-input" />
                     </div>
 
-                        <div>
-                            <label htmlFor="nome">Ícone </label>
-                            <Dropdown options={icones} name="icone" value={canal?.icone} onChange={atualizarValores} placeholder="Selecione" className="w-full md:w-14rem" />
-                        </div>
+                    <div>
+                        <label htmlFor="nome">Ícone: </label>
+                        <Dropdown options={icones} name="icone" value={canal?.icone} onChange={atualizarValores} placeholder="Selecione" />
+                    </div>
 
                     <div className="form-field">
-                        <label htmlFor="descricao" className="form-label">Descrição</label>
+                        <label htmlFor="descricao" className="form-label">Descrição:</label>
                         <InputTextarea name="descricao" value={canal?.descricao} onChange={atualizarValores} rows={5} cols={30} className="form-textarea" autoResize />
                     </div>
 
