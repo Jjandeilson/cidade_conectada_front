@@ -6,18 +6,31 @@ import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Dropdown } from 'primereact/dropdown';
 import { Toast } from 'primereact/toast';
+import { Dialog } from 'primereact/dialog';
 
 import CanalAntendimentoService from '../../../service/canalAtendimentoService';
 import CanalAtendimento from '../../../dto/canal-atendimento';
 
 const icones = ["Whatsapp", "Chat", "Presencial"]
 
-const CadastroCanalAtendimento = () => {
+const CadastroCanalAtendimento = (visible) => {
     const navegacao = useNavigate();
     const toast = useRef(null);
     const { codigo } = useParams();
     const [canal, setCanal] = useState(CanalAtendimento);
     const canalAtendimentoService = CanalAntendimentoService;
+
+    useEffect(() => {
+        if (codigo !== undefined) {
+            document.title = "Editar canal de atendimento";
+            canalAtendimentoService.buscar(codigo)
+                .then(response => setCanal(response.data))
+                .catch(response => console.log(response));
+        } else {
+            document.title = 'Novo canal de atendimento';
+        }
+
+    }, [])
 
     const show = (mensagem, severity, summary) => {
         toast.current.show({ severity: severity, summary: summary, detail: mensagem });
@@ -36,8 +49,8 @@ const CadastroCanalAtendimento = () => {
                     navegacao("/canais-atendimento");
                 })
                 .catch(response => (show(response.response.data.detail, 'error', 'Error')));
-            }  else {
-            
+        } else {
+
             canalAtendimentoService.atualizar(canal.codigo, canal)
                 .then(() => {
                     show('Operação realizada com sucesso', 'success', 'Success');
@@ -47,55 +60,34 @@ const CadastroCanalAtendimento = () => {
         }
     }
 
-    useEffect(() => {
-        if (codigo !== undefined) {
-            document.title = "Editar canal de atendimento";
-            canalAtendimentoService.buscar(codigo)
-                .then(response => setCanal(response.data))
-                .catch(response => console.log(response));
-        } else {
-            document.title = 'Novo canal de atendimento';
-        }
-
-    }, [])
-
     return (
         <>
-            <div className="formcanalatendimento" style={{ display: 'flex', flexDirection: 'column' }} >
-
-                <div>
-                    <div>
-                        <label htmlFor="nome">Nome</label>
+            <Dialog visible={visible} onHide={() => navegacao("/canais-atendimento")} >
+                <div className="cadastro-form">
+                    <h1>Cadastrar Canal</h1>
+                    <div className="form-field">
+                        <label htmlFor="nome" className="form-label">Nome</label>
+                        <InputText name="nome" value={canal.nome} onChange={atualizarValores} className="form-input" />
                     </div>
-                    <div>
-                        <InputText name="nome" value={canal.nome} onChange={atualizarValores} />
+
+                        <div>
+                            <label htmlFor="nome">Ícone </label>
+                            <Dropdown options={icones} name="icone" value={canal?.icone} onChange={atualizarValores} placeholder="Selecione" className="w-full md:w-14rem" />
+                        </div>
+
+                    <div className="form-field">
+                        <label htmlFor="descricao" className="form-label">Descrição</label>
+                        <InputTextarea name="descricao" value={canal?.descricao} onChange={atualizarValores} rows={5} cols={30} className="form-textarea" autoResize />
+                    </div>
+
+
+                    <div className="form-actions">
+                        <Button label="Cancelar" className="cancel-button" onClick={() => navegacao("/canais-atendimento")} />
+                        <Button label="Salvar" className="submit-button" onClick={salvar} />
                     </div>
                 </div>
-
-                <div>
-                    <div>
-                        <label htmlFor="nome">Ícone</label>
-                    </div>
-                    <div>
-                        <Dropdown options={icones} name="icone" value={canal?.icone} onChange={atualizarValores} placeholder="Selecione" className="w-full md:w-14rem" />
-                    </div>
-                </div>
-
-                <div>
-                    <div>
-                        <label htmlFor="nome">Descrição</label>
-                    </div>
-                    <div>
-                        <InputTextarea name="descricao" value={canal?.descricao} onChange={atualizarValores} rows={5} cols={30} />
-                    </div>
-                </div>
-                <div>
-                    <Button label="Salvar" severity="success" onClick={salvar} />
-                    <a onClick={() => navegacao("/canais-atendimento")} className="p-button p-button-warning font-bold">Cancelar</a>
-                </div>
-
                 <Toast ref={toast} />
-            </div>
+            </Dialog >
         </>
     )
 }

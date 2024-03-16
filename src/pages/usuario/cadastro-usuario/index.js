@@ -114,66 +114,47 @@ const CadastroUsuario = (visible) => {
     return (
         <>
             <Dialog visible={visible} onHide={() => navegacao("/usuarios")} >
-                <div className='form-user'>
-                    <h1>Cadastrar Setor</h1>
-                    <div>
-                        <div>
-                            <label htmlFor="nome">Nome</label>
-                        </div>
-                        <div>
-                            <InputText name="nome" value={usuario.nome} onChange={atualizarValores} className="form-label" />
-                        </div>
+                <div className='cadastro-form-user'>
+                    <h1>Cadastrar Usuário</h1>
+                    <div className="form-field">
+                        <label htmlFor="nome">Nome:</label>
+                        <InputText name="nome" value={usuario.nome} onChange={atualizarValores} className="form-input" />
                     </div>
 
-                    <div>
-                        <div>
-                            <label htmlFor="email">E-mail</label>
-                        </div>
-                        <div>
-                            <InputText name="email" value={usuario.email} onChange={atualizarValores} className="form-label" />
-                        </div>
+                    <div className="form-field">
+                        <label htmlFor="email">E-mail:</label>
+                        <InputText name="email" value={usuario.email} onChange={atualizarValores} className="form-input" />
                     </div>
 
-                    <div>
-                        <div>
-                            <label htmlFor="telefone">Telefone</label>
-                        </div>
+
+                    <div className="form-field">
+                        <label htmlFor="telefone">Telefone:</label>
                         <div>
                             <InputMask mask="(99) 99999-9999" name="telefone" value={usuario?.telefone} onChange={atualizarValores} unmask={true} />
                         </div>
                     </div>
 
-                    <div>
-                        <div>
-                            <label htmlFor="celular">Celular</label>
-                        </div>
+                    <div className="form-field">
+                        <label htmlFor="celular">Celular:</label>
                         <div>
                             <InputMask mask="(99) 99999-9999" name="celular" value={usuario?.celular} onChange={atualizarValores} unmask={true} />
                         </div>
                     </div>
 
-                    <div>
-                        <div>
-                            <label htmlFor="login">Login</label>
-                        </div>
-                        <div>
-                            <InputText name="login" value={usuario.login} onChange={atualizarValores} className="form-label" />
-                        </div>
+                    <div className="form-field">
+                        <label htmlFor="login">Login:</label>
+                        <InputText name="login" value={usuario.login} onChange={atualizarValores} className="form-input" />
                     </div>
 
-                    <div>
-                        <div>
-                            <label htmlFor="senha">Senha</label>
-                        </div>
+                    <div className="form-field">
+                        <label htmlFor="senha">Senha:</label>
                         <div>
                             <Password feedback={false} name="senha" value={usuario.senha} onChange={atualizarValores} />
                         </div>
                     </div>
 
-                    <div>
-                        <div>
-                            <label htmlFor="setor">Setor</label>
-                        </div>
+                    <div className="form-field">
+                        <label htmlFor="setor">Setor:</label>
                         <div>
                             <Dropdown options={setores} placeholder="Selecione" name="setor" value={usuario.setor} optionLabel="nome" onChange={atualizarValores} />
                         </div>
@@ -182,7 +163,7 @@ const CadastroUsuario = (visible) => {
                     {usuario.codigo && (
                         <div>
                             <div>
-                                <label htmlFor="atendente">Atendente</label>
+                                <label htmlFor="atendente">Atendente:</label>
                             </div>
                             <div>
                                 <SelectButton options={optionsSelectButton} optionLabel="nome" optionValue="valor" name="atendente" value={usuario?.atendente}
@@ -197,14 +178,13 @@ const CadastroUsuario = (visible) => {
                         </div>
                     )}
 
-                    <div className="btn-form-user">
-                        <a onClick={() => navegacao("/usuarios")} className="p-button p-button-warning font-bold">Cancelar</a>
-                        <Button label="Salvar" severity="success" onClick={salvar} />
+                    <div className="form-actions">
+                        <Button label="Cancelar" className="cancel-button" onClick={() => navegacao("/usuarios")} />
+                        <Button label="Salvar" className="submit-button" onClick={salvar} />
                     </div>
-
                     <Toast ref={toast} />
-                </div >
-            </Dialog>
+                </div>
+            </Dialog >
 
         </>
     )

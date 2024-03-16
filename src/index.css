@@ -63,11 +63,28 @@ code {
   justify-content: center;
   background: #fff;
   width: 500px;
-  height: 400px;
+  gap: 20px;
+  height: 550px;
   border: 1px solid #ddd;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
+}
+
+.cadastro-form-user {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #fff;
+  gap: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.p-password-input {
+  width: 300px;
 }
 
 .form-field {

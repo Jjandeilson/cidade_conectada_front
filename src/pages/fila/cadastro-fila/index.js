@@ -62,12 +62,12 @@ const CadastroFila = (visible) => {
                 <div className="cadastro-form">
                     <h1>Cadastrar Fila</h1>
                     <div className="form-field">
-                        <label htmlFor="nome" className="form-label">Nome</label>
+                        <label htmlFor="nome" className="form-label">Nome:</label>
                         <InputText name="nome" value={fila.nome} onChange={atualizarValores} className="form-input" />
                     </div>
 
                     <div className="form-field">
-                        <label htmlFor="descricao" className="form-label">Descrição</label>
+                        <label htmlFor="descricao" className="form-label">Descrição:</label>
                         <InputTextarea name="descricao" value={fila?.descricao} onChange={atualizarValores} rows={5} className="form-textarea" autoResize />
                     </div>
 

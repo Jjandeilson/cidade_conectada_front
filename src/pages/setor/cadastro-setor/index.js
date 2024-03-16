@@ -7,7 +7,6 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import { Toast } from 'primereact/toast';
 import { Dialog } from 'primereact/dialog';
 
-
 import SetorService from '../../../service/sertorService';
 import Setor from '../../../dto/setor';
 
@@ -63,12 +62,12 @@ const CadastroSetor = (visible) => {
                 <div className="cadastro-form">
                     <h1>Cadastrar Setor</h1>
                     <div className="form-field">
-                        <label htmlFor="nome" className="form-label">Nome</label>
+                        <label htmlFor="nome" className="form-label">Nome:</label>
                         <InputText name="nome" value={setor.nome} onChange={atualizarValores} className="form-input" />
                     </div>
 
                     <div className="form-field">
-                        <label htmlFor="descricao" className="form-label">Descrição</label>
+                        <label htmlFor="descricao" className="form-label">Descrição:</label>
                         <InputTextarea name="descricao" value={setor?.descricao} onChange={atualizarValores} rows={5} className="form-textarea" autoResize />
                     </div>
 
