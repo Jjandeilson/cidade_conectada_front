@@ -5,44 +5,16 @@ import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Toast } from 'primereact/toast';
-
-import '../cadastro-fila/index.css'
+import { Dialog } from 'primereact/dialog';
 
 import FilaService from '../../../service/filaService';
 import Fila from '../../../dto/fila';
 
-const CadastroFila = () => {
+const CadastroFila = (visible) => {
     const navegacao = useNavigate();
     const toast = useRef(null);
-    const {codigo} = useParams();
+    const { codigo } = useParams();
     const [fila, setFila] = useState(Fila);
-
-    const show = (mensagem, severity, summary) => {
-        toast.current.show({ severity: severity, summary: summary, detail: mensagem });
-    };
-
-    function atualizarValores(envet) {
-        const {name, value} = envet.target
-        setFila({...fila,[name]: value});
-    }
-
-    function salvar() {
-        if (fila.codigo === '') {
-            FilaService.salvar(fila)
-                .then(() => {
-                    show('Operação realizada com sucesso', 'success', 'Success');
-                    navegacao("/filas");
-                })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
-            } else {
-            FilaService.atualizar(fila.codigo, fila)
-                .then(() => {
-                    show('Operação realizada com sucesso', 'success', 'Success');
-                    navegacao("/filas");
-                })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
-        }
-    }
 
     useEffect(() => {
         if (codigo !== undefined) {
@@ -56,33 +28,56 @@ const CadastroFila = () => {
 
     }, [codigo])
 
+    const show = (mensagem, severity, summary) => {
+        toast.current.show({ severity: severity, summary: summary, detail: mensagem });
+    };
+
+    function atualizarValores(envet) {
+        const { name, value } = envet.target
+        setFila({ ...fila, [name]: value });
+    }
+
+    function salvar() {
+        if (fila.codigo === '') {
+            FilaService.salvar(fila)
+                .then(() => {
+                    show('Cadastro realizado com sucesso', 'success', 'Success');
+                    navegacao("/filas");
+                })
+                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
+        } else {
+            FilaService.atualizar(fila.codigo, fila)
+                .then(() => {
+                    show('Atualização realizada com sucesso', 'success', 'Success');
+                    navegacao("/filas");
+                })
+                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
+        }
+    }
+
     return (
         <>
-            <div className="formfila" style={{ display: 'flex', flexDirection: 'column' }}>
-                <div>
-                    <div>
-                        <label htmlFor="nome">Nome</label>
-                    </div>
-                    <div>
-                        <InputText name="nome" value={fila.nome} onChange={atualizarValores} />
-                    </div>
-                </div>
 
-                <div>
-                    <div>
-                        <label htmlFor="nome">Descrição</label>
+            <Dialog visible={visible} onHide={() => navegacao("/filas")} >
+                <div className="cadastro-form">
+                    <h1>Cadastrar Fila</h1>
+                    <div className="form-field">
+                        <label htmlFor="nome" className="form-label">Nome</label>
+                        <InputText name="nome" value={fila.nome} onChange={atualizarValores} className="form-input" />
                     </div>
-                    <div>
-                        <InputTextarea name="descricao" value={fila?.descricao} onChange={atualizarValores} rows={5} cols={30} />
-                    </div>
-                </div>
-                <div>
-                    <Button label="Salvar" severity="success" onClick={salvar} />
-                    <a onClick={() => navegacao("/filas")} className="p-button p-button-warning font-bold">Cancelar</a>
-                </div>
 
+                    <div className="form-field">
+                        <label htmlFor="descricao" className="form-label">Descrição</label>
+                        <InputTextarea name="descricao" value={fila?.descricao} onChange={atualizarValores} rows={5} className="form-textarea" autoResize />
+                    </div>
+
+                    <div className="form-actions">
+                        <Button label="Cancelar" className="cancel-button" onClick={() => navegacao("/filas")} />
+                        <Button label="Salvar" className="submit-button" onClick={salvar} />
+                    </div>
+                </div>
                 <Toast ref={toast} />
-            </div>
+            </Dialog>
         </>
     )
 }

@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 
 import { DataTable } from 'primereact/datatable';
@@ -7,6 +7,7 @@ import { Paginator } from 'primereact/paginator';
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
 
+import '../../../index.css'
 import UsuarioService from '../../../service/usuarioService';
 
 const TabelaUsuario = () => {
@@ -18,6 +19,16 @@ const TabelaUsuario = () => {
     const [quantidadePorPagina, setQuantidadePorPagina] = useState(0);
     const [totalRegistros, setTotalRegistros] = useState(0);
     const navegacao = useNavigate();
+
+    const atualizarPagina = (e) => {
+        UsuarioService.listar(e.page)
+            .then(response => {
+                setUsuarios(response.data.content);
+                setNumeroPagina(e.first);
+                setQuantidadePorPagina(response.data.size);
+                setTotalRegistros(response.data.totalElements);
+            })
+    }
 
     const show = (mensagem, severity, summary) => {
         toast.current.show({ severity: severity, summary: summary, detail: mensagem });
@@ -38,16 +49,6 @@ const TabelaUsuario = () => {
             .catch(response => (
                 show(response.response.data.detail, 'error', 'Error')
             ))
-    }
-
-    const atualizarPagina = (e) => {
-        UsuarioService.listar(e.page)
-            .then(response => {
-                setUsuarios(response.data.content);
-                setNumeroPagina(e.first);
-                setQuantidadePorPagina(response.data.size);
-                setTotalRegistros(response.data.totalElements);
-            })
     }
 
     const botoesEditarExcluir = (usuario) => {
@@ -71,22 +72,21 @@ const TabelaUsuario = () => {
 
     return (
         <>
-            <div>
-                <div>
-                    <a onClick={() => navegacao("/usuarios/novo")} className="p-button font-bold">Novo usuário</a>
+            <Toast ref={toast} />
+            <div className="data-table-container">
+                <div className='header'>
+                    <h1>USUÁRIOS</h1>
+                    <Link to="/usuarios/novo" className="p-button">Novo Usuário</Link>
                 </div>
-
-                <DataTable value={usuarios} tableStyle={{ minWidth: '50rem' }}>
-                    <Column field="nome" header="Nome"></Column>
-                    <Column field="email" header="E-amil"></Column>
-                    <Column field="telefone" header="Telefone"></Column>
-                    <Column field="celular" header="Celular"></Column>
-                    <Column field="atendente" header="Atendente"></Column>
-                    <Column field="acoes" header="Ações" body={botoesEditarExcluir}></Column>
+                <DataTable value={usuarios}>
+                    <Column field="nome" header="Nome" />
+                    <Column field="email" header="E-amail" />
+                    <Column field="telefone" header="Telefone" />
+                    <Column field="celular" header="Celular" />
+                    <Column field="atendente" header="Atendente" />
+                    <Column field="acoes" header="Ações" body={botoesEditarExcluir} />
                 </DataTable>
                 <Paginator first={numeroPagina} rows={quantidadePorPagina} totalRecords={totalRegistros} onPageChange={atualizarPagina} />
-
-                <Toast ref={toast} />
             </div>
         </>
     )

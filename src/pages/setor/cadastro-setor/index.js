@@ -5,45 +5,17 @@ import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Toast } from 'primereact/toast';
+import { Dialog } from 'primereact/dialog';
 
-import '../cadastro-setor/index.css';
 
 import SetorService from '../../../service/sertorService';
-
 import Setor from '../../../dto/setor';
 
-const CadastroSetor = () => {
+const CadastroSetor = (visible) => {
     const navegacao = useNavigate();
     const toast = useRef(null);
-    const {codigo} = useParams();
+    const { codigo } = useParams();
     const [setor, setSetor] = useState(Setor);
-
-    const show = (mensagem, severity, summary) => {
-        toast.current.show({ severity: severity, summary: summary, detail: mensagem });
-    };
-
-    function atualizarValores(envet) {
-        const {name, value} = envet.target
-        setSetor({...setor,[name]: value});
-    }
-
-    function salvar() {
-        if (setor.codigo === '') {
-            SetorService.salvar(setor)
-                .then(() => {
-                    show('Operação realizada com sucesso', 'success', 'Success');
-                    navegacao("/setores");
-                })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
-            } else {
-            SetorService.atualizar(setor.codigo, setor)
-                .then(() => {
-                    show('Operação realizada com sucesso', 'success', 'Success');
-                    navegacao("/setores");
-                })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
-        }
-    }
 
     useEffect(() => {
         if (codigo !== undefined) {
@@ -52,32 +24,62 @@ const CadastroSetor = () => {
                 .then(response => setSetor(response.data))
                 .catch(response => console.log(response));
         } else {
-            document.title = 'Novo setor';
+            document.title = 'Cadastrar setor';
         }
 
     }, [codigo])
 
+    const show = (mensagem, severity, summary) => {
+        toast.current.show({ severity: severity, summary: summary, detail: mensagem });
+    };
+
+    function atualizarValores(envet) {
+        const { name, value } = envet.target
+        setSetor({ ...setor, [name]: value });
+    }
+
+    function salvar() {
+        if (setor.codigo === '') {
+            SetorService.salvar(setor)
+                .then(() => {
+                    show('Cadastro realizado com sucesso', 'success', 'Success');
+                    navegacao("/setores");
+                })
+                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
+        } else {
+            SetorService.atualizar(setor.codigo, setor)
+                .then(() => {
+                    show('Atualização realizada com sucesso', 'success', 'Success');
+                    navegacao("/setores");
+                })
+                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
+        }
+    }
+
     return (
         <>
-            <div className="cadastroForm">
-                <h1>Cadastro Setor</h1>
-                <div className="formField">
-                    <label htmlFor="nome" className="formLabel">Nome</label>
-                    <InputText name="nome" value={setor.nome} onChange={atualizarValores} className="formInput" />
-                </div>
 
-                <div className="formField">
-                    <label htmlFor="descricao" className="formLabel">Descrição</label>
-                    <InputTextarea name="descricao" value={setor?.descricao} onChange={atualizarValores} rows={5} className="formTextarea" autoResize />
-                </div>
+            <Dialog visible={visible} onHide={() => navegacao("/setores")} >
+                <div className="cadastro-form">
+                    <h1>Cadastrar Setor</h1>
+                    <div className="form-field">
+                        <label htmlFor="nome" className="form-label">Nome</label>
+                        <InputText name="nome" value={setor.nome} onChange={atualizarValores} className="form-input" />
+                    </div>
 
-                <div className="formActions">
-                    <Button label="Salvar" className="submitButton" onClick={salvar} />
-                    <Button label="Cancelar" className="cancelButton" onClick={() => navegacao("/setores")} />
-                </div>
+                    <div className="form-field">
+                        <label htmlFor="descricao" className="form-label">Descrição</label>
+                        <InputTextarea name="descricao" value={setor?.descricao} onChange={atualizarValores} rows={5} className="form-textarea" autoResize />
+                    </div>
 
+                    <div className="form-actions">
+                        <Button label="Cancelar" className="cancel-button" onClick={() => navegacao("/setores")} />
+                        <Button label="Salvar" className="submit-button" onClick={salvar} />
+                    </div>
+                </div>
                 <Toast ref={toast} />
-            </div>
+            </Dialog>
+
         </>
     )
 }

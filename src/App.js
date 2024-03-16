@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import './App.css';
 
 import Main from './pages/main';
 import TabelaSetor from './pages/setor/tabela-setor';
