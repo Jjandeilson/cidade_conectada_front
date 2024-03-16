@@ -20,23 +20,27 @@ const TabelaSetor = () => {
     const [quantidadePorPagina, setQuantidadePorPagina] = useState(0);
     const [totalRegistros, setTotalRegistros] = useState(0);
 
-    useEffect(() => {
-        carregarSetores();
-        document.title = 'Setores';
-    }, []);
 
-    const carregarSetores = async (pagina = 0) => {
-        try {
-            const response = await SetorService.listar(pagina);
-            const { content, number, size, totalElements } = response.data;
-            setSetores(content);
-            setNumeroPagina(number);
-            setQuantidadePorPagina(size);
-            setTotalRegistros(totalElements);
-        } catch (error) {
-            show(error.response?.data?.detail || 'Erro ao carregar setor', 'error', 'Erro');
-        }
-    };
+    useEffect(() => {
+        SetorService.listar()
+            .then(response => {
+                setSetores(response.data.content);
+                setNumeroPagina(response.data.number);
+                setQuantidadePorPagina(response.data.size);
+                setTotalRegistros(response.data.totalElements);
+            });
+    }, [])
+
+
+    const atualizarPagina = (e) => {
+        SetorService.listar(e.page)
+            .then(response => {
+                setSetores(response.data.content);
+                setNumeroPagina(e.first);
+                setQuantidadePorPagina(response.data.size);
+                setTotalRegistros(response.data.totalElements);
+            })
+    }
 
     const show = (mensagem, severity, summary) => {
         toast.current.show({ severity: severity, summary: summary, detail: mensagem });
@@ -46,7 +50,7 @@ const TabelaSetor = () => {
         try {
             await SetorService.excluir(codigo);
             show('Operação realizada com sucesso', 'success', 'Success');
-            await carregarSetores();
+            await atualizarPagina();
         } catch (error) {
             show(error.response?.data?.detail || 'Erro ao excluir setor', 'error', 'Erro');
         }
@@ -74,7 +78,7 @@ const TabelaSetor = () => {
                     <Column field="descricao" header="Descrição" />
                     <Column field="acao" header="Ações" body={botoesEditarExcluir} />
                 </DataTable>
-                <Paginator first={numeroPagina} rows={quantidadePorPagina} totalRecords={totalRegistros} onPageChange={carregarSetores} />
+                <Paginator first={numeroPagina} rows={quantidadePorPagina} totalRecords={totalRegistros} onPageChange={atualizarPagina} />
             </div>
         </>
     );

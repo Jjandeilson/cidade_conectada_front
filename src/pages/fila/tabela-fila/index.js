@@ -21,22 +21,25 @@ const TabelaFila = () => {
     const [totalRegistros, setTotalRegistros] = useState(0);
 
     useEffect(() => {
-        carregarFilas();
-        document.title = "Filas";
-    }, []);
+        FilaService.listar()
+            .then(response => {
+                setFilas(response.data.content);
+                setNumeroPagina(response.data.number);
+                setQuantidadePorPagina(response.data.size);
+                setTotalRegistros(response.data.totalElements);
+            });
+    }, [])
 
-    const carregarFilas = async (pagina = 0) => {
-        try {
-            const response = await FilaService.listar(pagina);
-            const { content, number, size, totalElements } = response.data;
-            setFilas(content);
-            setNumeroPagina(number);
-            setQuantidadePorPagina(size);
-            setTotalRegistros(totalElements);
-        } catch (error) {
-            show(error.response?.data?.detail || 'Erro ao carregar fila', 'error', 'Erro');
-        }
-    };
+    const atualizarPagina = (e) => {
+        FilaService.listar(e.page)
+            .then(response => {
+                setFilas(response.data.content);
+                setNumeroPagina(e.first);
+                setQuantidadePorPagina(response.data.size);
+                setTotalRegistros(response.data.totalElements);
+            })
+            .catch(response => console.log(response));
+    }
 
     const show = (mensagem, severity, summary) => {
         toast.current.show({ severity: severity, summary: summary, detail: mensagem });
@@ -46,7 +49,7 @@ const TabelaFila = () => {
         try {
             await FilaService.excluir(codigo);
             show('Operação realizada com sucesso', 'success', 'Success');
-            await carregarFilas();
+            await atualizarPagina();
         } catch (error) {
             show(error.response?.data?.detail || 'Erro ao excluir fila', 'error', 'Erro');
         }
@@ -74,7 +77,7 @@ const TabelaFila = () => {
                     <Column field="descricao" header="Descrição" />
                     <Column field="acoes" header="Ações" body={botoesEditarExcluir} />
                 </DataTable>
-                <Paginator first={numeroPagina} rows={quantidadePorPagina} totalRecords={totalRegistros} onPageChange={carregarFilas} />
+                <Paginator first={numeroPagina} rows={quantidadePorPagina} totalRecords={totalRegistros} onPageChange={atualizarPagina} />
             </div>
         </>
     )

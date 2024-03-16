@@ -21,22 +21,26 @@ const TabelaCanalAtendimento = () => {
     const [totalRegistros, setTotalRegistros] = useState(0);
 
     useEffect(() => {
-        carregarCanais();
-        document.title = 'Canais de atendimento';
-    }, []);
+        CanalAntendimentoService.listar()
+            .then(response => {
+                setCanais(response.data.content);
+                setNumeroPagina(response.data.number);
+                setQuantidadePorPagina(response.data.size);
+                setTotalRegistros(response.data.totalElements);
+            })
+            .catch(response => console.log(response));
+    }, [])
 
-    const carregarCanais = async (pagina = 0) => {
-        try {
-            const response = await CanalAntendimentoService.listar(pagina);
-            const { content, number, size, totalElements } = response.data;
-            setCanais(content);
-            setNumeroPagina(number);
-            setQuantidadePorPagina(size);
-            setTotalRegistros(totalElements);
-        } catch (error) {
-            console.error(error);
-        }
-    };
+    const atualizarPagina = (e) => {
+        CanalAntendimentoService.listar(e.page)
+            .then(response => {
+                setCanais(response.data.content);
+                setNumeroPagina(e.first);
+                setQuantidadePorPagina(response.data.size);
+                setTotalRegistros(response.data.totalElements);
+            })
+            .catch(response => console.log(response));
+    }
 
     const show = (mensagem, severity, summary) => {
         toast.current.show({ severity: severity, summary: summary, detail: mensagem });
@@ -46,7 +50,7 @@ const TabelaCanalAtendimento = () => {
         try {
             await CanalAntendimentoService.excluir(codigo);
             show('Operação realizada com sucesso', 'success', 'Success');
-            await carregarCanais();
+            await atualizarPagina();
         } catch (error) {
             show(error.response.data.detail, 'error', 'Error');
         }
@@ -76,7 +80,7 @@ const TabelaCanalAtendimento = () => {
                     <Column field="descricao" header="Descrição"></Column>
                     <Column field="acoes" header="Ações" body={botoesEditarExcluir}></Column>
                 </DataTable>
-                <Paginator first={numeroPagina} rows={quantidadePorPagina} totalRecords={totalRegistros} onPageChange={carregarCanais} />
+                <Paginator first={numeroPagina} rows={quantidadePorPagina} totalRecords={totalRegistros} onPageChange={atualizarPagina} />
             </div >
         </>
     )
