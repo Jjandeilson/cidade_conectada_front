@@ -57,7 +57,6 @@ const CadastroSetor = (visible) => {
 
     return (
         <>
-
             <Dialog visible={visible} onHide={() => navegacao("/setores")} >
                 <div className="cadastro-form">
                     <h1>Cadastrar Setor</h1>
