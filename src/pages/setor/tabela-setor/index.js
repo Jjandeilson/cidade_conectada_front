@@ -9,7 +9,7 @@ import { Toast } from 'primereact/toast';
 
 import '../../../index.css'
 
-import SetorService from '../../../service/sertorService';
+import SetorService from '../../../service/setorService';
 
 const TabelaSetor = () => {
 

@@ -54,8 +54,10 @@ const TabelaUsuario = () => {
     const botoesEditarExcluir = (usuario) => {
         return (
             <>
-                <Button label="Editar" onClick={() => navegacao(`/usuarios/${usuario.codigo}/editar`)} />
-                <Button label="Excluir" onClick={() => excluir(usuario.codigo)} severity="warning" />
+                <div className="btn-table">
+                    <Button label="Editar" onClick={() => navegacao(`/usuarios/${usuario.codigo}/editar`)} />
+                    <Button label="Excluir" onClick={() => excluir(usuario.codigo)} severity="warning" />
+                </div>
             </>
         )
     }
@@ -73,7 +75,7 @@ const TabelaUsuario = () => {
     return (
         <>
             <Toast ref={toast} />
-            <div className="data-table-container">
+            <div className="data-table-container container-max">
                 <div className='header'>
                     <h1>USUÁRIOS</h1>
                     <Link to="/usuarios/novo" className="p-button">Novo Usuário</Link>

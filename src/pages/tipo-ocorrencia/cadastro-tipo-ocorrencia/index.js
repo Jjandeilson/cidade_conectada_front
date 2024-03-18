@@ -10,17 +10,43 @@ import { Dialog } from 'primereact/dialog';
 
 import CadastroOcorrencia from '../../ocorrencia/cadastro-ocorrencia';
 import TipoOcorrenciaService from '../../../service/tipoOcorrenciaService';
-import SetorService from '../../../service/sertorService';
+import SetorService from '../../../service/setorService';
 
 import TipoOcorrencia from '../../../dto/tipo-ocorrencia';
 
 const CadastroTipoOcorencia = (visible) => {
-    const navegacao = useNavigate();
     const toast = useRef(null);
     const { codigo } = useParams();
     const [tipoOcorrencia, setTipoOcorrencia] = useState(TipoOcorrencia);
     const [setores, setSetores] = useState([]);
+    const navegacao = useNavigate();
 
+    const show = (mensagem, severity, summary) => {
+        toast.current.show({ severity: severity, summary: summary, detail: mensagem });
+    };
+
+    function atualizarValores(envet) {
+        const { name, value } = envet.target
+        setTipoOcorrencia({ ...tipoOcorrencia, [name]: value });
+    }
+
+    function salvar() {
+        if (tipoOcorrencia.codigo === '') {
+            TipoOcorrenciaService.salvar(tipoOcorrencia)
+                .then(response => {
+                    show('Operação realizada com sucesso', 'success', 'Success');
+                    navegacao(`/tipos-ocorrencia/${response.data.codigo}/editar`);
+                })
+                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
+        } else {
+            TipoOcorrenciaService.atualizar(tipoOcorrencia.codigo, tipoOcorrencia)
+                .then(response => {
+                    show('Operação realizada com sucesso', 'success', 'Success');
+                    navegacao(`/tipos-ocorrencia/${response.data.codigo}/editar`);
+                })
+                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
+        }
+    }
 
     useEffect(() => {
         SetorService.listar()
@@ -40,33 +66,6 @@ const CadastroTipoOcorencia = (visible) => {
         }
     }, [codigo])
 
-
-    const show = (mensagem, severity, summary) => {
-        toast.current.show({ severity: severity, summary: summary, detail: mensagem });
-    };
-
-    function atualizarValores(envet) {
-        const { name, value } = envet.target
-        setTipoOcorrencia({ ...tipoOcorrencia, [name]: value });
-    }
-
-    function salvar() {
-        if (tipoOcorrencia.codigo === '') {
-            TipoOcorrenciaService.salvar(tipoOcorrencia)
-                .then(() => {
-                    show('Operação realizada com sucesso', 'success', 'Success');
-                    navegacao("/tipos-ocorrencia");
-                })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
-        } else {
-            TipoOcorrenciaService.atualizar(tipoOcorrencia.codigo, tipoOcorrencia)
-                .then(() => {
-                    show('Operação realizada com sucesso', 'success', 'Success');
-                    navegacao("/tipos-ocorrencia");
-                })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
-        }
-    }
 
     return (
         <>

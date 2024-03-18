@@ -20,16 +20,27 @@ const TabelaCanalAtendimento = () => {
     const [quantidadePorPagina, setQuantidadePorPagina] = useState(0);
     const [totalRegistros, setTotalRegistros] = useState(0);
 
-    useEffect(() => {
-        CanalAntendimentoService.listar()
-            .then(response => {
-                setCanais(response.data.content);
-                setNumeroPagina(response.data.number);
-                setQuantidadePorPagina(response.data.size);
-                setTotalRegistros(response.data.totalElements);
+    const show = (mensagem, severity, summary) => {
+        toast.current.show({ severity: severity, summary: summary, detail: mensagem });
+    };
+
+    const excluir = (codigo) => {
+        CanalAntendimentoService.excluir(codigo)
+            .then(() => {
+                show('Operação realizada com sucesso', 'success', 'Success')
+                CanalAntendimentoService.listar()
+                    .then(response => {
+                        setCanais(response.data.content);
+                        setNumeroPagina(response.data.number);
+                        setQuantidadePorPagina(response.data.size);
+                        setTotalRegistros(response.data.totalElements);
+                    })
+                    .catch(response => console.log(response));
             })
-            .catch(response => console.log(response));
-    }, [])
+            .catch(response => (
+                show(response.response.data.detail, 'error', 'Error')
+            ))
+    }
 
     const atualizarPagina = (e) => {
         CanalAntendimentoService.listar(e.page)
@@ -42,20 +53,6 @@ const TabelaCanalAtendimento = () => {
             .catch(response => console.log(response));
     }
 
-    const show = (mensagem, severity, summary) => {
-        toast.current.show({ severity: severity, summary: summary, detail: mensagem });
-    };
-
-    const excluir = async (codigo) => {
-        try {
-            await CanalAntendimentoService.excluir(codigo);
-            show('Operação realizada com sucesso', 'success', 'Success');
-            await atualizarPagina();
-        } catch (error) {
-            show(error.response.data.detail, 'error', 'Error');
-        }
-    };
-
     const botoesEditarExcluir = (canal) => {
         return (
             <>
@@ -67,10 +64,21 @@ const TabelaCanalAtendimento = () => {
         )
     }
 
+    useEffect(() => {
+        CanalAntendimentoService.listar()
+            .then(response => {
+                setCanais(response.data.content);
+                setNumeroPagina(response.data.number);
+                setQuantidadePorPagina(response.data.size);
+                setTotalRegistros(response.data.totalElements);
+            })
+            .catch(response => console.log(response));
+    }, [])
+
     return (
         <>
             <Toast ref={toast} />
-            <div className="data-table-container">
+            <div className="data-table-container ">
                 <div className='header'>
                     <h1>CANAIS DE ATENDIMENTO</h1>
                     <Link to="/canais-atendimento/novo" className="p-button">Novo canal de atendimento</Link>

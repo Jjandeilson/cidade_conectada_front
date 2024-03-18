@@ -86,8 +86,11 @@ const TabelaCliente = () => {
 
     return (
         <>
-            <div>
-                <div>
+
+
+            <div className="data-table-container container-max" >
+                <div className='header'>
+                    <h1>CLIENTES</h1>
                     <a onClick={() => navegacao("/clientes/novo")} className="p-button font-bold">Novo cliente</a>
                 </div>
 
@@ -100,9 +103,8 @@ const TabelaCliente = () => {
                     <Column field="acoes" header="Ações" body={botoesEditarExcluir}></Column>
                 </DataTable>
                 <Paginator first={numeroPagina} rows={quantidadePorPagina} totalRecords={totalRegistros} onPageChange={atualizarPagina} />
-
                 <Toast ref={toast} />
-            </div>
+            </div >
         </>
     )
 }

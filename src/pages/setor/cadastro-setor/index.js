@@ -7,7 +7,7 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import { Toast } from 'primereact/toast';
 import { Dialog } from 'primereact/dialog';
 
-import SetorService from '../../../service/sertorService';
+import SetorService from '../../../service/setorService';
 import Setor from '../../../dto/setor';
 
 const CadastroSetor = (visible) => {

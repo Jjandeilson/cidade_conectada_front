@@ -12,7 +12,7 @@ import { Dialog } from 'primereact/dialog';
 
 import CadastroUsuarioFila from '../cadastro-usuario-fila';
 import UsuarioService from '../../../service/usuarioService';
-import SetorService from '../../../service/sertorService';
+import SetorService from '../../../service/setorService';
 import FilaService from '../../../service/filaService';
 
 import '../cadastro-usuario/index.css'

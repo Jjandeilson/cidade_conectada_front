@@ -21,21 +21,17 @@ const TabelaAtendimento = () => {
     const [totalRegistros, setTotalRegistros] = useState(0);
     const navegacao = useNavigate();
 
-    const show = (mensagem, severity, summary) => {
-        toast.current.show({ severity: severity, summary: summary, detail: mensagem });
-    };
-
     const atualizarPagina = (e) => {
         AtendimentoService.listar(e.page)
             .then(response => {
                 let atendimentoBanco = response.data.content;
 
                 atendimentoBanco.forEach(atendimento => {
-                    atendimento.abertura = moment(atendimento.abertura).format("DD/MM/YYYY HH:mm:ss");
-
-                    if (atendimento.fechamento) {
-                        atendimento.fechamento = moment(atendimento.fechamento).format("DD/MM/YYYY HH:mm:ss");
-                    }
+                   atendimento.abertura = moment(atendimento.abertura).format("DD/MM/YYYY HH:mm:ss");
+                   
+                   if (atendimento.fechamento) {
+                       atendimento.fechamento = moment(atendimento.fechamento).format("DD/MM/YYYY HH:mm:ss");
+                   }
                 });
 
                 setAtendimentos(atendimentoBanco);
@@ -43,16 +39,36 @@ const TabelaAtendimento = () => {
                 setQuantidadePorPagina(response.data.size);
                 setTotalRegistros(response.data.totalElements);
             })
-            .catch(response => console.log(response))
+            .catch(response => console.log(response));
     }
 
     const botoesEditar = (atendimento) => {
-        return (
+        return  (
             <>
-                <Button label="Visualizar" onClick={() => navegacao(`/atendimentos/${atendimento.codigo}/editar`)} />
+               <Button label="Visualizar" onClick={() => navegacao(`/atendimentos/${atendimento.codigo}/editar`)}/>
             </>
         )
     }
+
+    useEffect(() => {
+        AtendimentoService.listar()
+            .then(response =>  {
+                let atendimentoBanco = response.data.content;
+                atendimentoBanco.forEach(atendimento => {
+                   atendimento.abertura = moment(atendimento.abertura).format("DD/MM/YYYY HH:mm:ss");
+                   
+                   if (atendimento.fechamento) {
+                       atendimento.fechamento = moment(atendimento.fechamento).format("DD/MM/YYYY HH:mm:ss");
+                   }
+                });
+                
+                setAtendimentos(atendimentoBanco);
+                setNumeroPagina(response.data.number);
+                setQuantidadePorPagina(response.data.size);
+                setTotalRegistros(response.data.totalElements);
+            })
+            .catch(response => console.log(response));
+    }, [])
 
     useEffect(() => {
         AtendimentoService.listar()
@@ -78,7 +94,7 @@ const TabelaAtendimento = () => {
     return (
         <>
             <Toast ref={toast} />
-            <div className="data-table-container">
+            <div className="data-table-container container-max">
                 <div className='header'>
                     <h1>ATENDIMENTOS</h1>
                     <Link to="/atendimentos/novo" className="p-button">Novo Atendimento</Link>

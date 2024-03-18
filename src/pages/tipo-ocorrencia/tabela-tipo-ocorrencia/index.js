@@ -20,28 +20,6 @@ const TabelaTipoOcorrencia = () => {
     const [quantidadePorPagina, setQuantidadePorPagina] = useState(0);
     const [totalRegistros, setTotalRegistros] = useState(0);
 
-    useEffect(() => {
-        carregarTiposOcorrencia();
-        document.title = 'Listagem de tipos de ocorrências';
-    }, []);
-
-    const carregarTiposOcorrencia = async (pagina = 0) => {
-        try {
-            const response = await TipoOcorrenciaService.listar(pagina);
-            const { content, number, size, totalElements } = response.data;
-            setTiposOcorrencias(content);
-            setNumeroPagina(number);
-            setQuantidadePorPagina(size);
-            setTotalRegistros(totalElements);
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    const atualizarPagina = (e) => {
-        carregarTiposOcorrencia(e.page);
-    };
-
     const show = (mensagem, severity, summary) => {
         toast.current.show({ severity: severity, summary: summary, detail: mensagem });
     };
@@ -57,11 +35,24 @@ const TabelaTipoOcorrencia = () => {
                         setQuantidadePorPagina(response.data.size);
                         setTotalRegistros(response.data.totalElements);
                     })
+                    .catch(response => console.log(response));
             })
-            .catch(response => (
-                show(response.response.data.detail, 'error', 'Error')
-            ))
+            .catch(response => {
+                show(response.response.data.detail, 'error', 'Error');
+            });
     }
+
+    const atualizarPagina = (e) => {
+        TipoOcorrenciaService.listar(e.page)
+            .then(response => {
+                setTiposOcorrencias(response.data.content);
+                setNumeroPagina(e.first);
+                setQuantidadePorPagina(response.data.size);
+                setTotalRegistros(response.data.totalElements);
+            })
+            .catch(response => console.log(response));
+    }
+
 
     const botoesEditarExcluir = (tipo) => {
         return (
@@ -73,6 +64,17 @@ const TabelaTipoOcorrencia = () => {
             </>
         )
     }
+
+    useEffect(() => {
+        TipoOcorrenciaService.listar()
+            .then(response => {
+                setTiposOcorrencias(response.data.content);
+                setNumeroPagina(response.data.number);
+                setQuantidadePorPagina(response.data.size);
+                setTotalRegistros(response.data.totalElements);
+            })
+            .catch(response => console.log(response));
+    }, [])
 
     return (
         <>
