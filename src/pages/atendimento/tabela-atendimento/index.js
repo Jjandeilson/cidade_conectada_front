@@ -70,27 +70,6 @@ const TabelaAtendimento = () => {
             .catch(response => console.log(response));
     }, [])
 
-    useEffect(() => {
-        AtendimentoService.listar()
-            .then(response => {
-                let atendimentoBanco = response.data.content;
-                console.log(atendimentoBanco);
-                atendimentoBanco.forEach(atendimento => {
-                    atendimento.abertura = moment(atendimento.abertura).format("DD/MM/YYYY HH:mm:ss");
-
-                    if (atendimento.fechamento) {
-                        atendimento.fechamento = moment(atendimento.fechamento).format("DD/MM/YYYY HH:mm:ss");
-                    }
-                });
-
-                setAtendimentos(atendimentoBanco);
-                setNumeroPagina(response.data.number);
-                setQuantidadePorPagina(response.data.size);
-                setTotalRegistros(response.data.totalElements);
-            })
-            .catch(response => console.log(response));
-    }, [])
-
     return (
         <>
             <Toast ref={toast} />

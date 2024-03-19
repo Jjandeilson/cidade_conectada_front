@@ -68,7 +68,7 @@ const CadastroUsuario = (visible) => {
     }
 
     function exibirBotaoAtendente() {
-        return !usuario.atendente
+        return !usuario.atendente;
     }
 
     function ativarDesativarAtendente(event) {
@@ -79,6 +79,7 @@ const CadastroUsuario = (visible) => {
 
                     FilaService.listar()
                         .then(response => setFilas(response.data.content))
+                        .catch(response => console.log(response));
 
                     atualizarValores(event)
                 })
@@ -89,7 +90,7 @@ const CadastroUsuario = (visible) => {
                     show('Operação realizada com sucesso', 'success', 'Success');
                     atualizarValores(event)
                 })
-                .catch(response => console.log(response))
+                .catch(response => console.log(response));
         }
     }
 

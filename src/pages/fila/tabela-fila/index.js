@@ -20,16 +20,6 @@ const TabelaFila = () => {
     const [quantidadePorPagina, setQuantidadePorPagina] = useState(0);
     const [totalRegistros, setTotalRegistros] = useState(0);
 
-    useEffect(() => {
-        FilaService.listar()
-            .then(response => {
-                setFilas(response.data.content);
-                setNumeroPagina(response.data.number);
-                setQuantidadePorPagina(response.data.size);
-                setTotalRegistros(response.data.totalElements);
-            });
-    }, [])
-
     const atualizarPagina = (e) => {
         FilaService.listar(e.page)
             .then(response => {
@@ -46,13 +36,21 @@ const TabelaFila = () => {
     };
 
     const excluir = async (codigo) => {
-        try {
-            await FilaService.excluir(codigo);
-            show('Operação realizada com sucesso', 'success', 'Success');
-            await atualizarPagina();
-        } catch (error) {
-            show(error.response?.data?.detail || 'Erro ao excluir fila', 'error', 'Erro');
-        }
+        FilaService.excluir(codigo)
+            .then(() => {
+                show('Operação realizada com sucesso', 'success', 'Success');
+                FilaService.listar()
+                    .then(response => {
+                        setFilas(response.data.content);
+                        setNumeroPagina(response.data.number);
+                        setQuantidadePorPagina(response.data.size);
+                        setTotalRegistros(response.data.totalElements);
+                    })
+                    .catch(response => console.log(response));
+            })
+            .catch(response => {
+                show(response.response.data.detail, 'error', 'Error');
+            });
     };
 
     const botoesEditarExcluir = (fila) => {
@@ -64,9 +62,19 @@ const TabelaFila = () => {
         )
     }
 
+    useEffect(() => {
+        FilaService.listar()
+            .then(response => {
+                setFilas(response.data.content);
+                setNumeroPagina(response.data.number);
+                setQuantidadePorPagina(response.data.size);
+                setTotalRegistros(response.data.totalElements);
+            })
+            .catch(response => console.log(response));
+    }, []);
+
     return (
         <>
-            <Toast ref={toast} />
             <div className="data-table-container">
                 <div className="header">
                     <h1>FILAS</h1>
@@ -79,6 +87,8 @@ const TabelaFila = () => {
                 </DataTable>
                 <Paginator first={numeroPagina} rows={quantidadePorPagina} totalRecords={totalRegistros} onPageChange={atualizarPagina} />
             </div>
+
+            <Toast ref={toast} />
         </>
     )
 }

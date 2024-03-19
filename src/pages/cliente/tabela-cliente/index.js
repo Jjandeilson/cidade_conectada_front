@@ -35,10 +35,11 @@ const TabelaCliente = () => {
                         setQuantidadePorPagina(response.data.size);
                         setTotalRegistros(response.data.totalElements);
                     })
+                    .catch(response => console.log(response));
             })
-            .catch(response => (
-                show(response.response.data.detail, 'error', 'Error')
-            ))
+            .catch(response => {
+                show(response.response.data.detail, 'error', 'Error');
+            });
     }
 
     const atualizarPagina = (e) => {

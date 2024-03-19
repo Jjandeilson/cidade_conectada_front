@@ -115,6 +115,7 @@ const TelaAtendente = () => {
     function salvar() {
         cliente.endereco = endereco;
         atendimento.cliente = cliente;
+        atendimento.protocolo = protocoloCliente;
             
         AtendimentoService.salvar(atendimento)
             .then(() => {
@@ -122,6 +123,8 @@ const TelaAtendente = () => {
                 setEndereco(Endereco);
                 setCliente(Cliente);
                 setAtendimento(Atendimento);
+                document.getElementById('chatId').innerText = "";
+                enviarMensagemFinalizacao();
             })
             .catch(response => (show(response.response.data.detail, 'error', 'Error')));
     }
@@ -129,12 +132,15 @@ const TelaAtendente = () => {
     function escreverFila() {
         client.subscribe("/chat/cliente", function(result) {
             let mensagemCliente = JSON.parse(result.body);
-            setProtocoloCliente(mensagemCliente.protocolo);
-            const chatMessage = document.getElementById('chatId');
-            const divMensagem = document.createElement("div");
 
-            divMensagem.textContent = mensagemCliente.mensagem;
-            chatMessage.appendChild(divMensagem);
+            if (!mensagemCliente.finalizado) {
+                setProtocoloCliente(mensagemCliente.protocolo);
+                const chatMessage = document.getElementById('chatId');
+                const divMensagem = document.createElement("div");
+    
+                divMensagem.textContent = mensagemCliente.mensagem;
+                chatMessage.appendChild(divMensagem);
+            }
         })
     }
 
@@ -190,6 +196,19 @@ const TelaAtendente = () => {
         setMensagemChat(MensagemChat);
     }
 
+    function enviarMensagemFinalizacao() {
+        mensagemChat.fluxo = 'SAIDA';
+        mensagemChat.midia = 'CHAT';
+        mensagemChat.envioMensagem = "ATENDENTE";
+        mensagemChat.protocolo = protocoloCliente;
+        mensagemChat.mensagem = 'Atendimento finalizado';
+        mensagemChat.finalizado = true;
+
+        client.send("/app/chat", {}, JSON.stringify({
+            ...mensagemChat
+        }));
+    }
+
     const botaologout = (
         <>
             <a onClick={() => navegacao("/login")} className="p-button font-bold">Logout</a>
@@ -234,8 +253,6 @@ const TelaAtendente = () => {
             .catch(response => {
                 console.log(response);
             });
-
-        atendimento.protocolo = '202401141';
     }, [])
 
     return (

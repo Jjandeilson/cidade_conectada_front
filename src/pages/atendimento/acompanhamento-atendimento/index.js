@@ -11,7 +11,7 @@ import { Fieldset } from 'primereact/fieldset';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
-import { Toast } from 'primereact/toast';
+import { ScrollPanel } from 'primereact/scrollpanel';
 
 import * as moment from 'moment-timezone';
 
@@ -38,6 +38,7 @@ const AcompanhamentoAtendimento = () => {
     const [tiposOcorrencia, setTiposOcorrencia] = useState([]);
     const [ocorrencias, setOcorrencias] = useState([]);
     const [etapas, setEtapas] = useState([]);
+    const [indexTab, setIndexTab] = useState(0);
 
     function podeIniciarEtapa(etapa) {
         let executarEtapa = true;
@@ -125,6 +126,27 @@ const AcompanhamentoAtendimento = () => {
         )
     }
 
+    function alterarAba(index) {
+        setIndexTab(index);
+
+        if (index === 2) {
+            AtendimentoService.buscarConversaChat(codigo)
+            .then(response => {
+                let mensagens = response.data;
+                const chatMessage = document.getElementById('chatId');
+
+                mensagens.forEach(item => {
+                    const divMensagem = document.createElement("div");
+        
+                    divMensagem.textContent = item.mensagem;
+                    chatMessage.appendChild(divMensagem);
+
+                });
+            })
+            .catch(response => console.log(response));
+        }
+    }
+
     useEffect(() => {
        AtendimentoService.buscarClienteAtendimento(codigo)
         .then(response => {
@@ -186,7 +208,7 @@ const AcompanhamentoAtendimento = () => {
                 <a onClick={() => navegacao("/atendimentos")} className="p-button p-button-warning font-bold">Voltar</a>
             </div>
 
-             <TabView>
+             <TabView activeIndex={indexTab} onTabChange={(e) => alterarAba(e.index)}>
                 <TabPanel header="Dados do cliente">
                     <div>
                         <div>
@@ -344,6 +366,11 @@ const AcompanhamentoAtendimento = () => {
                             </Fieldset>
                         </div>
                     </div>
+                </TabPanel>
+                <TabPanel header="Mensagens Chat">
+                    <ScrollPanel style={{ width: '100%', height: '200px' }}>
+                        <div id="chatId"></div>
+                    </ScrollPanel>
                 </TabPanel>
              </TabView>
         </>

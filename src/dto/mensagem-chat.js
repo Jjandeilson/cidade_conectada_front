@@ -3,7 +3,8 @@ const MensagemChat = {
     protocolo: '',
     envioMensagem: '',
     fluxo: '',
-    midia: ''
+    midia: '',
+    finalizado: false
 }
 
 export default MensagemChat

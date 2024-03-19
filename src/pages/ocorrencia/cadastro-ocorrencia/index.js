@@ -33,24 +33,19 @@ const CadastroOcorrencia = () => {
     }
 
     function salvar() {
-        if (ocorrencia.codigo === '') {
-            OcorrenciaService.salvar(codigo, ocorrencia)
-                .then(() => {
-                    show('Operação realizada com sucesso', 'success', 'Success');
-                    setOcorrencia(Ocorrencia);
-                    OcorrenciaService.listar(codigo)
-                        .then(response => setOcorrencias(response.data))
-                        .catch(response => console.log(response));
-                })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
-            } else {
-                OcorrenciaService.atualizar(codigo, ocorrencia)
-                .then(() => {
-                    show('Operação realizada com sucesso', 'success', 'Success');
-                    setOcorrencia(Ocorrencia);
-                })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
-            }
+        ocorrencia.codigo = '';
+
+        OcorrenciaService.salvar(codigo, ocorrencia)
+            .then(() => {
+                show('Operação realizada com sucesso', 'success', 'Success');
+                setOcorrencia(Ocorrencia);
+                OcorrenciaService.listar(codigo)
+                    .then(response => setOcorrencias(response.data))
+                    .catch(response => console.log(response));
+            })
+            .catch(response => {
+                show(response.response.data.detail, 'error', 'Error');
+            });
     }
 
     const excluirOcorrencia = (codigoOcorrencia) => {

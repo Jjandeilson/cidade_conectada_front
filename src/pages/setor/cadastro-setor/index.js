@@ -16,18 +16,6 @@ const CadastroSetor = (visible) => {
     const { codigo } = useParams();
     const [setor, setSetor] = useState(Setor);
 
-    useEffect(() => {
-        if (codigo !== undefined) {
-            document.title = "Editar setor";
-            SetorService.buscar(codigo)
-                .then(response => setSetor(response.data))
-                .catch(response => console.log(response));
-        } else {
-            document.title = 'Cadastrar setor';
-        }
-
-    }, [codigo])
-
     const show = (mensagem, severity, summary) => {
         toast.current.show({ severity: severity, summary: summary, detail: mensagem });
     };
@@ -40,20 +28,32 @@ const CadastroSetor = (visible) => {
     function salvar() {
         if (setor.codigo === '') {
             SetorService.salvar(setor)
-                .then(() => {
+                .then(response => {
                     show('Cadastro realizado com sucesso', 'success', 'Success');
-                    navegacao("/setores");
+                    navegacao(`/setores/${response.data.codigo}/editar`);
                 })
                 .catch(response => (show(response.response.data.detail, 'error', 'Error')));
         } else {
             SetorService.atualizar(setor.codigo, setor)
-                .then(() => {
+                .then(response => {
                     show('Atualização realizada com sucesso', 'success', 'Success');
-                    navegacao("/setores");
+                    navegacao(`/setores/${response.data.codigo}/editar`);
                 })
                 .catch(response => (show(response.response.data.detail, 'error', 'Error')));
         }
     }
+    
+    useEffect(() => {
+        if (codigo !== undefined) {
+            document.title = "Editar setor";
+            SetorService.buscar(codigo)
+                .then(response => setSetor(response.data))
+                .catch(response => console.log(response));
+        } else {
+            document.title = 'Cadastrar setor';
+        }
+
+    }, [codigo])
 
     return (
         <>

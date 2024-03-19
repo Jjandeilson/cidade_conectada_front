@@ -28,7 +28,8 @@ const TabelaSetor = () => {
                 setNumeroPagina(response.data.number);
                 setQuantidadePorPagina(response.data.size);
                 setTotalRegistros(response.data.totalElements);
-            });
+            })
+            .catch(response => console.log(response));
     }, [])
 
 
@@ -40,6 +41,7 @@ const TabelaSetor = () => {
                 setQuantidadePorPagina(response.data.size);
                 setTotalRegistros(response.data.totalElements);
             })
+            .catch(response => console.log(response));
     }
 
     const show = (mensagem, severity, summary) => {
@@ -47,13 +49,20 @@ const TabelaSetor = () => {
     };
 
     const excluir = async (codigo) => {
-        try {
-            await SetorService.excluir(codigo);
-            show('Operação realizada com sucesso', 'success', 'Success');
-            await atualizarPagina();
-        } catch (error) {
-            show(error.response?.data?.detail || 'Erro ao excluir setor', 'error', 'Erro');
-        }
+        SetorService.excluir(codigo)
+            .then(() => {
+                show('Operação realizada com sucesso', 'success', 'Success')
+                SetorService.listar()
+                    .then(response => {
+                        setSetores(response.data.content);
+                        setNumeroPagina(response.data.number);
+                        setQuantidadePorPagina(response.data.size);
+                        setTotalRegistros(response.data.totalElements);
+                    })
+            })
+            .catch(response => (
+                show(response.response.data.detail, 'error', 'Error')
+            ));
     };
 
     const botoesEditarExcluir = (setor) => {

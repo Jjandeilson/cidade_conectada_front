@@ -27,7 +27,7 @@ const TabelaCanalAtendimento = () => {
     const excluir = (codigo) => {
         CanalAntendimentoService.excluir(codigo)
             .then(() => {
-                show('Operação realizada com sucesso', 'success', 'Success')
+                show('Operação realizada com sucesso', 'success', 'Success');
                 CanalAntendimentoService.listar()
                     .then(response => {
                         setCanais(response.data.content);
@@ -37,9 +37,9 @@ const TabelaCanalAtendimento = () => {
                     })
                     .catch(response => console.log(response));
             })
-            .catch(response => (
-                show(response.response.data.detail, 'error', 'Error')
-            ))
+            .catch(response => {
+                show(response.response.data.detail, 'error', 'Error');
+            })
     }
 
     const atualizarPagina = (e) => {

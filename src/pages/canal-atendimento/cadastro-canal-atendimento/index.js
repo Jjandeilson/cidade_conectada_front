@@ -30,7 +30,7 @@ const CadastroCanalAtendimento = (visible) => {
             document.title = 'Novo canal de atendimento';
         }
 
-    }, [])
+    }, [codigo])
 
     const show = (mensagem, severity, summary) => {
         toast.current.show({ severity: severity, summary: summary, detail: mensagem });
@@ -44,17 +44,16 @@ const CadastroCanalAtendimento = (visible) => {
     function salvar() {
         if (canal.codigo === '') {
             canalAtendimentoService.salvar(canal)
-                .then(() => {
+                .then(response => {
                     show('Operação realizada com sucesso', 'success', 'Success');
-                    navegacao("/canais-atendimento");
+                    navegacao(`/canais-atendimento/${response.data.codigo}/editar`);
                 })
                 .catch(response => (show(response.response.data.detail, 'error', 'Error')));
-        } else {
-
+        }  else {
             canalAtendimentoService.atualizar(canal.codigo, canal)
-                .then(() => {
+                .then(response => {
                     show('Operação realizada com sucesso', 'success', 'Success');
-                    navegacao("/canais-atendimento");
+                    navegacao(`/canais-atendimento/${response.data.codigo}/editar`);
                 })
                 .catch(response => (show(response.response.data.detail, 'error', 'Error')));
         }

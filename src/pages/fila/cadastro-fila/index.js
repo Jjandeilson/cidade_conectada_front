@@ -40,16 +40,16 @@ const CadastroFila = (visible) => {
     function salvar() {
         if (fila.codigo === '') {
             FilaService.salvar(fila)
-                .then(() => {
-                    show('Cadastro realizado com sucesso', 'success', 'Success');
-                    navegacao("/filas");
+                .then(response => {
+                    show('Operação realizada com sucesso', 'success', 'Success');
+                    navegacao(`/filas/${response.data.codigo}/editar`);
                 })
                 .catch(response => (show(response.response.data.detail, 'error', 'Error')));
         } else {
             FilaService.atualizar(fila.codigo, fila)
-                .then(() => {
-                    show('Atualização realizada com sucesso', 'success', 'Success');
-                    navegacao("/filas");
+                .then(response => {
+                    show('Operação realizada com sucesso', 'success', 'Success');
+                    navegacao(`/filas/${response.data.codigo}/editar`);
                 })
                 .catch(response => (show(response.response.data.detail, 'error', 'Error')));
         }

@@ -29,10 +29,13 @@ const CadastroEtapa = ({codigoOcorrencia}) => {
     function salvar() {
         EtapaService.salvar(codigo, etapa)
             .then(() => {
+                show('Operação realizada com sucesso', 'success', 'Success');
                 setEtapa(Etapa);
                 
                 EtapaService.listar(codigo)
-                    .then(response => setEtapas(response.data))
+                    .then(response => {
+                        setEtapas(response.data);
+                    })
                     .catch(response => console.log(response));
             })
             .catch(response => console.log(response));
@@ -41,6 +44,8 @@ const CadastroEtapa = ({codigoOcorrencia}) => {
     function excluirEtapa(codigoEtapa) {
         EtapaService.excluir(codigo, codigoEtapa)
             .then(() => {
+                show('Operação realizada com sucesso', 'success', 'Success');
+
                 EtapaService.listar(codigo)
                 .then(response => setEtapas(response.data))
                 .catch(response => console.log(response));

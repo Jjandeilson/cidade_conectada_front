@@ -28,6 +28,7 @@ const TabelaUsuario = () => {
                 setQuantidadePorPagina(response.data.size);
                 setTotalRegistros(response.data.totalElements);
             })
+            .catch(response => console.log(response));
     }
 
     const show = (mensagem, severity, summary) => {
@@ -45,10 +46,11 @@ const TabelaUsuario = () => {
                         setQuantidadePorPagina(response.data.size);
                         setTotalRegistros(response.data.totalElements);
                     })
+                    .catch(response => console.log(response));
             })
-            .catch(response => (
-                show(response.response.data.detail, 'error', 'Error')
-            ))
+            .catch(response => {
+                show(response.response.data.detail, 'error', 'Error');
+            });
     }
 
     const botoesEditarExcluir = (usuario) => {

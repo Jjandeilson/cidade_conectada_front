@@ -94,7 +94,6 @@ const CadastroAtendimento = (visible) => {
 
     }, [])
 
-
     return (
         <>
             <Dialog visible={visible} onHide={() => navegacao("/atendimentos")} >
@@ -196,17 +195,6 @@ const CadastroAtendimento = (visible) => {
                         </div>
 
                     </Panel>
-
-
-
-
-
-
-
-
-
-
-
                 </div>
                 <Toast ref={toast} />
             </Dialog>
