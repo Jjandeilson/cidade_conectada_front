@@ -9,7 +9,7 @@ import { Button } from 'primereact/button';
 import '../../index.css'
 
 import CodigoUsuarioContext from '../../context/CodigoUsuarioContext';
-
+import Image from '../../cidade-conectada.png';
 import UsuarioService from '../../service/usuarioService';
 import UsuarioLogin from '../../dto/usuario-login';
 
@@ -43,12 +43,18 @@ const Login = () => {
 
     return (
         <>
-            
-                <div className='form-login'>
 
+
+            <div className="login-container">
+                <div >
+                    <img className="logo-img" src={Image} alt="logo cidade conectada" />
+                </div>
+
+                <div className='form-login'>
+                    <h1>LOGIN</h1>
                     <div className="form-field">
                         <label className="form-label"> Login:</label>
-                        <InputText name="login" value={usuarioLogin.login} onChange={atualizarValores} className="form-input"/>
+                        <InputText name="login" value={usuarioLogin.login} onChange={atualizarValores} className="form-input" />
                     </div>
 
                     <div className="form-field">
@@ -56,12 +62,13 @@ const Login = () => {
                         <Password name="senha" feedback={false} value={usuarioLogin.senha} onChange={atualizarValores} />
                     </div>
 
-                    <div>
+                    <div className="button-container">
                         <Button label="Entar" onClick={logar} />
                     </div>
                 </div>
-            
-            <Outlet />
+                <Outlet />
+            </div>
+
         </>
     )
 }

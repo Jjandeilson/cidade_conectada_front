@@ -135,11 +135,35 @@ code {
 }
 
 .form-login {
+  margin: auto;
   display: flex;
+  justify-content: center;
   flex-direction: column;
+  padding: 30px;
   background: #fff;
-  width: 300px;
+  width: 360px;
   border: 1px solid #ddd;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  height: 30vh;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end; /* Isso vai alinhar o botão à direita */
+}
+
+.logo-img {
+  width: 300px;
+  display: flex;
+  margin: auto;
+}
+
+.form-login h1 {
+  text-align: center;
 }
