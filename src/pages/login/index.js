@@ -57,7 +57,7 @@ const Login = () => {
 
                     <div className="form-field">
                         <label className="form-label">Senha:</label>
-                        <Password name="senha" feedback={false} value={usuarioLogin.senha} onChange={atualizarValores} />
+                        <Password style={{ width: '299px',}} name="senha" feedback={false} value={usuarioLogin.senha} onChange={atualizarValores}/>
                     </div>
 
                     <div className="button-container">
