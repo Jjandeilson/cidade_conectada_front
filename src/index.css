@@ -144,7 +144,7 @@ code {
 
 .button-container {
   display: flex;
-  justify-content: flex-end; /* Isso vai alinhar o botão à direita */
+  justify-content: flex-end; 
 }
 
 .logo-img {
@@ -155,10 +155,6 @@ code {
 
 .form-login h1 {
   text-align: center;
-}
-
-.card-atendimento {
-  margin-top: 10px;
 }
 
 .tab-view-container {
@@ -177,4 +173,43 @@ code {
 
 .span-atendimento {
   font-weight: bold;
+}
+
+.protocolo-form {
+  margin-top: 300px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 500px;
+  border: 1px solid #ddd;
+}
+
+.protocolo-form h1 {
+  text-align: center;
+  color: #374151;
+}
+
+.container-protocolo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.input-container {
+  display: flex;
+}
+
+.input-container .p-inputtext {
+  flex-grow: 1; 
+}
+
+.input-container .p-button {
+  margin-left: 0.5em;
+}
+
+.input-container .p-inputtext, .input-container .p-button {
+  height: 2.5em; 
 }

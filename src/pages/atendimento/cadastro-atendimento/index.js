@@ -130,7 +130,7 @@ const CadastroAtendimento = (visible) => {
 
                             <div className="form-field">
                                 <label htmlFor="datanascimento" className="form-label">Data de nascimento:</label>
-                                <Calendar name="dataNascimento" dateFormat="dd/mm/yy" showIcon value={cliente.dataNascimento} onChange={atualizarValoresCliente} />
+                                <Calendar style={{ width: '100%', height: '2.5em' }}  name="dataNascimento" dateFormat="dd/mm/yy" showIcon value={cliente.dataNascimento} onChange={atualizarValoresCliente} />
                             </div>
 
 
@@ -158,45 +158,38 @@ const CadastroAtendimento = (visible) => {
                                 <label htmlFor="observacao" className="form-label">Observação:</label>
                                 <InputTextarea name="observacao" rows={5} value={cliente.observacao} onChange={atualizarValoresCliente} className="form-textarea" autoResize />
                             </div>
-
+                            <div className="form-actions">
+                                <Button label="Cancelar" className="cancel-button" onClick={() => navegacao("/atendimentos")} />
+                                <Button label="Salvar" className="submit-button" onClick={salvar} />
+                            </div>
                         </div>
                     </Panel>
 
                     <div>
-                        <div className="form-actions">
-                            <Button label="Cancelar" className="cancel-button" onClick={() => navegacao("/atendimentos")} />
-                            <Button label="Salvar" className="submit-button" onClick={salvar} />
-                        </div>
-
                         <div className='card-atendimento'>
                             <Panel header="Informações do atendimento" >
-                                <div className="panel-atendimento">
-
-                                    <div className="form-field">
-                                        <label htmlFor="canalAtendimento">Canal de atendimento: </label>
-                                        <Dropdown name="canalAtendimento" placeholder="Selecione" options={canaisAtendimento} optionLabel="nome"
-                                            value={atendimento.canalAtendimento} onChange={atualizarValoresAtendimento} />
-                                    </div>
-
-                                    <div className="form-field">
-                                        <label htmlFor="tipoOcorrencia">Tipo de ocorrência: </label>
-                                        <Dropdown name="tipoOcorrencia" placeholder="Selecione" options={tiposOcorrencia} optionLabel="nome"
-                                            value={atendimento.tipoOcorrencia} onChange={atualizarSelectOcorrencia} />
-                                    </div>
-
-
-                                    <div className="form-field">
-                                        <label htmlFor="ocorrencia">Ocorrência: </label>
-                                        <Dropdown name="ocorrencia" placeholder="Selecione" options={ocorrencias} optionLabel="nome"
-                                            value={atendimento.ocorrencia} onChange={atualizarValoresAtendimento} />
-                                    </div>
-
-                                    <div className="form-field">
-                                        <label htmlFor="descricao" className="form-label">Descrição:</label>
-                                        <InputTextarea name="descricao" rows={5} cols={30} value={atendimento.descricao} onChange={atualizarValoresAtendimento} className="form-textarea" />
-                                    </div>
+                                <div className="form-field">
+                                    <label htmlFor="canalAtendimento">Canal de atendimento: </label>
+                                    <Dropdown name="canalAtendimento" placeholder="Selecione" options={canaisAtendimento} optionLabel="nome"
+                                        value={atendimento.canalAtendimento} onChange={atualizarValoresAtendimento} />
                                 </div>
 
+                                <div className="form-field">
+                                    <label htmlFor="tipoOcorrencia">Tipo de ocorrência: </label>
+                                    <Dropdown name="tipoOcorrencia" placeholder="Selecione" options={tiposOcorrencia} optionLabel="nome"
+                                        value={atendimento.tipoOcorrencia} onChange={atualizarSelectOcorrencia} />
+                                </div>
+
+                                <div className="form-field">
+                                    <label htmlFor="ocorrencia">Ocorrência: </label>
+                                    <Dropdown name="ocorrencia" placeholder="Selecione" options={ocorrencias} optionLabel="nome"
+                                        value={atendimento.ocorrencia} onChange={atualizarValoresAtendimento} />
+                                </div>
+
+                                <div className="form-field">
+                                    <label htmlFor="descricao" className="form-label">Descrição:</label>
+                                    <InputTextarea name="descricao" rows={5} cols={30} value={atendimento.descricao} onChange={atualizarValoresAtendimento} className="form-textarea" />
+                                </div>
                             </Panel>
                         </div>
                     </div>
