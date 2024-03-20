@@ -118,58 +118,47 @@ const CadastroUsuario = (visible) => {
                 <div className='cadastro-form-user'>
                     <h1>Cadastrar Usuário</h1>
                     <div className="form-field">
-                        <label htmlFor="nome">Nome:</label>
+                        <label htmlFor="nome" className='form-label'>Nome:</label>
                         <InputText name="nome" value={usuario.nome} onChange={atualizarValores} className="form-input" />
                     </div>
 
                     <div className="form-field">
-                        <label htmlFor="email">E-mail:</label>
+                        <label htmlFor="email" className='form-label'>E-mail:</label>
                         <InputText name="email" value={usuario.email} onChange={atualizarValores} className="form-input" />
                     </div>
 
-
                     <div className="form-field">
-                        <label htmlFor="telefone">Telefone:</label>
-                        <div>
-                            <InputMask mask="(99) 99999-9999" name="telefone" value={usuario?.telefone} onChange={atualizarValores} unmask={true} />
-                        </div>
+                        <label htmlFor="telefone" className='form-label'>Telefone:</label>
+                        <InputMask mask="(99) 99999-9999" name="telefone" value={usuario?.telefone} onChange={atualizarValores} unmask={true} className="form-input" />
                     </div>
 
                     <div className="form-field">
-                        <label htmlFor="celular">Celular:</label>
-                        <div>
-                            <InputMask mask="(99) 99999-9999" name="celular" value={usuario?.celular} onChange={atualizarValores} unmask={true} />
-                        </div>
+                        <label htmlFor="celular" className='form-label'>Celular:</label>
+                        <InputMask mask="(99) 99999-9999" name="celular" value={usuario?.celular} onChange={atualizarValores} unmask={true} className="form-input" />
                     </div>
 
                     <div className="form-field">
-                        <label htmlFor="login">Login:</label>
+                        <label htmlFor="login" className='form-label'>Login:</label>
                         <InputText name="login" value={usuario.login} onChange={atualizarValores} className="form-input" />
                     </div>
 
                     <div className="form-field">
-                        <label htmlFor="senha">Senha:</label>
-                        <div>
-                            <Password feedback={false} name="senha" value={usuario.senha} onChange={atualizarValores} />
-                        </div>
+                        <label htmlFor="senha" className='form-label'>Senha:</label>
+                        <Password feedback={false} name="senha" value={usuario.senha} onChange={atualizarValores} toggleMask />
                     </div>
 
                     <div className="form-field">
-                        <label htmlFor="setor">Setor:</label>
+                        <label htmlFor="setor" className='form-label'>Setor:</label>
                         <div>
                             <Dropdown options={setores} placeholder="Selecione" name="setor" value={usuario.setor} optionLabel="nome" onChange={atualizarValores} />
                         </div>
                     </div>
 
                     {usuario.codigo && (
-                        <div>
-                            <div>
-                                <label htmlFor="atendente">Atendente:</label>
-                            </div>
-                            <div>
-                                <SelectButton options={optionsSelectButton} optionLabel="nome" optionValue="valor" name="atendente" value={usuario?.atendente}
-                                    onChange={ativarDesativarAtendente} />
-                            </div>
+                        <div className="form-field">
+                            <label htmlFor="atendente" className='form-label'>Atendente:</label>
+                            <SelectButton options={optionsSelectButton} optionLabel="nome" optionValue="valor" name="atendente" value={usuario?.atendente}
+                                onChange={ativarDesativarAtendente} />
                         </div>
                     )}
 

@@ -43,8 +43,6 @@ const Login = () => {
 
     return (
         <>
-
-
             <div className="login-container">
                 <div >
                     <img className="logo-img" src={Image} alt="logo cidade conectada" />

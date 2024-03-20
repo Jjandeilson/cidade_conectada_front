@@ -9,11 +9,11 @@ const Main = () => {
     const navegacao = useNavigate();
     const { codigoUsuario, setCodigoUsuario } = useContext(CodigoUsuarioContext);
 
-    useEffect(() => {
-        if (codigoUsuario === '') {
-            navegacao("/login");
-        }
-    }, [])
+    // useEffect(() => {
+    //     if (codigoUsuario === '') {
+    //         navegacao("/login");
+    //     }
+    // }, [])
 
     return (
         <>

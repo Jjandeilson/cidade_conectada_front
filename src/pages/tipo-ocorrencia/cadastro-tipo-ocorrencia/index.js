@@ -78,21 +78,21 @@ const CadastroTipoOcorencia = (visible) => {
                     </div>
 
                     <div>
-
-                        <label htmlFor="setor">Setor: </label>
-
-
+                        <label htmlFor="setor" className="form-label">Setor:</label>
                         <Dropdown options={setores} placeholder="Selecione" name="setor" value={tipoOcorrencia.setor} optionLabel="nome" onChange={atualizarValores} />
-
                     </div>
 
                     <div className="form-field">
                         <label htmlFor="descricao" className="form-label">Descrição:</label>
                         <InputTextarea name="descricao" value={tipoOcorrencia.descricao} onChange={atualizarValores} rows={5} className="form-textarea" autoResize />
                     </div>
+
                     {tipoOcorrencia.codigo && (
-                        <CadastroOcorrencia />
+                        <div>
+                            <CadastroOcorrencia />
+                        </div>
                     )}
+
                     <div className="form-actions">
                         <Button label="Cancelar" className="cancel-button" onClick={() => navegacao("/tipos-ocorrencia")} />
                         <Button label="Salvar" className="submit-button" onClick={salvar} />

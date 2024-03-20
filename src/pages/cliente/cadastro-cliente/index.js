@@ -9,6 +9,8 @@ import { Calendar } from 'primereact/calendar';
 import { Toast } from 'primereact/toast';
 import { Dialog } from 'primereact/dialog';
 
+import '../cadastro-cliente/index.css'
+
 import * as moment from 'moment-timezone';
 
 import ClienteService from '../../../service/clienteService';
@@ -89,37 +91,27 @@ const CadastroCliente = (visible) => {
 
                     <div className="form-field">
                         <label htmlFor="cpf" className="form-label">CPF:</label>
-                        <div>
-                            <InputMask name="cpf" value={cliente.cpf} onChange={atualizarValores} mask="999.999.999-99" unmask={true} />
-                        </div>
+                        <InputMask name="cpf" value={cliente.cpf} onChange={atualizarValores} mask="999.999.999-99" unmask={true} className="form-input" />
                     </div>
 
                     <div className="form-field">
                         <label htmlFor="telefone" className="form-label">Telefone:</label>
-                        <div>
-                            <InputMask name="telefone" value={cliente.telefone} onChange={atualizarValores} mask="(99) 99999-9999" unmask={true} />
-                        </div>
+                        <InputMask name="telefone" value={cliente.telefone} onChange={atualizarValores} mask="(99) 99999-9999" unmask={true} className="form-input" />
                     </div>
 
                     <div className="form-field">
                         <label htmlFor="celular" className="form-label">Celular:</label>
-                        <div>
-                            <InputMask name="celular" value={cliente.celular} onChange={atualizarValores} mask="(99) 99999-9999" unmask={true} />
-                        </div>
+                        <InputMask name="celular" value={cliente.celular} onChange={atualizarValores} mask="(99) 99999-9999" unmask={true} className="form-input" />
                     </div>
 
                     <div className="form-field">
                         <label htmlFor="datanascimento" className="form-label">Data de nascimento:</label>
-                        <div>
-                            <Calendar name="dataNascimento" value={cliente.dataNascimento} onChange={atualizarValores} dateFormat="dd/mm/yy" showIcon />
-                        </div>
+                        <Calendar style={{ width: '100%', height: '2.5em' }} name="dataNascimento" value={cliente.dataNascimento} onChange={atualizarValores} dateFormat="dd/mm/yy" showIcon />
                     </div>
 
                     <div className="form-field">
                         <label htmlFor="cep" className="form-label">CEP:</label>
-                        <div>
-                            <InputMask name="cep" value={endereco.cep} onChange={atualizarValoresEndereco} mask="99.999-999" unmask={true} />
-                        </div>
+                        <InputMask name="cep" value={endereco.cep} onChange={atualizarValoresEndereco} mask="99.999-999" unmask={true} className="form-input" />
                     </div>
 
                     <div className="form-field">

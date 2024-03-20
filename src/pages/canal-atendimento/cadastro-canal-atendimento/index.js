@@ -69,8 +69,8 @@ const CadastroCanalAtendimento = (visible) => {
                         <InputText name="nome" value={canal.nome} onChange={atualizarValores} className="form-input" />
                     </div>
 
-                    <div>
-                        <label htmlFor="nome">Ícone: </label>
+                    <div className="form-field">
+                        <label htmlFor="nome" className="form-label">Ícone: </label>
                         <Dropdown options={icones} name="icone" value={canal?.icone} onChange={atualizarValores} placeholder="Selecione" />
                     </div>
 

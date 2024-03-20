@@ -13,6 +13,8 @@ import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { ScrollPanel } from 'primereact/scrollpanel';
 
+import '../../../index.css'
+
 import * as moment from 'moment-timezone';
 
 import Endereco from '../../../dto/endereco';
@@ -29,7 +31,7 @@ let etapaAtual = false;
 const AcompanhamentoAtendimento = () => {
     document.title = 'Acompanhamento de atendimento';
 
-    const {codigo} = useParams();
+    const { codigo } = useParams();
     const navegacao = useNavigate();
     const [cliente, setCliente] = useState(Cliente);
     const [endereco, setEndereco] = useState(Endereco);
@@ -46,14 +48,14 @@ const AcompanhamentoAtendimento = () => {
         if ((etapa.inicio != null && etapa.posicao == 1 || etapa.status !== 'PENDENTE') || (etapa.inicio == null && etapa.posicao > 1 && etapa.status !== 'PENDENTE' && etapaAtual)) {
             executarEtapa = false;
         }
-        
+
         if (etapa.status == 'FINALIZADO') {
-           etapaAtual = true;
+            etapaAtual = true;
         } else if (etapa.status == 'PENDENTE' && etapaAtual || (etapa.posicao == numeroEtapaAtual)) {
             etapaAtual = false;
             numeroEtapaAtual = etapa.posicao;
         }
-         else {
+        else {
             executarEtapa = false
         }
 
@@ -88,38 +90,38 @@ const AcompanhamentoAtendimento = () => {
         AtendimentoService.finalizarEtapa(codigo, codigoEtapa)
             .then(() => {
                 AtendimentoService.buscarEtapasAtendimento(codigo)
-                .then(response => {
-                    let etapasBanco = response.data;
+                    .then(response => {
+                        let etapasBanco = response.data;
 
-                    etapasBanco.forEach(etapa => {
-                        if (etapa.inicio) {
-                            etapa.inicio = moment(etapa.inicio).format("DD/MM/YYYY HH:mm:ss");
-                        }
+                        etapasBanco.forEach(etapa => {
+                            if (etapa.inicio) {
+                                etapa.inicio = moment(etapa.inicio).format("DD/MM/YYYY HH:mm:ss");
+                            }
 
-                        if (etapa.fim) {
-                            etapa.fim = moment(etapa.fim).format("DD/MM/YYYY HH:mm:ss");
-                        }
-                    });
+                            if (etapa.fim) {
+                                etapa.fim = moment(etapa.fim).format("DD/MM/YYYY HH:mm:ss");
+                            }
+                        });
 
-                    setEtapas(etapasBanco);
-                })
-                .catch(response => console.log(response));
+                        setEtapas(etapasBanco);
+                    })
+                    .catch(response => console.log(response));
             })
             .catch(response => console.log(response));
     }
- 
+
     function botoes(etapa) {
         return (
             <>
                 {podeIniciarEtapa(etapa) && (
                     <div>
-                        <Button icon="pi pi-play" onClick={() => iniciarEtapa(etapa.codigo)}/>
+                        <Button icon="pi pi-play" onClick={() => iniciarEtapa(etapa.codigo)} />
                     </div>
                 )}
 
                 {(etapa.inicio && !etapa.fim) && (
-                     <div>
-                        <Button icon="pi pi-power-off" onClick={() => finalizarEtapa(etapa.codigo)}/>
+                    <div>
+                        <Button icon="pi pi-power-off" onClick={() => finalizarEtapa(etapa.codigo)} />
                     </div>
                 )}
             </>
@@ -131,35 +133,35 @@ const AcompanhamentoAtendimento = () => {
 
         if (index === 2) {
             AtendimentoService.buscarConversaChat(codigo)
-            .then(response => {
-                let mensagens = response.data;
-                const chatMessage = document.getElementById('chatId');
+                .then(response => {
+                    let mensagens = response.data;
+                    const chatMessage = document.getElementById('chatId');
 
-                mensagens.forEach(item => {
-                    const divMensagem = document.createElement("div");
-        
-                    divMensagem.textContent = item.mensagem;
-                    chatMessage.appendChild(divMensagem);
+                    mensagens.forEach(item => {
+                        const divMensagem = document.createElement("div");
 
-                });
-            })
-            .catch(response => console.log(response));
+                        divMensagem.textContent = item.mensagem;
+                        chatMessage.appendChild(divMensagem);
+
+                    });
+                })
+                .catch(response => console.log(response));
         }
     }
 
     useEffect(() => {
-       AtendimentoService.buscarClienteAtendimento(codigo)
-        .then(response => {
-            response.data.dataNascimento = moment(response.data.dataNascimento).add(1, "days").toDate();
-            setCliente(response.data);
-            setEndereco(response.data.endereco);
-        })
-        .catch(response => console.log(response));
-        
+        AtendimentoService.buscarClienteAtendimento(codigo)
+            .then(response => {
+                response.data.dataNascimento = moment(response.data.dataNascimento).add(1, "days").toDate();
+                setCliente(response.data);
+                setEndereco(response.data.endereco);
+            })
+            .catch(response => console.log(response));
+
         CanalAntendimentoService.listaTodosCanais()
-        .then(response => setCanaisAntendimento(response.data))
-        .catch(response => console.log(response));
-        
+            .then(response => setCanaisAntendimento(response.data))
+            .catch(response => console.log(response));
+
         TipoOcorrenciaService.listaTodosTiposOcorrencias()
             .then(response => setTiposOcorrencia(response.data))
             .catch(response => console.log(response));
@@ -198,181 +200,141 @@ const AcompanhamentoAtendimento = () => {
 
                 setEtapas(etapasBanco);
             })
-            .catch(response => console.log(response));    
-        
-}, [codigo]);
+            .catch(response => console.log(response));
+
+    }, [codigo]);
 
     return (
         <>
-             <div>
-                <a onClick={() => navegacao("/atendimentos")} className="p-button p-button-warning font-bold">Voltar</a>
-            </div>
+            <div className='acomp-atendimento-header'>
+                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <a onClick={() => navegacao("/atendimentos")} className="p-button p-button-warning font-bold">Voltar</a>
+                </div>
+                <TabView activeIndex={indexTab} onTabChange={(e) => alterarAba(e.index)} className='tab-view-container' >
 
-             <TabView activeIndex={indexTab} onTabChange={(e) => alterarAba(e.index)}>
-                <TabPanel header="Dados do cliente">
-                    <div>
-                        <div>
-                            <div>
-                                <label htmlFor="nome">Nome</label>
-                            </div>
-                            <div>
-                                <InputText name="nome" value={cliente.nome} disabled="true" />
-                            </div>
-                        </div>
-
-                        <div>
-                            <div>
-                                <label htmlFor="cpf">CPF</label>
-                            </div>
-                            <div>
-                                <InputMask name="cpf" value={cliente.cpf} mask="999.999.999-99" unmask={true} disabled="true" />
-                            </div>
-                        </div>
-
-                        <div>
-                            <div>
-                                <label htmlFor="email">E-mail</label>
-                            </div>
-                            <div>
-                                <InputText name="email" value={cliente?.email} disabled="true" />
-                            </div>
-                        </div>
-
-                        <div>
-                            <div>
-                                <label htmlFor="telefone">Telefone</label>
-                            </div>
-                            <div>
-                                <InputMask name="telefone" value={cliente.telefone} mask="(99) 99999-9999" unmask={true} disabled="true" />
-                            </div>
-                        </div>
-                    
-                        <div>
-                            <div>
-                                <label htmlFor="celular">Celular</label>
-                            </div>
-                            <div>
-                                <InputMask name="celular" value={cliente.celular} mask="(99) 99999-9999" unmask={true} disabled="true" />
-                            </div>
-                        </div>
-
-                        <div>
-                            <div>
-                                <label htmlFor="datanascimento">Data de nascimento</label>
-                            </div>
-                            <div>
-                                <Calendar name="dataNascimento" value={cliente.dataNascimento} dateFormat="dd/mm/yy" disabled="true" showIcon />
-                            </div>
-                        </div>
-                        <div>
-                            <div>
-                                <div>
-                                    <label htmlFor="logradouro">Logradouro</label>
+                    <TabPanel header="Dados do cliente" >
+                        <div className='tabela-editar-um-dois'>
+                            <div className='tab-um'>
+                                <div className="form-field">
+                                    <label htmlFor="nome" className="form-label">Nome:</label>
+                                    <InputText name="nome" value={cliente.nome} disabled="true" />
                                 </div>
-                                <div>
+
+                                <div className="form-field">
+                                    <label htmlFor="cpf" className="form-label">CPF:</label>
+                                    <InputMask name="cpf" value={cliente.cpf} mask="999.999.999-99" unmask={true} disabled="true" />
+                                </div>
+
+                                <div className="form-field">
+                                    <label htmlFor="email" className="form-label">E-mail:</label>
+                                    <InputText name="email" value={cliente?.email} disabled="true" />
+                                </div>
+
+                                <div className="form-field">
+                                    <label htmlFor="telefone" className="form-label">Telefone:</label>
+                                    <InputMask name="telefone" value={cliente.telefone} mask="(99) 99999-9999" unmask={true} disabled="true" />
+                                </div>
+
+                                <div className="form-field">
+                                    <label htmlFor="celular" className="form-label">Celular:</label>
+                                    <InputMask name="celular" value={cliente.celular} mask="(99) 99999-9999" unmask={true} disabled="true" />
+                                </div>
+
+                                <div className="form-field">
+                                    <label htmlFor="datanascimento" className="form-label">Data de nascimento:</label>
+                                    <Calendar name="dataNascimento" value={cliente.dataNascimento} dateFormat="dd/mm/yy" disabled="true" showIcon />
+                                </div>
+                            </div>
+                            <div className='tab-dois'>
+                                <div className="form-field">
+                                    <label htmlFor="logradouro" className="form-label">Logradouro:</label>
                                     <InputText name="logradouro" value={endereco.logradouro} disabled="true" />
                                 </div>
-                            </div>
-                            <div>
-                                <div>
-                                    <label htmlFor="numero">Número</label>
-                                </div>
-                                <div>
+
+                                <div className="form-field">
+                                    <label htmlFor="numero" className="form-label">Número:</label>
                                     <InputText name="numero" value={endereco.numero} disabled="true" />
                                 </div>
-                            </div>
-                            <div>
-                                <div>
-                                    <label htmlFor="bairro">Bairro</label>
+
+                                <div className="form-field">
+                                    <label htmlFor="bairro" className="form-label">Bairro:</label>
+                                    <InputText name="bairro" value={endereco.bairro} disabled="true" className="form-input"  />
                                 </div>
-                                <div>
-                                    <InputText name="bairro" value={endereco.bairro} disabled="true" />
-                                </div>
-                            </div>
-                            <div>
-                                <div>
-                                    <label htmlFor="cep">CEP</label>
-                                </div>
-                                <div>
+
+                                <div className="form-field">
+                                    <label htmlFor="cep" className="form-label" >CEP:</label>
                                     <InputMask name="cep" value={endereco.cep} mask="99.999-999" unmask={true} disabled="true" />
                                 </div>
+                                <div className="form-field">
+                                    <label htmlFor="observacao" lassName="form-field">Observação:</label>
+                                    <InputTextarea name="observacao" rows={5} cols={30} value={cliente.observacao} disabled="true" className="form-textarea" />
+                                </div>
                             </div>
                         </div>
+                    </TabPanel>
 
-                        <div>
+                    <TabPanel header="Dados do atendimento">
+                        <div className='tab-view-container'>
+
                             <div>
-                                <label htmlFor="observacao">Observação</label>
+                                <div className='span-atendimento'>
+                                    <span><label>Data de abertura: {atendimento.abertura}</label></span> | <span><label>Data de finalização: {atendimento.fechamento}</label></span> | <span><label>Status: {atendimento.status}</label></span>
+                                </div>
                             </div>
-                            <div>
-                                <InputTextarea name="observacao" rows={5} cols={30} value={cliente.observacao} disabled="true" />
+
+                            <div className='dados-atendimento-container'>
+                                <div>
+                                    <div className="form-field">
+                                        <label htmlFor="canalAtendimento" className="form-label">Canal de atendimento: </label>
+                                        <Dropdown name="canalAtendimento" placeholder="Selecione" options={canaisAtendimento} optionLabel="nome"
+                                            value={atendimento.canalAtendimento} disabled />
+                                    </div>
+                                </div>
+
+                                <div className="form-field">
+                                    <label htmlFor="tipoOcorrencia" className="form-label">Tipo de ocorrência:</label>
+                                    <Dropdown name="tipoOcorrencia" placeholder="Selecione" options={tiposOcorrencia} optionLabel="nome"
+                                        value={atendimento.tipoOcorrencia} disabled />
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </TabPanel>
-                <TabPanel header="Dados do atendimento">
-                    <div>
-                        <div>
-                            <span><label>Data de abertura: {atendimento.abertura}</label></span> | <span><label>Data de finalização: {atendimento.fechamento}</label></span> | <span><label>Status: {atendimento.status}</label></span>
-                        </div>
-                    </div>
-                    <div>
-                        <div>
-                            <div>
-                                <label htmlFor="canalAtendimento">Canal de atendimento</label>
-                            </div>
-                            <div>
-                                <Dropdown name="canalAtendimento" placeholder="Selecione" options={canaisAtendimento} optionLabel="nome"
-                                   value={atendimento.canalAtendimento} disabled  />
-                            </div>
-                        </div>
-                        <div>
-                            <div>
-                                <label htmlFor="tipoOcorrencia">Tipo de ocorrência</label>
-                            </div>
-                            <div>
-                                <Dropdown name="tipoOcorrencia" placeholder="Selecione" options={tiposOcorrencia}  optionLabel="nome" 
-                                    value={atendimento.tipoOcorrencia} disabled />
-                            </div>
-                        </div>
-                        <div>
-                            <div>
-                                <label htmlFor="ocorrencia">Ocorrência</label>
-                            </div>
-                            <div>
+
+                            <div className="form-field">
+                                <label htmlFor="ocorrencia" className="form-label">Ocorrência:</label>
                                 <Dropdown name="ocorrencia" placeholder="Selecione" options={ocorrencias} optionLabel="nome"
                                     value={atendimento.ocorrencia} disabled />
                             </div>
-                        </div>
-                        <div>
-                            <div>
-                                <label htmlFor="descricao">Descrição</label>
-                            </div>
-                            <div>
-                                <InputTextarea name="descricao" rows={5} cols={30} value={atendimento.descricao} disabled />
-                            </div>
-                        </div>
 
-                        <div>
-                            <Fieldset legend="Etapas do atendimento">
-                                <div className="card">
-                                    <DataTable value={etapas}>
-                                        <Column field="nome"></Column>
-                                        <Column field="status"></Column>
-                                        <Column field="inicio"></Column>
-                                        <Column field="fim"></Column>
-                                        <Column body={botoes}></Column>
-                                    </DataTable>
+                            <div>
+                                <div className="form-field">
+                                    <label htmlFor="descricao" className="form-label">Descrição:</label>
+                                    <InputTextarea name="descricao" rows={5} cols={30} value={atendimento.descricao} disabled className="form-textarea"/>
                                 </div>
-                            </Fieldset>
+
+                                <div>
+                                    <Fieldset legend="Etapas do atendimento">
+                                        <div className="card">
+                                            <DataTable value={etapas}>
+                                                <Column field="nome"></Column>
+                                                <Column field="status"></Column>
+                                                <Column field="inicio"></Column>
+                                                <Column field="fim"></Column>
+                                                <Column body={botoes}></Column>
+                                            </DataTable>
+                                        </div>
+                                    </Fieldset>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </TabPanel>
-                <TabPanel header="Mensagens Chat">
-                    <ScrollPanel style={{ width: '100%', height: '200px' }}>
-                        <div id="chatId"></div>
-                    </ScrollPanel>
-                </TabPanel>
-             </TabView>
+                    </TabPanel >
+                    <TabPanel header="Mensagens Chat"  >
+                        <div className='tab-view-container'>
+                            <ScrollPanel >
+                                <div id="chatId"></div>
+                            </ScrollPanel>
+                        </div>
+                    </TabPanel>
+                </TabView >
+            </div >
         </>
     )
 }

@@ -57,7 +57,7 @@ const TabelaUsuario = () => {
         return (
             <>
                 <div className="btn-table">
-                    <Button label="Editar" onClick={() => navegacao(`/usuarios/${usuario.codigo}/editar`)} />
+                    <Button label="Editar"  onClick={() => navegacao(`/usuarios/${usuario.codigo}/editar`)} />
                     <Button label="Excluir" onClick={() => excluir(usuario.codigo)} severity="warning" />
                 </div>
             </>

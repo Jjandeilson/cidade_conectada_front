@@ -27,11 +27,11 @@ const TabelaAtendimento = () => {
                 let atendimentoBanco = response.data.content;
 
                 atendimentoBanco.forEach(atendimento => {
-                   atendimento.abertura = moment(atendimento.abertura).format("DD/MM/YYYY HH:mm:ss");
-                   
-                   if (atendimento.fechamento) {
-                       atendimento.fechamento = moment(atendimento.fechamento).format("DD/MM/YYYY HH:mm:ss");
-                   }
+                    atendimento.abertura = moment(atendimento.abertura).format("DD/MM/YYYY HH:mm:ss");
+
+                    if (atendimento.fechamento) {
+                        atendimento.fechamento = moment(atendimento.fechamento).format("DD/MM/YYYY HH:mm:ss");
+                    }
                 });
 
                 setAtendimentos(atendimentoBanco);
@@ -43,25 +43,28 @@ const TabelaAtendimento = () => {
     }
 
     const botoesEditar = (atendimento) => {
-        return  (
+        return (
             <>
-               <Button label="Visualizar" onClick={() => navegacao(`/atendimentos/${atendimento.codigo}/editar`)}/>
+                <div className='btn-table'>
+                    <Button label="Visualizar" onClick={() => navegacao(`/atendimentos/${atendimento.codigo}/editar`)} />
+                </div>
             </>
+
         )
     }
 
     useEffect(() => {
         AtendimentoService.listar()
-            .then(response =>  {
+            .then(response => {
                 let atendimentoBanco = response.data.content;
                 atendimentoBanco.forEach(atendimento => {
-                   atendimento.abertura = moment(atendimento.abertura).format("DD/MM/YYYY HH:mm:ss");
-                   
-                   if (atendimento.fechamento) {
-                       atendimento.fechamento = moment(atendimento.fechamento).format("DD/MM/YYYY HH:mm:ss");
-                   }
+                    atendimento.abertura = moment(atendimento.abertura).format("DD/MM/YYYY HH:mm:ss");
+
+                    if (atendimento.fechamento) {
+                        atendimento.fechamento = moment(atendimento.fechamento).format("DD/MM/YYYY HH:mm:ss");
+                    }
                 });
-                
+
                 setAtendimentos(atendimentoBanco);
                 setNumeroPagina(response.data.number);
                 setQuantidadePorPagina(response.data.size);

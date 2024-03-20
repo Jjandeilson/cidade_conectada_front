@@ -62,9 +62,12 @@ const TabelaCliente = () => {
     const botoesEditarExcluir = (setor) => {
         return (
             <>
-                <Button label="Editar" onClick={() => navegacao(`/clientes/${setor.codigo}/editar`)} />
-                <Button label="Excluir" onClick={() => excluir(setor.codigo)} severity="warning" />
+               <div className="btn-table">
+                    <Button label="Editar"  onClick={() => navegacao(`/clientes/${setor.codigo}/editar`)} />
+                    <Button label="Excluir" onClick={() => excluir(setor.codigo)} severity="warning" />
+                </div >
             </>
+
         )
     }
 

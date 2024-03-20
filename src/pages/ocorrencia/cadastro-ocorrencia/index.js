@@ -1,4 +1,4 @@
-import { useEffect, useRef ,useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { DataTable } from 'primereact/datatable';
@@ -17,7 +17,7 @@ import TipoOcorrencia from '../../../dto/tipo-ocorrencia';
 
 const CadastroOcorrencia = () => {
     const toast = useRef(null);
-    const {codigo} = useParams();
+    const { codigo } = useParams();
     const [codigoOcorrencia, setCodigoOcorrencia] = useState('');
     const [visible, setVisible] = useState(false);
     const [ocorrencia, setOcorrencia] = useState(Ocorrencia);
@@ -28,8 +28,8 @@ const CadastroOcorrencia = () => {
     };
 
     function atualizarValores(envet) {
-        const {name, value} = envet.target
-        setOcorrencia({...ocorrencia,[name]: value});
+        const { name, value } = envet.target
+        setOcorrencia({ ...ocorrencia, [name]: value });
     }
 
     function salvar() {
@@ -65,7 +65,7 @@ const CadastroOcorrencia = () => {
     }
 
     const botoesTabelaOcorrencia = (ocorrencia) => {
-        return  (
+        return (
             <>
                 <Button label="+" onClick={() => exibirModalEtapa(ocorrencia.codigo)} />
                 <Button label="-" onClick={() => excluirOcorrencia(ocorrencia.codigo)} severity="warning" />
@@ -74,42 +74,34 @@ const CadastroOcorrencia = () => {
     }
 
     useEffect(() => {
-       TipoOcorrencia.codigo = codigo;
-       ocorrencia.tipoOcorrencia = TipoOcorrencia;
-       OcorrenciaService.listar(codigo)
-        .then(response => setOcorrencias(response.data))
-        .catch(response => console.log(response))
+        TipoOcorrencia.codigo = codigo;
+        ocorrencia.tipoOcorrencia = TipoOcorrencia;
+        OcorrenciaService.listar(codigo)
+            .then(response => setOcorrencias(response.data))
+            .catch(response => console.log(response))
     }, [codigo])
 
     return (
         <>
             <div>
                 <Fieldset legend="Cadastro de ocorrência">
-                    <div>
-                        <div>
-                            <label htmlFor="nome">Nome</label>
-                        </div>
-                        <div>
-                            <InputText name="nome" value={ocorrencia.nome} onChange={atualizarValores}/>
-                        </div>
+                    <div className="form-field">
+                        <label htmlFor="nome" className="form-label">Nome:</label>
+                        <InputText name="nome" value={ocorrencia.nome} onChange={atualizarValores} className="form-input"/>
                     </div>
 
                     <div>
-                        <div>
-                            <label htmlFor="descricao">Descrição</label>
-                        </div>
-                        <div>
-                            <InputTextarea name="descricao" rows={5} cols={30} value={ocorrencia.descricao} onChange={atualizarValores} />
-                        </div>
+                        <label className="form-label" htmlFor="descricao">Descrição:</label>
+                        <InputTextarea  name="descricao" rows={5} cols={30} value={ocorrencia.descricao} onChange={atualizarValores} className="form-textarea" autoResize />
                     </div>
 
-                    <div>
+                    <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'flex-end' }}>
                         <Button label="Salvar" severity="success" onClick={salvar} />
                     </div>
 
                     <div>
                         <DataTable value={ocorrencias}>
-                            <Column field="nome" header="Nome"></Column>    
+                            <Column field="nome" header="Nome"></Column>
                             <Column field="acoes" header="Ações" body={botoesTabelaOcorrencia}></Column>
                         </DataTable>
                         <Dialog visible={visible} onHide={() => setVisible(false)} >

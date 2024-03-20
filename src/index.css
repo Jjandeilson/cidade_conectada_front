@@ -14,7 +14,7 @@ code {
 
 .btn-table {
   display: flex;
-  gap: 10px;
+  gap: 5px;
 }
 
 .data-table-container {
@@ -47,7 +47,7 @@ code {
 }
 
 .data-table-container .p-datatable-tbody > tr > td {
-  max-width: 100px;
+  max-width: 150px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -63,19 +63,6 @@ code {
   justify-content: center;
   background: #fff;
   width: 500px;
-  gap: 20px;
-  height: 550px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-}
-
-.cadastro-form-user {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  background: #fff;
   gap: 20px;
   border: 1px solid #ddd;
   border-radius: 10px;
@@ -116,6 +103,7 @@ code {
 
 .submit-button {
   background-color: green;
+  width: 100px;
   border: none;
   color: white;
   border-radius: 5px;
@@ -124,6 +112,7 @@ code {
 
 .cancel-button {
   background-color: red;
+  width: 100px;
   border: none;
   color: white;
   border-radius: 5px;
@@ -131,7 +120,7 @@ code {
 }
 
 .container-max {
-  width: 1500px;
+  width: 1280px;
 }
 
 .form-login {
@@ -166,4 +155,26 @@ code {
 
 .form-login h1 {
   text-align: center;
+}
+
+.card-atendimento {
+  margin-top: 10px;
+}
+
+.tab-view-container {
+  width: 900px;
+  height: 70vh;
+}
+
+.tabela-editar-um-dois {
+  display: flex;
+  gap: 50px;
+}
+
+.dados-atendimento-container {
+  margin-top: 15px;
+}
+
+.span-atendimento {
+  font-weight: bold;
 }
