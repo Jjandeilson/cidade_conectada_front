@@ -42,16 +42,20 @@ const CadastroFila = (visible) => {
             FilaService.salvar(fila)
                 .then(response => {
                     show('Operação realizada com sucesso', 'success', 'Success');
-                    navegacao(`/filas/${response.data.codigo}/editar`);
+                    setTimeout(() => {
+                        navegacao('/filas');
+                    }, 500);
                 })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
+                .catch(response => (show(response.response.data.fields[0].message, 'error', 'Error')));
         } else {
             FilaService.atualizar(fila.codigo, fila)
                 .then(response => {
                     show('Operação realizada com sucesso', 'success', 'Success');
-                    navegacao(`/filas/${response.data.codigo}/editar`);
+                    setTimeout(() => {
+                        navegacao('/filas');
+                    }, 500);
                 })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
+                .catch(response => (show(response.response.data.fieds[0].message, 'error', 'Error')));
         }
     }
 

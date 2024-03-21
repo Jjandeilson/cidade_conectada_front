@@ -30,16 +30,20 @@ const CadastroSetor = (visible) => {
             SetorService.salvar(setor)
                 .then(response => {
                     show('Cadastro realizado com sucesso', 'success', 'Success');
-                    navegacao(`/setores/${response.data.codigo}/editar`);
+                    setTimeout(() => {
+                        navegacao('/setores');
+                    }, 500);
                 })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
+                .catch(response => (show(response.response.data.fields[0].message, 'error', 'Error')));
         } else {
             SetorService.atualizar(setor.codigo, setor)
                 .then(response => {
                     show('Atualização realizada com sucesso', 'success', 'Success');
-                    navegacao(`/setores/${response.data.codigo}/editar`);
+                    setTimeout(() => {
+                        navegacao('/setores');
+                    }, 500);
                 })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
+                .catch(response => (show(response.response.data.fields[0].message, 'error', 'Error')));
         }
     }
     

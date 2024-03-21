@@ -99,16 +99,20 @@ const CadastroUsuario = (visible) => {
             UsuarioService.salvar(usuario)
                 .then(() => {
                     show('Operação realizada com sucesso', 'success', 'Success');
-                    navegacao("/usuarios")
+                    setTimeout(() => {
+                        navegacao('/usuarios');
+                    }, 500);
                 })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')))
+                .catch(response => (show(response.response.data.fields[0].message, 'error', 'Error')))
         } else {
             UsuarioService.atualizar(usuario.codigo, usuario)
                 .then(() => {
                     show('Operação realizada com sucesso', 'success', 'Success')
-                    navegacao("/usuarios")
+                    setTimeout(() => {
+                        navegacao('/usuarios');
+                    }, 500);
                 })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')))
+                .catch(response => (show(response.response.data.fields[0].message, 'error', 'Error')))
         }
     }
 

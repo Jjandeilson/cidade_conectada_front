@@ -35,16 +35,20 @@ const CadastroTipoOcorencia = (visible) => {
             TipoOcorrenciaService.salvar(tipoOcorrencia)
                 .then(response => {
                     show('Operação realizada com sucesso', 'success', 'Success');
-                    navegacao(`/tipos-ocorrencia/${response.data.codigo}/editar`);
+                    setTimeout(() => {
+                        navegacao('/tipos-ocorrencia');
+                    }, 500);
                 })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
+                .catch(response => (show(response.response.data.fields[0].message, 'error', 'Error')));
         } else {
             TipoOcorrenciaService.atualizar(tipoOcorrencia.codigo, tipoOcorrencia)
                 .then(response => {
                     show('Operação realizada com sucesso', 'success', 'Success');
-                    navegacao(`/tipos-ocorrencia/${response.data.codigo}/editar`);
+                    setTimeout(() => {
+                        navegacao('/tipos-ocorrencia');
+                    }, 500);
                 })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
+                .catch(response => (show(response.response.data.fields[0].message, 'error', 'Error')));
         }
     }
 
