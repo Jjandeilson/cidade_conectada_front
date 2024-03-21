@@ -1,12 +1,30 @@
-import { Outlet } from "react-router-dom"
+import { useEffect, useContext } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 
-import MenuNavegacao from "../../shared/menu_navegacao"
+import CodigoUsuarioContext from "../../context/CodigoUsuarioContext";
+import './../main/index.css';
+import MenuNavegacao from "../../shared/menu_navegacao/menu";
 
 const Main = () => {
+    const navegacao = useNavigate();
+    const { codigoUsuario, setCodigoUsuario } = useContext(CodigoUsuarioContext);
+
+    useEffect(() => {
+        if (codigoUsuario === '') {
+            navegacao("/login");
+        }
+    }, [])
+
     return (
         <>
-            <MenuNavegacao />
-            <Outlet />
+
+            <div className="main-container">
+                <MenuNavegacao />
+                <div className="outlet-container">
+                    <Outlet />
+                </div>
+            </div>
+
         </>
     )
 }

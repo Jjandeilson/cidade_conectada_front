@@ -6,6 +6,8 @@ import { Toast } from 'primereact/toast';
 import { Timeline } from 'primereact/timeline';
 import { Card } from 'primereact/card';
 
+import '../../../index.css'
+
 import AtendimentoService from '../../../service/atendimentoService';
 
 import * as moment from 'moment-timezone';
@@ -45,7 +47,7 @@ const AcompanharAtendimentoCliente = () => {
     const templateMarker = (etapa) => {
         return (
             <span className="flex w-2rem h-2rem align-items-center justify-content-center text-white border-circle z-1 shadow-1">
-               {etapa.posicao}
+                {etapa.posicao}
             </span>
         );
     }
@@ -90,33 +92,38 @@ const AcompanharAtendimentoCliente = () => {
 
     return (
         <>
-                <div>
-                    <div className="p-inputgroup">
-                        <label>Protocolo</label>
-                        <InputText name="protocolo" value={protocolo} onChange={atualizarValores} />
+
+            <div className='container-protocolo'> 
+                <div className="protocolo-form" >
+                    <h1>BUSCAR PROTOCOLO</h1>
+                    <label className="form-label">Protocolo: </label>
+                    <div className='input-container'>
+                        <InputText className="form-label" name="protocolo" value={protocolo} onChange={atualizarValores} />
                         <Button icon="pi pi-search" className="p-button-warning" onClick={consultar} />
                     </div>
                 </div>
+            </div>
 
-                {visualizar && (
+
+            {visualizar && (
+                <div>
                     <div>
-                        <div>
-                            <label>Protocolo: {atendimento.protocolo}</label>
-                        </div>
-                        <div>
-                            <label>Data de abertura: {atendimento.abertura}</label>
-                        </div>
-                        <div>
-                            <label>Data de finalização: {atendimento.fechamento}</label>
-                        </div>
-                        <div>
-                            <label>Status: {atendimento.status}</label>
-                        </div>
-                        <div className="card">
-                            <Timeline align='alternate' value={etapas} marker={templateMarker} content={templateEtapas}/>
-                        </div>
+                        <label>Protocolo: {atendimento.protocolo}</label>
                     </div>
-                )} 
+                    <div>
+                        <label>Data de abertura: {atendimento.abertura}</label>
+                    </div>
+                    <div>
+                        <label>Data de finalização: {atendimento.fechamento}</label>
+                    </div>
+                    <div>
+                        <label>Status: {atendimento.status}</label>
+                    </div>
+                    <div className="card">
+                        <Timeline align='alternate' value={etapas} marker={templateMarker} content={templateEtapas} />
+                    </div>
+                </div>
+            )}
             <Toast ref={toast} />
         </>
     )

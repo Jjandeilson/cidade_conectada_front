@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { ScrollPanel } from 'primereact/scrollpanel';
 import { Button } from 'primereact/button';
@@ -11,6 +12,9 @@ import { Calendar } from 'primereact/calendar';
 import { Toolbar } from 'primereact/toolbar';
 import { SplitButton } from 'primereact/splitbutton';
 import { Toast } from 'primereact/toast';
+import { Card } from 'primereact/card';
+
+import CodigoUsuarioContext from '../../../context/CodigoUsuarioContext';
 
 import CanalAtendimentoService from '../../../service/canalAtendimentoService';
 import TipoOcorrenciaService from '../../../service/tipoOcorrenciaService';
@@ -19,17 +23,22 @@ import ClienteService from '../../../service/clienteService';
 import AtendimentoService from '../../../service/atendimentoService';
 import UsuarioService from '../../../service/usuarioService';
 import EnviarNotificacaoService from '../../../service/enviarNotificacaoService';
+import WebSocket from '../../../service/websocket';
 import Endereco from '../../../dto/endereco';
 import Cliente from '../../../dto/cliente';
 import Fila from '../../../dto/fila';
 import MensagemNotificacao from '../../../dto/mensagem-notificacao';
 import Atendimento from '../../../dto/atendimento';
+import MensagemChat from '../../../dto/mensagem-chat';
+
+import '../../../index.css'
+import '../../chat-cliente/index.css'
 
 import * as moment from 'moment-timezone';
 
 const TelaAtendente = () => {
     const toast = useRef(null);
-
+    const navegacao = useNavigate();
     const [canaisAtendimento, setCanaisAntendimento] = useState([]);
     const [tiposOcorrencia, setTiposOcorrencia] = useState([]);
     const [ocorrencias, setOcorrencias] = useState([]);
@@ -39,24 +48,28 @@ const TelaAtendente = () => {
     const [cliente, setCliente] = useState(Cliente);
     const [atendimento, setAtendimento] = useState(Atendimento);
     const [mensagemNotificacao, setMensagemNotificacao] = useState(MensagemNotificacao);
-    const [codigoUsuario, setCodigoUsuario] = useState('93441ba0-166d-4220-9310-de01481cf12d');
     const [desativarSelectFila, setDesativarSelectFila] = useState(false);
+    const { codigoUsuario, setCodigoUsuario } = useContext(CodigoUsuarioContext);
+    const [protocoloCliente, setProtocoloCliente] = useState('');
+    const [mensagemChat, setMensagemChat] = useState(MensagemChat);
+    const [textoChat, setTextoChat] = useState('');
+    const [client, setClient] = useState({});
 
     const items = [
         {
             label: 'E-mail',
             icon: 'pi pi-file',
-            command: () => {notificar('EMAIL')}
+            command: () => { notificar('EMAIL') }
         },
         {
             label: 'Whatsapp',
             icon: 'pi pi-whatsapp',
-            command: () => {notificar('WHATSAPP')}
+            command: () => { notificar('WHATSAPP') }
         },
         {
             label: 'SMS',
             icon: 'pi pi-comment',
-            command: () => {notificar('SMS')}
+            command: () => { notificar('SMS') }
         }
     ];
 
@@ -64,19 +77,24 @@ const TelaAtendente = () => {
         toast.current.show({ severity: severity, summary: summary, detail: mensagem });
     };
 
+    function atualizarValores(event) {
+        const { value } = event.target;
+        setTextoChat(value);
+    }
+
     function atualizarValoresAtendimento(event) {
-        const {name, value} = event.target;
-        setAtendimento({...atendimento,[name]: value});
+        const { name, value } = event.target;
+        setAtendimento({ ...atendimento, [name]: value });
     }
-   
+
     function atualizarValoresCliente(event) {
-        const {name, value} = event.target;
-        setCliente({...cliente,[name]: value});
+        const { name, value } = event.target;
+        setCliente({ ...cliente, [name]: value });
     }
-    
+
     function atualizarValoresEndereco(event) {
-        const {name, value} = event.target;
-        setEndereco({...endereco,[name]: value});
+        const { name, value } = event.target;
+        setEndereco({ ...endereco, [name]: value });
     }
 
     function buscarClientePorCpf() {
@@ -101,15 +119,33 @@ const TelaAtendente = () => {
     function salvar() {
         cliente.endereco = endereco;
         atendimento.cliente = cliente;
-            
+        atendimento.protocolo = protocoloCliente;
+
         AtendimentoService.salvar(atendimento)
             .then(() => {
                 show('Operação realizada com sucesso', 'success', 'Success');
                 setEndereco(Endereco);
                 setCliente(Cliente);
                 setAtendimento(Atendimento);
+                document.getElementById('chatId').innerText = "";
+                enviarMensagemFinalizacao();
             })
             .catch(response => (show(response.response.data.detail, 'error', 'Error')));
+    }
+
+    function escreverFila() {
+        client.subscribe("/chat/cliente", function (result) {
+            let mensagemCliente = JSON.parse(result.body);
+
+            if (!mensagemCliente.finalizado) {
+                setProtocoloCliente(mensagemCliente.protocolo);
+                const chatMessage = document.getElementById('chatId');
+                const divMensagem = document.createElement("div");
+
+                divMensagem.textContent = mensagemCliente.mensagem;
+                chatMessage.appendChild(divMensagem);
+            }
+        })
     }
 
     function logarFila(fila) {
@@ -117,6 +153,7 @@ const TelaAtendente = () => {
             .then(() => {
                 setDesativarSelectFila(true);
                 setFila(fila.target.value);
+                escreverFila();
             })
             .catch(response => console.log(response));
     }
@@ -131,7 +168,7 @@ const TelaAtendente = () => {
     }
 
     function notificar(midia) {
-        if (midia == 'EMAIL') {
+        if (midia === 'EMAIL') {
             mensagemNotificacao.to = cliente.email;
         } else {
             mensagemNotificacao.to = "55" + cliente.celular;
@@ -147,6 +184,46 @@ const TelaAtendente = () => {
             })
             .catch(response => console.log(response));
     }
+
+    function handleKeyDown(event) {
+        if (event.key === 'Enter') {
+            enviarMensagem();
+        }
+    }
+
+    function enviarMensagem() {
+        mensagemChat.fluxo = 'SAIDA';
+        mensagemChat.midia = 'CHAT';
+        mensagemChat.envioMensagem = "ATENDENTE";
+        mensagemChat.protocolo = protocoloCliente;
+        mensagemChat.mensagem = 'Atendente: ' + textoChat;
+
+        client.send("/app/chat", {}, JSON.stringify({
+            ...mensagemChat
+        }));
+
+        setTextoChat('');
+        setMensagemChat(MensagemChat);
+    }
+
+    function enviarMensagemFinalizacao() {
+        mensagemChat.fluxo = 'SAIDA';
+        mensagemChat.midia = 'CHAT';
+        mensagemChat.envioMensagem = "ATENDENTE";
+        mensagemChat.protocolo = protocoloCliente;
+        mensagemChat.mensagem = 'Atendimento finalizado';
+        mensagemChat.finalizado = true;
+
+        client.send("/app/chat", {}, JSON.stringify({
+            ...mensagemChat
+        }));
+    }
+
+    const botaologout = (
+        <>
+            <a onClick={() => navegacao("/login")} className="p-button font-bold">Logout</a>
+        </>
+    )
 
     const botoesAtendimento = (
         <>
@@ -168,199 +245,144 @@ const TelaAtendente = () => {
 
     useEffect(() => {
         CanalAtendimentoService.listaTodosCanais()
-            .then(response =>  setCanaisAntendimento(response.data))
+            .then(response => setCanaisAntendimento(response.data))
             .catch(response => console.log(response));
-       
+
         TipoOcorrenciaService.listaTodosTiposOcorrencias()
-            .then(response =>  setTiposOcorrencia(response.data))
+            .then(response => setTiposOcorrencia(response.data))
             .catch(response => console.log(response));
 
         UsuarioService.listarFilasUsuario(codigoUsuario)
             .then(response => setFilas(response.data))
             .catch(response => console.log(response));
 
-        atendimento.protocolo = '202401141';
+        WebSocket.login()
+            .then(response => {
+                setClient(response);
+            })
+            .catch(response => {
+                console.log(response);
+            });
     }, [])
 
     return (
         <>
-            <div>
-                <Toolbar center={botoesAtendimento} end={botoesFila} />
-            </div>    
-
-            {/* chat do atendente */}
-            <div className="card">
-                <ScrollPanel style={{ width: '100%', height: '200px' }}>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </p>
-                    <p>
-                        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, 
-                        eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo
-                        enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui 
-                        ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam eius modi.
-                    </p>
-                    <p className="m-0">
-                        At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti 
-                        quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in
-                        culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. 
-                        Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.
-                    </p>
-                </ScrollPanel>
-
-                <div className="p-inputgroup">
-                    <InputText name="mensagemAgente" />
-                    <Button label="Enviar" className="p-button-success" />
+            <div className='vasco'>
+                <div className='button-atendente'>
+                    <Toolbar start={botaologout} center={botoesAtendimento} end={botoesFila} />
                 </div>
             </div>
 
-            {/* cadastro de cliente e atendimento */}
-            <div>
-                <Panel header="Informações do cliente">
-                    <div>
-                        <div>
-                            <div>
-                                <label htmlFor="nome">Nome</label>
-                            </div>
-                            <div>
-                                <InputText name="nome" value={cliente.nome} onChange={atualizarValoresCliente} />
-                            </div>
-                        </div>
+            <div className='container-info-atendente'>
+                {/* cadastro de cliente e atendimento */}
+                <div className="cadastro-form-atendimentos">
+                    <Panel header="Informações do cliente">
+                        <div className="panel-cliente">
 
-                        <div>
-                            <div>
-                                <label htmlFor="cpf">CPF</label>
+                            <div className="form-field">
+                                <label htmlFor="nome" className="form-label" >Nome:</label>
+                                <InputText name="nome" value={cliente.nome} onChange={atualizarValoresCliente} className="form-input" />
                             </div>
-                            <div className="p-inputgroup">
-                                <InputMask name="cpf" mask="999.999.999-99" unmask={true} value={cliente.cpf} onChange={atualizarValoresCliente} />
-                                <Button icon="pi pi-search" className="p-button-warning" onClick={buscarClientePorCpf} />
-                            </div>
-                        </div>
 
-                        <div>
-                            <div>
-                                <label htmlFor="email">E-mail</label>
+                            <div className="form-field">
+                                <label htmlFor="email" className="form-label">E-mail:</label>
+                                <InputText name="email" value={cliente.email} onChange={atualizarValoresCliente} className="form-input" />
                             </div>
-                            <div>
-                                <InputText name="email" value={cliente.email} onChange={atualizarValoresCliente} />
-                            </div>
-                        </div>
 
-                        <div>
-                            <div>
-                                <label htmlFor="telefone">Telefone</label>
+                            <div className="form-field">
+                                <label htmlFor="cpf" className="form-label">CPF:</label>
+                                <div className="p-inputgroup" >
+                                    <InputMask name="cpf" mask="999.999.999-99" unmask={true} value={cliente.cpf} onChange={atualizarValoresCliente} className="form-input" />
+                                    <Button icon="pi pi-search" className="p-button-warning" onClick={buscarClientePorCpf} />
+                                </div>
                             </div>
-                            <div>
-                                <InputMask name="telefone" mask="(99) 99999-9999" unmask={true} value={cliente.telefone} onChange={atualizarValoresCliente} />
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <div>
-                                <label htmlFor="celular">Celular</label>
-                            </div>
-                            <div>
-                                <InputMask name="celular" mask="(99) 99999-9999" unmask={true} value={cliente.celular} onChange={atualizarValoresCliente} />
-                            </div>
-                        </div>
 
-                        <div>
-                            <div>
-                                <label htmlFor="datanascimento">Data de nascimento</label>
+                            <div className="form-field">
+                                <label htmlFor="telefone" className="form-label">Telefone:</label>
+                                <InputMask name="telefone" mask="(99) 99999-9999" unmask={true} value={cliente.telefone} onChange={atualizarValoresCliente} className="form-input" />
                             </div>
-                            <div>
-                                <Calendar name="dataNascimento" dateFormat="dd/mm/yy" showIcon value={cliente.dataNascimento} onChange={atualizarValoresCliente} />
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <div>
-                            <div>
-                                <label htmlFor="logradouro">Logradouro</label>
-                            </div>
-                            <div>
-                                <InputText name="logradouro" value={endereco.logradouro} onChange={atualizarValoresEndereco} />
-                            </div>
-                        </div>
-                        <div>
-                            <div>
-                                <label htmlFor="numero">Número</label>
-                            </div>
-                            <div>
-                                <InputText name="numero" value={endereco.numero} onChange={atualizarValoresEndereco} />
-                            </div>
-                        </div>
-                        <div>
-                            <div>
-                                <label htmlFor="bairro">Bairro</label>
-                            </div>
-                            <div>
-                                <InputText name="bairro" value={endereco.bairro} onChange={atualizarValoresEndereco} />
-                            </div>
-                        </div>
-                        <div>
-                            <div>
-                                <label htmlFor="cep">CEP</label>
-                            </div>
-                            <div>
-                                <InputMask name="cep" mask="99.999-999" unmask={true} value={endereco.cep} onChange={atualizarValoresEndereco} />
-                            </div>
-                        </div>
 
-                        <div>
-                            <div>
-                                <label htmlFor="observacao">Observação</label>
+                            <div lassName="form-field">
+                                <label htmlFor="celular" className="form-label">Celular:</label>
+                                <InputMask name="celular" mask="(99) 99999-9999" unmask={true} value={cliente.celular} onChange={atualizarValoresCliente} className="form-input" />
                             </div>
-                            <div>
-                                <InputTextarea name="observacao" rows={5} cols={30} value={cliente.observacao} onChange={atualizarValoresCliente} />
+
+                            <div className="form-field">
+                                <label htmlFor="datanascimento" className="form-label">Data de nascimento:</label>
+                                <Calendar style={{ width: '100%', height: '2.5em' }} name="dataNascimento" dateFormat="dd/mm/yy" showIcon value={cliente.dataNascimento} onChange={atualizarValoresCliente} />
+                            </div>
+
+                            <div className="form-field">
+                                <label htmlFor="cep" className="form-label">CEP:</label>
+                                <InputMask name="cep" mask="99.999-999" unmask={true} value={endereco.cep} onChange={atualizarValoresEndereco} className="form-input" />
+                            </div>
+
+                            <div className="form-field">
+                                <label htmlFor="logradouro" className="form-label">Logradouro:</label>
+                                <InputText name="logradouro" value={endereco.logradouro} onChange={atualizarValoresEndereco} className="form-input" />
+                            </div>
+
+                            <div className="form-field">
+                                <label htmlFor="numero" className="form-label">Número:</label>
+                                <InputText name="numero" value={endereco.numero} onChange={atualizarValoresEndereco} className="form-input" />
+                            </div>
+
+                            <div className="form-field">
+                                <label htmlFor="bairro" className="form-label">Bairro:</label>
+                                <InputText name="bairro" value={endereco.bairro} onChange={atualizarValoresEndereco} className="form-input" />
+                            </div>
+
+                            <div className="form-field">
+                                <label htmlFor="observacao" className="form-label">Observação:</label>
+                                <InputTextarea name="observacao" rows={5} cols={30} value={cliente.observacao} onChange={atualizarValoresCliente} className="form-textarea" autoResize />
                             </div>
                         </div>
-                    </div>
-                </Panel>
-                <Panel header="Informações do atendimento">
-                    <div>
-                        <div>
-                            <div>
-                                <label htmlFor="canalAtendimento">Canal de atendimento</label>
-                            </div>
-                            <div>
+                    </Panel>
+
+                    <Panel header="Informações do atendimento">
+                        <div className='card-atendimento'>
+                            <div className="form-field">
+                                <label className="form-label" htmlFor="canalAtendimento">Canal de atendimento:</label>
                                 <Dropdown name="canalAtendimento" placeholder="Selecione" options={canaisAtendimento} optionLabel="nome"
-                                   value={atendimento.canalAtendimento} onChange={atualizarValoresAtendimento} />
+                                    value={atendimento.canalAtendimento} onChange={atualizarValoresAtendimento} />
                             </div>
-                        </div>
-                        <div>
-                            <div>
-                                <label htmlFor="tipoOcorrencia">Tipo de ocorrência</label>
-                            </div>
-                            <div>
-                                <Dropdown name="tipoOcorrencia" placeholder="Selecione" options={tiposOcorrencia}  optionLabel="nome" 
+
+                            <div className="form-field">
+                                <label className="form-label" htmlFor="tipoOcorrencia">Tipo de ocorrência:</label>
+                                <Dropdown name="tipoOcorrencia" placeholder="Selecione" options={tiposOcorrencia} optionLabel="nome"
                                     value={atendimento.tipoOcorrencia} onChange={atualizarSelectOcorrencia} />
                             </div>
-                        </div>
-                        <div>
-                            <div>
-                                <label htmlFor="ocorrencia">Ocorrência</label>
-                            </div>
-                            <div>
+
+                            <div className="form-field">
+                                <label className="form-label" htmlFor="ocorrencia">Ocorrência:</label>
                                 <Dropdown name="ocorrencia" placeholder="Selecione" options={ocorrencias} optionLabel="nome"
                                     value={atendimento.ocorrencia} onChange={atualizarValoresAtendimento} />
                             </div>
-                        </div>
-                        <div>
-                            <div>
-                                <label htmlFor="descricao">Descrição</label>
-                            </div>
-                            <div>
-                                <InputTextarea name="descricao" rows={5} cols={30} value={atendimento.descricao} onChange={atualizarValoresAtendimento} />
-                            </div>
-                        </div>
-                    </div>
-                </Panel>
-            </div>
 
+                            <div className="form-field">
+                                <label className="form-label" htmlFor="descricao">Descrição:</label>
+                                <InputTextarea name="descricao" rows={5} cols={30} value={atendimento.descricao} onChange={atualizarValoresAtendimento} className="form-textarea" autoResize />
+                            </div>
+                        </div>
+                    </Panel>
+                </div>
+
+                {/* chat do atendente */}
+                <div className='container-card-chat'>
+                    <Card>
+                        <div className="card-atendente">
+                            <ScrollPanel >
+                                <div className="mensagem" id="chatId"></div>
+                            </ScrollPanel>
+                        </div>
+                        <div className="p-inputgroup input-chat-grup">
+                            <InputText name="textoChat" onKeyDown={handleKeyDown} value={textoChat} onChange={atualizarValores} />
+                            <Button label="Enviar" className="p-button-success" onClick={enviarMensagem} />
+                        </div>
+                    </Card>
+                </div>
+
+            </div>
             <Toast ref={toast} />
         </>
     )

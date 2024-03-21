@@ -6,46 +6,19 @@ import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Dropdown } from 'primereact/dropdown';
 import { Toast } from 'primereact/toast';
+import { Dialog } from 'primereact/dialog';
 
 import CanalAntendimentoService from '../../../service/canalAtendimentoService';
 import CanalAtendimento from '../../../dto/canal-atendimento';
 
 const icones = ["Whatsapp", "Chat", "Presencial"]
 
-const CadastroCanalAtendimento = () => {
+const CadastroCanalAtendimento = (visible) => {
     const navegacao = useNavigate();
     const toast = useRef(null);
-    const {codigo} = useParams();
+    const { codigo } = useParams();
     const [canal, setCanal] = useState(CanalAtendimento);
     const canalAtendimentoService = CanalAntendimentoService;
-
-    const show = (mensagem, severity, summary) => {
-        toast.current.show({ severity: severity, summary: summary, detail: mensagem });
-    }
-
-    function atualizarValores(envet) {
-        const {name, value} = envet.target;
-        setCanal({...canal,[name]: value});
-    }
-
-    function salvar() {
-        if (canal.codigo === '') {
-            canalAtendimentoService.salvar(canal)
-                .then(() => {
-                    show('Operação realizada com sucesso', 'success', 'Success');
-                    navegacao("/canais-atendimento");
-                })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
-            } else {
-                canalAtendimentoService.atualizar(canal.codigo, canal)
-                .then(() => {
-                    show('Operação realizada com sucesso', 'success', 'Success');
-                    navegacao("/canais-atendimento");
-                })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
-        }
-        
-    }
 
     useEffect(() => {
         if (codigo !== undefined) {
@@ -57,43 +30,67 @@ const CadastroCanalAtendimento = () => {
             document.title = 'Novo canal de atendimento';
         }
 
-    }, [])
+    }, [codigo])
+
+    const show = (mensagem, severity, summary) => {
+        toast.current.show({ severity: severity, summary: summary, detail: mensagem });
+    }
+
+    function atualizarValores(envet) {
+        const { name, value } = envet.target;
+        setCanal({ ...canal, [name]: value });
+    }
+
+    function salvar() {
+        if (canal.codigo === '') {
+            canalAtendimentoService.salvar(canal)
+                .then(response => {
+                    show('Operação realizada com sucesso', 'success', 'Success');
+                    setTimeout(() => {
+                        navegacao('/canais-atendimento');
+                    }, 500);
+                })
+                .catch(response => (show(response.response.data.fields[0].message, 'error', 'Error')));
+        }  else {
+            canalAtendimentoService.atualizar(canal.codigo, canal)
+                .then(response => {
+                    show('Operação realizada com sucesso', 'success', 'Success');
+                    setTimeout(() => {
+                        navegacao('/canais-atendimento');
+                    }, 500);
+                })
+                .catch(response => (show(response.response.data.fields[0].message, 'error', 'Error')));
+        }
+    }
 
     return (
         <>
-            <div>
-                <Button label="Salvar" severity="success" onClick={salvar}/>
-                <a onClick={() => navegacao("/canais-atendimento")} className="p-button p-button-warning font-bold">Cancelar</a>
-            </div>
+            <Dialog visible={visible} onHide={() => navegacao("/canais-atendimento")} >
+                <div className="cadastro-form">
+                    <h1>Cadastrar Canal</h1>
+                    <div className="form-field">
+                        <label htmlFor="nome" className="form-label">Nome:</label>
+                        <InputText name="nome" value={canal.nome} onChange={atualizarValores} className="form-input" />
+                    </div>
 
-            <div>
-                <div>
-                    <label htmlFor="nome">Nome</label>
-                </div>
-                <div>
-                    <InputText name="nome" value={canal.nome} onChange={atualizarValores} />
-                </div>
-            </div>
-            
-            <div>
-                <div>
-                    <label htmlFor="nome">Ícone</label>
-                </div>
-                <div>
-                    <Dropdown options={icones} name="icone" value={canal?.icone} onChange={atualizarValores} placeholder="Selecione" className="w-full md:w-14rem" />
-                </div>
-            </div>
+                    <div className="form-field">
+                        <label htmlFor="nome" className="form-label">Ícone: </label>
+                        <Dropdown options={icones} name="icone" value={canal?.icone} onChange={atualizarValores} placeholder="Selecione" />
+                    </div>
 
-            <div>
-                <div>
-                    <label htmlFor="nome">Descrição</label>
-                </div>
-                <div>
-                    <InputTextarea name="descricao" value={canal?.descricao} onChange={atualizarValores} rows={5} cols={30} />
-                </div>
-            </div>
+                    <div className="form-field">
+                        <label htmlFor="descricao" className="form-label">Descrição:</label>
+                        <InputTextarea name="descricao" value={canal?.descricao} onChange={atualizarValores} rows={5} cols={30} className="form-textarea" autoResize />
+                    </div>
 
-            <Toast ref={toast} />
+
+                    <div className="form-actions">
+                        <Button label="Cancelar" className="cancel-button" onClick={() => navegacao("/canais-atendimento")} />
+                        <Button label="Salvar" className="submit-button" onClick={salvar} />
+                    </div>
+                </div>
+                <Toast ref={toast} />
+            </Dialog >
         </>
     )
 }

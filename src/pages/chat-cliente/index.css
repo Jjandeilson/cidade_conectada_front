@@ -1,0 +1,86 @@
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.p-card {
+  background-color: rgb(230, 230, 230);
+}
+
+.chat {
+  gap: 10px;
+  width: 100px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat label {
+  text-align: center;
+  font-size: 30px;
+}
+
+.card {
+  height: 50vh;
+  overflow-y: auto;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.card-header span {
+  font-size: 40px;
+}
+
+.chat-card {
+  margin: auto;
+  display: flex;
+}
+
+.conteiner-card-chat {
+  gap: 2rem;
+  width: 700px;
+  display: flex;
+  margin: auto;
+  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.chat-container .card {
+  padding: 5px;
+  background: #f4f4f4;
+  border-radius: 5px;
+}
+
+.p-inputgroup .p-button {
+  border-radius: 0 5px 5px 0;
+}
+
+.scroll-panel .p-scrollpanel-wrapper {
+  border-radius: 5px;
+}
+
+.mensagem {
+  padding: 10px 10px; 
+  margin: 5px 0; 
+  max-width: 50%; 
+  word-wrap: break-word;
+}
+
+#chatId div {
+  margin-bottom: 10px;
+  background-color: #e7f5ff;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.input-chat-grup {
+  padding-top: 10px;
+}

@@ -5,15 +5,15 @@ import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Toast } from 'primereact/toast';
+import { Dialog } from 'primereact/dialog';
 
-import SetorService from '../../../service/sertorService';
-
+import SetorService from '../../../service/setorService';
 import Setor from '../../../dto/setor';
 
-const CadastroSetor = () => {
+const CadastroSetor = (visible) => {
     const navegacao = useNavigate();
     const toast = useRef(null);
-    const {codigo} = useParams();
+    const { codigo } = useParams();
     const [setor, setSetor] = useState(Setor);
 
     const show = (mensagem, severity, summary) => {
@@ -21,29 +21,32 @@ const CadastroSetor = () => {
     };
 
     function atualizarValores(envet) {
-        const {name, value} = envet.target
-        setSetor({...setor,[name]: value});
+        const { name, value } = envet.target
+        setSetor({ ...setor, [name]: value });
     }
 
     function salvar() {
         if (setor.codigo === '') {
             SetorService.salvar(setor)
-                .then(() => {
-                    show('Operação realizada com sucesso', 'success', 'Success');
-                    navegacao("/setores");
+                .then(response => {
+                    show('Cadastro realizado com sucesso', 'success', 'Success');
+                    setTimeout(() => {
+                        navegacao('/setores');
+                    }, 500);
                 })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
-            } else {
-                SetorService.atualizar(setor.codigo, setor)
-                .then(() => {
-                    show('Operação realizada com sucesso', 'success', 'Success');
-                    navegacao("/setores");
+                .catch(response => (show(response.response.data.fields[0].message, 'error', 'Error')));
+        } else {
+            SetorService.atualizar(setor.codigo, setor)
+                .then(response => {
+                    show('Atualização realizada com sucesso', 'success', 'Success');
+                    setTimeout(() => {
+                        navegacao('/setores');
+                    }, 500);
                 })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
+                .catch(response => (show(response.response.data.fields[0].message, 'error', 'Error')));
         }
-        
     }
-
+    
     useEffect(() => {
         if (codigo !== undefined) {
             document.title = "Editar setor";
@@ -51,37 +54,34 @@ const CadastroSetor = () => {
                 .then(response => setSetor(response.data))
                 .catch(response => console.log(response));
         } else {
-            document.title = 'Novo setor';
+            document.title = 'Cadastrar setor';
         }
 
     }, [codigo])
 
     return (
         <>
-            <div>
-                <Button label="Salvar" severity="success" onClick={salvar} />
-                <a onClick={() => navegacao("/setores")} className="p-button p-button-warning font-bold">Cancelar</a>
-            </div>
+            <Dialog visible={visible} onHide={() => navegacao("/setores")} >
+                <div className="cadastro-form">
+                    <h1>Cadastrar Setor</h1>
+                    <div className="form-field">
+                        <label htmlFor="nome" className="form-label">Nome:</label>
+                        <InputText name="nome" value={setor.nome} onChange={atualizarValores} className="form-input" />
+                    </div>
 
-            <div>
-                <div>
-                    <label htmlFor="nome">Nome</label>
-                </div>
-                <div>
-                    <InputText name="nome" value={setor.nome} onChange={atualizarValores} />
-                </div>
-            </div>
+                    <div className="form-field">
+                        <label htmlFor="descricao" className="form-label">Descrição:</label>
+                        <InputTextarea name="descricao" value={setor?.descricao} onChange={atualizarValores} rows={5} className="form-textarea" autoResize />
+                    </div>
 
-            <div>
-                <div>
-                    <label htmlFor="descricao">Descrição</label>
+                    <div className="form-actions">
+                        <Button label="Cancelar" className="cancel-button" onClick={() => navegacao("/setores")} />
+                        <Button label="Salvar" className="submit-button" onClick={salvar} />
+                    </div>
                 </div>
-                <div>
-                    <InputTextarea name="descricao" value={setor?.descricao} rows={5} cols={30} onChange={atualizarValores} />
-                </div>
-            </div>
-            
-            <Toast ref={toast} />
+                <Toast ref={toast} />
+            </Dialog>
+
         </>
     )
 }

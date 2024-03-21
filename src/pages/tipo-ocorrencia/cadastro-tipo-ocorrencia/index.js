@@ -6,16 +6,17 @@ import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Dropdown } from 'primereact/dropdown';
 import { Toast } from 'primereact/toast';
+import { Dialog } from 'primereact/dialog';
 
 import CadastroOcorrencia from '../../ocorrencia/cadastro-ocorrencia';
 import TipoOcorrenciaService from '../../../service/tipoOcorrenciaService';
-import SetorService from '../../../service/sertorService';
+import SetorService from '../../../service/setorService';
 
 import TipoOcorrencia from '../../../dto/tipo-ocorrencia';
 
-const CadastroTipoOcorencia = () => {
+const CadastroTipoOcorencia = (visible) => {
     const toast = useRef(null);
-    const {codigo} = useParams();
+    const { codigo } = useParams();
     const [tipoOcorrencia, setTipoOcorrencia] = useState(TipoOcorrencia);
     const [setores, setSetores] = useState([]);
     const navegacao = useNavigate();
@@ -25,26 +26,30 @@ const CadastroTipoOcorencia = () => {
     };
 
     function atualizarValores(envet) {
-        const {name, value} = envet.target
-        setTipoOcorrencia({...tipoOcorrencia,[name]: value});
+        const { name, value } = envet.target
+        setTipoOcorrencia({ ...tipoOcorrencia, [name]: value });
     }
 
     function salvar() {
         if (tipoOcorrencia.codigo === '') {
             TipoOcorrenciaService.salvar(tipoOcorrencia)
-                .then(() => {
+                .then(response => {
                     show('Operação realizada com sucesso', 'success', 'Success');
-                    navegacao("/tipos-ocorrencia");
+                    setTimeout(() => {
+                        navegacao('/tipos-ocorrencia');
+                    }, 500);
                 })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
+                .catch(response => (show(response.response.data.fields[0].message, 'error', 'Error')));
         } else {
             TipoOcorrenciaService.atualizar(tipoOcorrencia.codigo, tipoOcorrencia)
-                    .then(() => {
-                        show('Operação realizada com sucesso', 'success', 'Success');
-                        navegacao("/tipos-ocorrencia");
-                    })
-                    .catch(response => (show(response.response.data.detail, 'error', 'Error')));
-            }
+                .then(response => {
+                    show('Operação realizada com sucesso', 'success', 'Success');
+                    setTimeout(() => {
+                        navegacao('/tipos-ocorrencia');
+                    }, 500);
+                })
+                .catch(response => (show(response.response.data.fields[0].message, 'error', 'Error')));
+        }
     }
 
     useEffect(() => {
@@ -65,45 +70,40 @@ const CadastroTipoOcorencia = () => {
         }
     }, [codigo])
 
+
     return (
         <>
-            <div>
-                <Button label="Salvar" severity="success" onClick={salvar}/>
-                <a onClick={() => navegacao("/tipos-ocorrencia")} className="p-button p-button-warning font-bold">Cancelar</a>
-            </div>
+            <Dialog visible={visible} onHide={() => navegacao("/tipos-ocorrencia")} >
+                <div className="cadastro-form">
+                    <h1>Cadastrar Tipos de ocorrência</h1>
+                    <div className="form-field">
+                        <label htmlFor="nome" className="form-label">Nome:</label>
+                        <InputText name="nome" value={tipoOcorrencia.nome} onChange={atualizarValores} className="form-input" />
+                    </div>
 
-            <div>
-                <div>
-                    <label htmlFor="nome">Nome</label>
-                </div>
-                <div>
-                    <InputText name="nome" value={tipoOcorrencia.nome} onChange={atualizarValores} />
-                </div>
-            </div>
+                    <div>
+                        <label htmlFor="setor" className="form-label">Setor:</label>
+                        <Dropdown options={setores} placeholder="Selecione" name="setor" value={tipoOcorrencia.setor} optionLabel="nome" onChange={atualizarValores} />
+                    </div>
 
-            <div>
-                <div>
-                    <label htmlFor="setor">Setor</label>
-                </div>
-                <div>
-                    <Dropdown options={setores} placeholder="Selecione" name="setor" value={tipoOcorrencia.setor} optionLabel="nome" onChange={atualizarValores} />
-                </div>
-            </div>
+                    <div className="form-field">
+                        <label htmlFor="descricao" className="form-label">Descrição:</label>
+                        <InputTextarea name="descricao" value={tipoOcorrencia.descricao} onChange={atualizarValores} rows={5} className="form-textarea" autoResize />
+                    </div>
 
-            <div>
-                <div>
-                    <label htmlFor="descricao">Descrição</label>
-                </div>
-                <div>
-                    <InputTextarea name="descricao" value={tipoOcorrencia.descricao} onChange={atualizarValores} rows={5} cols={30} />
-                </div>
-            </div>
+                    {tipoOcorrencia.codigo && (
+                        <div>
+                            <CadastroOcorrencia />
+                        </div>
+                    )}
 
-            {tipoOcorrencia.codigo && (
-                <CadastroOcorrencia />
-            )}
-
-            <Toast ref={toast} />
+                    <div className="form-actions">
+                        <Button label="Cancelar" className="cancel-button" onClick={() => navegacao("/tipos-ocorrencia")} />
+                        <Button label="Salvar" className="submit-button" onClick={salvar} />
+                    </div>
+                    <Toast ref={toast} />
+                </div>
+            </Dialog>
         </>
     )
 }

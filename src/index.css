@@ -1,13 +1,242 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.btn-table {
+  display: flex;
+  gap: 5px;
+}
+
+.data-table-container {
+  border: solid 1px rgb(231, 231, 231);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 800px;
+  height: 800px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+
+.header h1 {
+  color: #374151;
+}
+
+.p-button {
+  text-decoration: none;
+}
+
+.p-datatable {
+  table-layout: fixed;
+}
+
+.data-table-container .p-datatable-tbody > tr > td {
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cadastro-form h1 {
+  text-align: center;
+}
+
+.cadastro-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #fff;
+  width: 500px;
+  gap: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.p-password-input {
+  width: 300px;
+}
+
+.form-field {
+  margin-bottom: 1rem;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.form-input,
+.form-textarea {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.form-textarea {
+  resize: none;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.submit-button {
+  background-color: green;
+  width: 100px;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  padding: 10px 15px;
+}
+
+.cancel-button {
+  background-color: red;
+  width: 100px;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  padding: 10px 15px;
+}
+
+.container-max {
+  width: 1280px;
+}
+
+.form-login {
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 30px;
+  background: #fff;
+  width: 360px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  height: 30vh;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.logo-img {
+  width: 300px;
+  display: flex;
+  margin: auto;
+}
+
+.form-login h1 {
+  text-align: center;
+}
+
+.tab-view-container {
+  width: 900px;
+  height: 70vh;
+}
+
+.tabela-editar-um-dois {
+  display: flex;
+  gap: 50px;
+}
+
+.dados-atendimento-container {
+  margin-top: 15px;
+}
+
+.span-atendimento {
+  font-weight: bold;
+}
+
+.protocolo-form {
+  margin-top: 300px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 500px;
+  border: 1px solid #ddd;
+}
+
+.protocolo-form h1 {
+  text-align: center;
+  color: #374151;
+}
+
+.container-protocolo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.input-container {
+  display: flex;
+}
+
+.input-container .p-inputtext {
+  flex-grow: 1;
+}
+
+.input-container .p-button {
+  margin-left: 0.5em;
+}
+
+.input-container .p-inputtext,
+.input-container .p-button {
+  height: 2.5em;
+}
+
+.container-info-atendente {
+  display: flex;
+  gap: 200px;
+  justify-content: center;
+}
+
+.container-card-chat {
+  width: 500px;
+}
+
+.card-atendente {
+  height: 500px;
+}
+
+.button-atendente {
+  width: 100%;
+  gap: 30px;
+}
+
+.button-atendente > .p-toolbar .p-button {
+  margin-right: 10px;
+}
+
+
+

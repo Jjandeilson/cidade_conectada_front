@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 
 import { DataTable } from 'primereact/datatable';
@@ -21,21 +21,17 @@ const TabelaAtendimento = () => {
     const [totalRegistros, setTotalRegistros] = useState(0);
     const navegacao = useNavigate();
 
-    const show = (mensagem, severity, summary) => {
-        toast.current.show({ severity: severity, summary: summary, detail: mensagem });
-    };
-
     const atualizarPagina = (e) => {
         AtendimentoService.listar(e.page)
             .then(response => {
                 let atendimentoBanco = response.data.content;
-               
+
                 atendimentoBanco.forEach(atendimento => {
-                   atendimento.abertura = moment(atendimento.abertura).format("DD/MM/YYYY HH:mm:ss");
-                   
-                   if (atendimento.fechamento) {
-                       atendimento.fechamento = moment(atendimento.fechamento).format("DD/MM/YYYY HH:mm:ss");
-                   }
+                    atendimento.abertura = moment(atendimento.abertura).format("DD/MM/YYYY HH:mm:ss");
+
+                    if (atendimento.fechamento) {
+                        atendimento.fechamento = moment(atendimento.fechamento).format("DD/MM/YYYY HH:mm:ss");
+                    }
                 });
 
                 setAtendimentos(atendimentoBanco);
@@ -43,30 +39,32 @@ const TabelaAtendimento = () => {
                 setQuantidadePorPagina(response.data.size);
                 setTotalRegistros(response.data.totalElements);
             })
-            .catch(response => console.log(response))
+            .catch(response => console.log(response));
     }
 
     const botoesEditar = (atendimento) => {
-        return  (
+        return (
             <>
-               <Button label="Visualizar" onClick={() => navegacao(`/atendimentos/${atendimento.codigo}/editar`)}/>
+                <div className='btn-table'>
+                    <Button label="Visualizar" onClick={() => navegacao(`/atendimentos/${atendimento.codigo}/editar`)} />
+                </div>
             </>
+
         )
     }
 
     useEffect(() => {
         AtendimentoService.listar()
-            .then(response =>  {
+            .then(response => {
                 let atendimentoBanco = response.data.content;
-                console.log(atendimentoBanco);
                 atendimentoBanco.forEach(atendimento => {
-                   atendimento.abertura = moment(atendimento.abertura).format("DD/MM/YYYY HH:mm:ss");
-                   
-                   if (atendimento.fechamento) {
-                       atendimento.fechamento = moment(atendimento.fechamento).format("DD/MM/YYYY HH:mm:ss");
-                   }
+                    atendimento.abertura = moment(atendimento.abertura).format("DD/MM/YYYY HH:mm:ss");
+
+                    if (atendimento.fechamento) {
+                        atendimento.fechamento = moment(atendimento.fechamento).format("DD/MM/YYYY HH:mm:ss");
+                    }
                 });
-                
+
                 setAtendimentos(atendimentoBanco);
                 setNumeroPagina(response.data.number);
                 setQuantidadePorPagina(response.data.size);
@@ -77,21 +75,22 @@ const TabelaAtendimento = () => {
 
     return (
         <>
-            <div>
-                <a onClick={() => navegacao('/atendimentos/novo')} className="p-button font-bold">Novo Atendimento</a>
-            </div>
-
-            <DataTable value={atendimentos}  tableStyle={{ minWidth: '50rem' }}>
-                <Column field="protocolo" header="Protocolo"></Column>
-                <Column field="status" header="Status"></Column>
-                <Column field="abertura" header="Data de abertura"></Column>
-                <Column field="finalizamento" header="Data de finalização"></Column>
-                <Column field="clienteNome" header="Cliente"></Column>
-                <Column field="acoes" header="Ações" body={botoesEditar}></Column>
-            </DataTable>
-            <Paginator first={numeroPagina} rows={quantidadePorPagina} totalRecords={totalRegistros} onPageChange={atualizarPagina}/>
-
             <Toast ref={toast} />
+            <div className="data-table-container container-max">
+                <div className='header'>
+                    <h1>ATENDIMENTOS</h1>
+                    <Link to="/atendimentos/novo" className="p-button">Novo Atendimento</Link>
+                </div>
+                <DataTable value={atendimentos}>
+                    <Column field="protocolo" header="Protocolo"></Column>
+                    <Column field="status" header="Status"></Column>
+                    <Column field="abertura" header="Data de abertura"></Column>
+                    <Column field="finalizamento" header="Data de finalização"></Column>
+                    <Column field="clienteNome" header="Cliente"></Column>
+                    <Column field="acoes" header="Ações" body={botoesEditar}></Column>
+                </DataTable>
+                <Paginator first={numeroPagina} rows={quantidadePorPagina} totalRecords={totalRegistros} onPageChange={atualizarPagina} />
+            </div>
         </>
     )
 }

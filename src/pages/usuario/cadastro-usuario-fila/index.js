@@ -10,9 +10,9 @@ import { Toast } from 'primereact/toast';
 
 import UsuarioService from '../../../service/usuarioService';
 
-const CadastroUsuarioFila = ({filas}) => {
+const CadastroUsuarioFila = ({ filas }) => {
     const toast = useRef(null);
-    const {codigo} = useParams();
+    const { codigo } = useParams();
     const [codigoFila, setCodigoFila] = useState('');
     const [filasUsuario, setFilasUsuario] = useState([]);
     const [listaFilas, setListaFilas] = useState(filas);
@@ -29,7 +29,7 @@ const CadastroUsuarioFila = ({filas}) => {
                     UsuarioService.listarFilasUsuario(codigo)
                         .then(response => setFilasUsuario(response.data))
                         .catch(response => console.log(response));
-                    
+
                     UsuarioService.listarFilasNaoAssociadasUsuario(codigo)
                         .then(response => setListaFilas(response.data))
                         .catch(response => console.log(response));
@@ -37,7 +37,7 @@ const CadastroUsuarioFila = ({filas}) => {
                     setCodigoFila('');
                 })
                 .catch(response => console.log(response))
-            
+
         }
     }
 
@@ -61,9 +61,9 @@ const CadastroUsuarioFila = ({filas}) => {
     }
 
     const botoesExcluir = (fila) => {
-        return  (
+        return (
             <>
-               <Button label="Excluir" onClick={() => excluir(fila.codigo)} severity="warning"/>
+                <Button label="Excluir" onClick={() => excluir(fila.codigo)} severity="warning" />
             </>
         )
     }
@@ -79,14 +79,12 @@ const CadastroUsuarioFila = ({filas}) => {
         <>
             <div>
                 <Fieldset legend="Associação de fila">
-                   <div>
+                    <div>
                         <div>
-                            <div>
-                                <label htmlFor="fila">Fila</label>
-                            </div>
-                            <div>
+                            <label htmlFor="fila">Fila:</label>
+                            <div style={{ display: 'flex', gap:'20px'}}>
                                 <Dropdown placeholder="Selecione" value={codigoFila} options={listaFilas} optionLabel="nome" optionValue="codigo" onChange={(event) => setCodigoFila(event.value)} />
-                                <Button label="Adicionar" onClick={salvarFila}/>
+                                <Button label="Adicionar" onClick={salvarFila} />
                             </div>
                         </div>
 
@@ -96,7 +94,7 @@ const CadastroUsuarioFila = ({filas}) => {
                                 <Column field="acoes" header="Ações" body={botoesExcluir}></Column>
                             </DataTable>
                         </div>
-                   </div>
+                    </div>
                 </Fieldset>
 
                 <Toast ref={toast} />
