@@ -157,7 +157,10 @@ const CadastroUsuario = (visible) => {
                             <Dropdown options={setores} placeholder="Selecione" name="setor" value={usuario.setor} optionLabel="nome" onChange={atualizarValores} />
                         </div>
                     </div>
-
+                    <div className="form-actions">
+                        <Button label="Cancelar" className="cancel-button" onClick={() => navegacao("/usuarios")} />
+                        <Button label="Salvar" className="submit-button" onClick={salvar} />
+                    </div>
                     {usuario.codigo && (
                         <div className="form-field">
                             <label htmlFor="atendente" className='form-label'>Atendente:</label>
@@ -172,10 +175,7 @@ const CadastroUsuario = (visible) => {
                         </div>
                     )}
 
-                    <div className="form-actions">
-                        <Button label="Cancelar" className="cancel-button" onClick={() => navegacao("/usuarios")} />
-                        <Button label="Salvar" className="submit-button" onClick={salvar} />
-                    </div>
+
                     <Toast ref={toast} />
                 </div>
             </Dialog >
