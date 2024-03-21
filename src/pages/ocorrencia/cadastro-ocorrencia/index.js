@@ -44,7 +44,7 @@ const CadastroOcorrencia = () => {
                     .catch(response => console.log(response));
             })
             .catch(response => {
-                show(response.response.data.detail, 'error', 'Error');
+                show(response.response.data.fields[0].message, 'error', 'Error');
             });
     }
 

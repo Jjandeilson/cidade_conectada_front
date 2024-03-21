@@ -80,7 +80,7 @@ const CadastroAtendimento = (visible) => {
             .then(() => {
                 show('Operação realizada com sucesso', 'success', 'Success');
             })
-            .catch(response => (show(response.response.data.detail, 'error', 'Error')));
+            .catch(response => (show(response.response.data.fields[0].message, 'error', 'Error')));
     }
 
     useEffect(() => {

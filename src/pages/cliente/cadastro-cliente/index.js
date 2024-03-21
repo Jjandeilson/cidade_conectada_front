@@ -44,17 +44,21 @@ const CadastroCliente = (visible) => {
             ClienteService.salvar(cliente)
                 .then(response => {
                     show('Operação realizada com sucesso', 'success', 'Success');
-                    navegacao(`/clientes/${response.data.codigo}/editar`);
+                    setTimeout(() => {
+                        navegacao('/clientes');
+                    }, 500);
                 })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
+                .catch(response => (show(response.response.data.fields[0].message, 'error', 'Error')));
         } else {
             cliente.endereco = endereco;
             ClienteService.atualizar(cliente.codigo, cliente)
                 .then(response => {
                     show('Operação realizada com sucesso', 'success', 'Success');
-                    navegacao(`/clientes/${response.data.codigo}/editar`);
+                    setTimeout(() => {
+                        navegacao('/clientes');
+                    }, 500);
                 })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
+                .catch(response => (show(response.response.data.fields[0].message, 'error', 'Error')));
         }
     }
 

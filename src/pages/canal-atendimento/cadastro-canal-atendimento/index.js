@@ -46,16 +46,20 @@ const CadastroCanalAtendimento = (visible) => {
             canalAtendimentoService.salvar(canal)
                 .then(response => {
                     show('Operação realizada com sucesso', 'success', 'Success');
-                    navegacao(`/canais-atendimento/${response.data.codigo}/editar`);
+                    setTimeout(() => {
+                        navegacao('/canais-atendimento');
+                    }, 500);
                 })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
+                .catch(response => (show(response.response.data.fields[0].message, 'error', 'Error')));
         }  else {
             canalAtendimentoService.atualizar(canal.codigo, canal)
                 .then(response => {
                     show('Operação realizada com sucesso', 'success', 'Success');
-                    navegacao(`/canais-atendimento/${response.data.codigo}/editar`);
+                    setTimeout(() => {
+                        navegacao('/canais-atendimento');
+                    }, 500);
                 })
-                .catch(response => (show(response.response.data.detail, 'error', 'Error')));
+                .catch(response => (show(response.response.data.fields[0].message, 'error', 'Error')));
         }
     }
 
