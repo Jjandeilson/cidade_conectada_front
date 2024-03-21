@@ -267,8 +267,10 @@ const TelaAtendente = () => {
 
     return (
         <>
-            <div className='button-atendente'>
-                <Toolbar start={botaologout} center={botoesAtendimento} end={botoesFila} />
+            <div className='vasco'>
+                <div className='button-atendente'>
+                    <Toolbar start={botaologout} center={botoesAtendimento} end={botoesFila} />
+                </div>
             </div>
 
             <div className='container-info-atendente'>

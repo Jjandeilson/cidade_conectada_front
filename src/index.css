@@ -230,22 +230,13 @@ code {
 }
 
 .button-atendente {
-  display: flex;
+  width: 100%;
   gap: 30px;
 }
 
 .button-atendente > .p-toolbar .p-button {
-  margin-right: 10px; /* Adiciona espaço à direita de cada botão */
-  /* outros estilos gerais */
+  margin-right: 10px;
 }
 
-/* Estilos específicos para o primeiro botão */
-.button-atendente > .p-toolbar .p-button:first-child {
-  /* estilos específicos para o primeiro botão */
-}
 
-/* Estilos específicos para o último botão */
-.button-atendente > .p-toolbar .p-button:last-child {
-  margin-right: 0; /* Remove a margem à direita do último botão */
-  /* outros estilos específicos */
-}
+
