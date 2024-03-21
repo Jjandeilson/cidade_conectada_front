@@ -98,6 +98,7 @@ const CadastroAtendimento = (visible) => {
         <>
             <Dialog visible={visible} onHide={() => navegacao("/atendimentos")} >
                 <h1>Cadastrar Atendimento</h1>
+
                 <div className="cadastro-form-atendimentos">
                     <Panel header="Informações do cliente" >
                         <div className="panel-cliente">
@@ -130,7 +131,7 @@ const CadastroAtendimento = (visible) => {
 
                             <div className="form-field">
                                 <label htmlFor="datanascimento" className="form-label">Data de nascimento:</label>
-                                <Calendar style={{ width: '100%', height: '2.5em' }}  name="dataNascimento" dateFormat="dd/mm/yy" showIcon value={cliente.dataNascimento} onChange={atualizarValoresCliente} />
+                                <Calendar style={{ width: '100%', height: '2.5em' }} name="dataNascimento" dateFormat="dd/mm/yy" showIcon value={cliente.dataNascimento} onChange={atualizarValoresCliente} />
                             </div>
 
 
@@ -169,7 +170,7 @@ const CadastroAtendimento = (visible) => {
                         <div className='card-atendimento'>
                             <Panel header="Informações do atendimento" >
                                 <div className="form-field">
-                                    <label htmlFor="canalAtendimento">Canal de atendimento: </label>
+                                    <label htmlFor="canalAtendimento">Canal de atendimento:</label>
                                     <Dropdown name="canalAtendimento" placeholder="Selecione" options={canaisAtendimento} optionLabel="nome"
                                         value={atendimento.canalAtendimento} onChange={atualizarValoresAtendimento} />
                                 </div>
@@ -193,7 +194,9 @@ const CadastroAtendimento = (visible) => {
                             </Panel>
                         </div>
                     </div>
+
                 </div>
+
                 <Toast ref={toast} />
             </Dialog>
         </>

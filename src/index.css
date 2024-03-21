@@ -144,7 +144,7 @@ code {
 
 .button-container {
   display: flex;
-  justify-content: flex-end; 
+  justify-content: flex-end;
 }
 
 .logo-img {
@@ -203,13 +203,49 @@ code {
 }
 
 .input-container .p-inputtext {
-  flex-grow: 1; 
+  flex-grow: 1;
 }
 
 .input-container .p-button {
   margin-left: 0.5em;
 }
 
-.input-container .p-inputtext, .input-container .p-button {
-  height: 2.5em; 
+.input-container .p-inputtext,
+.input-container .p-button {
+  height: 2.5em;
+}
+
+.container-info-atendente {
+  display: flex;
+  gap: 200px;
+  justify-content: center;
+}
+
+.container-card-chat {
+  width: 500px;
+}
+
+.card-atendente {
+  height: 500px;
+}
+
+.button-atendente {
+  display: flex;
+  gap: 30px;
+}
+
+.button-atendente > .p-toolbar .p-button {
+  margin-right: 10px; /* Adiciona espaço à direita de cada botão */
+  /* outros estilos gerais */
+}
+
+/* Estilos específicos para o primeiro botão */
+.button-atendente > .p-toolbar .p-button:first-child {
+  /* estilos específicos para o primeiro botão */
+}
+
+/* Estilos específicos para o último botão */
+.button-atendente > .p-toolbar .p-button:last-child {
+  margin-right: 0; /* Remove a margem à direita do último botão */
+  /* outros estilos específicos */
 }

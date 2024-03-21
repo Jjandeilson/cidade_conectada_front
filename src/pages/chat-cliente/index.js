@@ -5,6 +5,8 @@ import { Button } from 'primereact/button';
 import { ScrollPanel } from 'primereact/scrollpanel';
 import { InputText } from 'primereact/inputtext';
 
+import '../chat-cliente/index.css'
+
 import AtendimentoService from '../../service/atendimentoService';
 import WebSocket from '../../service/websocket';
 import MensagemChat from '../../dto/mensagem-chat';
@@ -16,13 +18,31 @@ const ChatCliente = () => {
     const [textoChat, setTextoChat] = useState('');
     const [exibirChat, setExibirChat] = useState(false);
     const [client, setClient] = useState({});
-    
+
+
     function atualizarValores(event) {
-        const {value} = event.target;
+        const { value } = event.target;
         setTextoChat(value);
     }
 
+    function voltar() {
+        setExibirChat(false);
+    }
+
+
+    function handleKeyDown(event) {
+        if (event.key === 'Enter') {
+            enviarMensagem();
+        }
+    }
+
     function enviarMensagem() {
+
+        if (textoChat.trim() === '') {
+
+            console.error('A mensagem não pode ser vazia.');
+            return;
+        }
         mensagemChat.fluxo = 'ENTRADA';
         mensagemChat.midia = 'CHAT';
         mensagemChat.envioMensagem = "CLIENTE";
@@ -37,8 +57,9 @@ const ChatCliente = () => {
         setMensagemChat(MensagemChat);
     }
 
+
     function escreverFila() {
-        client.subscribe("/chat/cliente", function(result) {
+        client.subscribe("/chat/cliente", function (result) {
             let mensagemCliente = JSON.parse(result.body);
             const chatMessage = document.getElementById('chatId');
             const divMensagem = document.createElement("div");
@@ -72,32 +93,49 @@ const ChatCliente = () => {
 
     return (
         <>
-            {!exibirChat && (
-                <Card>
-                    <div>
-                        <label>Chat</label>
+            <div className="chat-container">
+
+                {!exibirChat && (
+                    <div className='chat-card'>
+                        <Card>
+                            <div className='chat'>
+                                <label>Chat</label>
+                                <Button label="Entrar" onClick={logarChat} />
+                            </div>
+                        </Card>
+
                     </div>
 
-                    <div>
-                        <Button label="Entrar" onClick={logarChat} />
-                    </div>
-                </Card>
-            )}
+                )}
 
-            {exibirChat && (
-                <>
-                    <div className="card">
-                        <ScrollPanel style={{ width: '100%', height: '200px' }}>
-                            <div id="chatId"></div>
-                        </ScrollPanel>
+                {exibirChat && (
+                    <>
+                        <div className='conteiner-card-chat'>
 
-                        <div className="p-inputgroup">
-                            <InputText name="textoChat" value={textoChat} onChange={atualizarValores} />
-                            <Button label="Enviar" className="p-button-success" onClick={enviarMensagem} />
+                            <div className="card-header">
+                                <span>ATENDIMENTO</span>
+                                <a onClick={voltar} className="p-button p-button-warning font-bold">Voltar</a>
+                            </div>
+
+                            <div>
+                                <Card>
+                                    <div className="card">
+                                        <ScrollPanel >
+                                            <div className="mensagem" id="chatId"></div>
+                                        </ScrollPanel>
+                                    </div>
+                                    <div className="p-inputgroup input-chat-grup">
+                                        <InputText name="textoChat" onKeyDown={handleKeyDown} value={textoChat} onChange={atualizarValores} />
+                                        <Button label="Enviar" className="p-button-success" onClick={enviarMensagem} />
+                                    </div>
+                                </Card>
+                            </div>
                         </div>
-                    </div>
-                </>
-            )}
+                    </>
+
+                )}
+
+            </div >
         </>
     )
 }
