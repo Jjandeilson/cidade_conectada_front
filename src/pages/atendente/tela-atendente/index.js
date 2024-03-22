@@ -176,7 +176,7 @@ const TelaAtendente = () => {
 
         mensagemNotificacao.nome = cliente.nome;
         mensagemNotificacao.channel = midia;
-        mensagemNotificacao.content.text = atendimento.protocolo;
+        mensagemNotificacao.content.text = protocoloCliente;
 
         EnviarNotificacaoService.enviar(mensagemNotificacao)
             .then(() => {
