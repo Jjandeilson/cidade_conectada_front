@@ -90,17 +90,17 @@ const CadastroTipoOcorencia = (visible) => {
                         <label htmlFor="descricao" className="form-label">Descrição:</label>
                         <InputTextarea name="descricao" value={tipoOcorrencia.descricao} onChange={atualizarValores} rows={5} className="form-textarea" autoResize />
                     </div>
-
+                    <div className="form-actions">
+                        <Button label="Cancelar" className="cancel-button" onClick={() => navegacao("/tipos-ocorrencia")} />
+                        <Button label="Salvar" className="submit-button" onClick={salvar} />
+                    </div>
                     {tipoOcorrencia.codigo && (
                         <div>
                             <CadastroOcorrencia />
                         </div>
                     )}
 
-                    <div className="form-actions">
-                        <Button label="Cancelar" className="cancel-button" onClick={() => navegacao("/tipos-ocorrencia")} />
-                        <Button label="Salvar" className="submit-button" onClick={salvar} />
-                    </div>
+
                     <Toast ref={toast} />
                 </div>
             </Dialog>

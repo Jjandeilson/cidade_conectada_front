@@ -242,7 +242,7 @@ const AcompanhamentoAtendimento = () => {
 
                                 <div className="form-field">
                                     <label htmlFor="datanascimento" className="form-label">Data de nascimento:</label>
-                                    <Calendar name="dataNascimento" value={cliente.dataNascimento} dateFormat="dd/mm/yy" disabled="true" showIcon />
+                                    <Calendar style={{ width: '100%', height: '2.5em' }} name="dataNascimento" value={cliente.dataNascimento} dateFormat="dd/mm/yy" disabled="true" showIcon />
                                 </div>
                             </div>
                             <div className='tab-dois'>
